@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Login from './pages/Login';
+import Setup from './pages/Setup';
 import Signup from './pages/Signup';
 import Welcome from './pages/Welcome';
 
@@ -11,7 +12,16 @@ function App() {
   }
 
   if (currentPage === 'welcome') {
-    return <Welcome onLogout={() => setCurrentPage('login')} />;
+    return (
+      <Welcome
+        onBackToLogin={() => setCurrentPage('login')}
+        onStartSetup={() => setCurrentPage('setup')}
+      />
+    );
+  }
+
+  if (currentPage === 'setup') {
+    return <Setup onBackToWelcome={() => setCurrentPage('welcome')} />;
   }
 
   return (
