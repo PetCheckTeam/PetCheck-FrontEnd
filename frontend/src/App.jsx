@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Login from './pages/Login';
+import Results from './pages/Results';
 import Scanner from './pages/Scanner';
 import Setup from './pages/Setup';
 import Signup from './pages/Signup';
@@ -7,6 +8,11 @@ import Welcome from './pages/Welcome';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('login');
+  const [petProfile, setPetProfile] = useState({
+    petType: '',
+    petName: '',
+    allergies: [],
+  });
 
   if (currentPage === 'signup') {
     return <Signup onMoveToLogin={() => setCurrentPage('login')} />;
@@ -25,13 +31,31 @@ function App() {
     return (
       <Setup
         onBackToWelcome={() => setCurrentPage('welcome')}
-        onStartScanner={() => setCurrentPage('scanner')}
+        onStartScanner={(profile) => {
+          setPetProfile(profile);
+          setCurrentPage('scanner');
+        }}
       />
     );
   }
 
   if (currentPage === 'scanner') {
-    return <Scanner onBackToSetup={() => setCurrentPage('setup')} />;
+    return (
+      <Scanner
+        onBackToSetup={() => setCurrentPage('setup')}
+        onViewResults={() => setCurrentPage('results')}
+      />
+    );
+  }
+
+  if (currentPage === 'results') {
+    return (
+      <Results
+        petProfile={petProfile}
+        onScanAgain={() => setCurrentPage('scanner')}
+        onGoHome={() => setCurrentPage('welcome')}
+      />
+    );
   }
 
   return (

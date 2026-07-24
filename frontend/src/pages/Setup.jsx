@@ -46,7 +46,7 @@ function Setup({ onBackToWelcome, onStartScanner }) {
       <main className="setup-page">
         <section className="setup-complete">
           <span className="setup-complete__check" aria-hidden="true">✓</span>
-          <PetIllustration className="setup-complete__pet" />
+          <PetIllustration className="setup-complete__pet" type={petType} />
           <span className="eyebrow">등록 완료</span>
           <h1>{petName}의 정보를<br />안전하게 저장했어요</h1>
           <p>
@@ -62,7 +62,10 @@ function Setup({ onBackToWelcome, onStartScanner }) {
           <div className="setup-complete__next">
             다음 단계에서는 사료 사진을 올릴 수 있어요.
           </div>
-          <Button type="button" onClick={onStartScanner}>
+          <Button
+            type="button"
+            onClick={() => onStartScanner({ petType, petName, allergies })}
+          >
             사료 사진 올리기 →
           </Button>
           <button

@@ -5,7 +5,7 @@ import UploadBox from '../components/UploadBox';
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
-function Scanner({ onBackToSetup }) {
+function Scanner({ onBackToSetup, onViewResults }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [scanStatus, setScanStatus] = useState('empty');
@@ -100,8 +100,11 @@ function Scanner({ onBackToSetup }) {
                 <span className="scan-state__complete-icon" aria-hidden="true">✓</span>
                 <span className="eyebrow">분석 완료</span>
                 <h2>성분표를 모두 확인했어요!</h2>
-                <p>다음 단계에서 상세 분석 결과를 보여드릴게요.</p>
-                <Button type="button" onClick={handleRemove}>다른 사진 분석하기</Button>
+                <p>안전·주의·위험 성분을 구분해 두었어요.</p>
+                <div className="scan-state__actions">
+                  <Button type="button" onClick={onViewResults}>상세 분석 결과 보기</Button>
+                  <button type="button" onClick={handleRemove}>다른 사진 선택하기</button>
+                </div>
               </>
             )}
           </div>
