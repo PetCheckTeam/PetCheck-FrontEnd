@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Chatbot from './pages/Chatbot';
 import Login from './pages/Login';
 import Results from './pages/Results';
 import Scanner from './pages/Scanner';
@@ -54,6 +55,16 @@ function App() {
         petProfile={petProfile}
         onScanAgain={() => setCurrentPage('scanner')}
         onGoHome={() => setCurrentPage('welcome')}
+        onAskAI={() => setCurrentPage('chatbot')}
+      />
+    );
+  }
+
+  if (currentPage === 'chatbot') {
+    return (
+      <Chatbot
+        petProfile={petProfile}
+        onBackToResults={() => setCurrentPage('results')}
       />
     );
   }

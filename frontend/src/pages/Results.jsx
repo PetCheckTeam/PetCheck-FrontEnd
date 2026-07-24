@@ -92,7 +92,7 @@ const verdictInfo = {
   },
 };
 
-function Results({ petProfile, onScanAgain, onGoHome }) {
+function Results({ petProfile, onScanAgain, onGoHome, onAskAI }) {
   const [openIngredientId, setOpenIngredientId] = useState(null);
   const petName = petProfile.petName || '우리 아이';
   const result = createResultData(petName, petProfile.allergies || []);
@@ -173,6 +173,17 @@ function Results({ petProfile, onScanAgain, onGoHome }) {
             ))}
           </div>
         </section>
+
+        <div className="result-ai-cta">
+          <div>
+            <span aria-hidden="true">✨</span>
+            <div>
+              <strong>이 결과에 대해 더 궁금한가요?</strong>
+              <p>{petName}의 프로필을 참고해 AI가 쉽게 설명해 드려요.</p>
+            </div>
+          </div>
+          <Button type="button" onClick={onAskAI}>AI에게 물어보기 →</Button>
+        </div>
 
         <div className="result-actions">
           <Button type="button" onClick={onScanAgain}>다른 사료 분석하기</Button>
