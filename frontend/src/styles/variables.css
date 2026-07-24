@@ -1,0 +1,15 @@
+:root {
+  --color-cream: #f2f8ff;
+  --color-coral: #3182f6;
+  --color-coral-dark: #1b64da;
+  --color-coral-soft: #e8f3ff;
+  --color-brown: #191f28;
+  --color-brown-light: #6b7684;
+  --color-border: #e5e8eb;
+  --color-white: #ffffff;
+  --color-error: #f04452;
+  --color-success: #00a86b;
+  --shadow-card: 0 18px 60px rgba(48, 89, 138, 0.1);
+  --radius-card: 30px;
+  --radius-input: 16px;
+}

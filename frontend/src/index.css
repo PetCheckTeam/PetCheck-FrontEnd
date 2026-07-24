@@ -1,0 +1,463 @@
+@import './styles/variables.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color: var(--color-brown);
+  background: var(--color-cream);
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  word-break: keep-all;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.auth-page {
+  display: grid;
+  grid-template-columns: minmax(360px, 1fr) minmax(400px, 500px);
+  gap: clamp(52px, 8vw, 130px);
+  min-height: 100vh;
+  align-items: center;
+  padding: 48px max(7vw, 32px);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(129, 192, 255, .22), transparent 28%),
+    linear-gradient(145deg, #edf7ff 0%, #f8fbff 55%, #eef6ff 100%);
+}
+
+.auth-intro {
+  width: min(100%, 560px);
+  justify-self: end;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-brown);
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -.8px;
+  text-decoration: none;
+}
+
+.brand__paw {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--color-coral);
+  color: white;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.auth-intro__copy {
+  margin-top: clamp(62px, 8vh, 100px);
+}
+
+.eyebrow,
+.auth-card__step {
+  display: inline-block;
+  color: var(--color-coral);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.auth-intro__copy h1 {
+  margin: 14px 0 0;
+  font-size: clamp(44px, 4.6vw, 68px);
+  line-height: 1.17;
+  letter-spacing: -.06em;
+}
+
+.auth-intro__copy p {
+  margin: 23px 0 0;
+  color: var(--color-brown-light);
+  font-size: 18px;
+  line-height: 1.7;
+  letter-spacing: -.02em;
+}
+
+.pet-guide {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  margin: 36px 0 0 6px;
+}
+
+.pet-guide__bubble {
+  position: relative;
+  margin-bottom: 45px;
+  padding: 17px 22px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 10px 35px rgba(48, 89, 138, .09);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.pet-guide__bubble::after {
+  position: absolute;
+  right: -10px;
+  bottom: 17px;
+  width: 22px;
+  height: 22px;
+  background: white;
+  content: "";
+  transform: rotate(45deg);
+}
+
+.auth-intro__pet {
+  width: 125px;
+  height: auto;
+}
+
+.pet-illustration {
+  object-fit: contain;
+  transform-origin: center bottom;
+  animation: mascot-sway 4.2s ease-in-out infinite;
+}
+.auth-card {
+  width: 100%;
+  padding: clamp(34px, 4vw, 50px);
+  border: 1px solid rgba(255, 255, 255, .8);
+  border-radius: var(--radius-card);
+  background: rgba(255, 255, 255, .94);
+  box-shadow: var(--shadow-card);
+}
+
+.auth-card__heading {
+  margin-bottom: 34px;
+}
+
+.auth-card__heading h2 {
+  margin: 8px 0 8px;
+  font-size: 30px;
+  letter-spacing: -.045em;
+}
+
+.auth-card__heading p {
+  margin: 0;
+  color: var(--color-brown-light);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.auth-form {
+  display: grid;
+  gap: 20px;
+}
+
+.auth-field {
+  display: grid;
+  gap: 8px;
+}
+
+.auth-field__label {
+  padding-left: 3px;
+  color: #4e5968;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.auth-field__input {
+  width: 100%;
+  height: 56px;
+  padding: 0 17px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  outline: none;
+  background: #f7f8fa;
+  color: var(--color-brown);
+  font-size: 16px;
+  transition: background .18s, border-color .18s, box-shadow .18s;
+}
+
+.auth-field__input::placeholder {
+  color: #adb5bd;
+}
+
+.auth-field__input:hover {
+  background: #f2f4f6;
+}
+
+.auth-field__input:focus {
+  border-color: var(--color-coral);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(49, 130, 246, .12);
+}
+
+.auth-field__input--error {
+  border-color: var(--color-error);
+}
+
+.auth-field__error {
+  margin: 0;
+  padding-left: 3px;
+  color: var(--color-error);
+  font-size: 13px;
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field__input {
+  padding-right: 65px;
+}
+
+.password-field__toggle {
+  position: absolute;
+  top: 50%;
+  right: 13px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: var(--color-coral);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.button {
+  display: inline-flex;
+  min-height: 56px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--radius-input);
+  background: var(--color-coral);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .18s, transform .18s;
+}
+
+.button:hover {
+  background: var(--color-coral-dark);
+  transform: translateY(-1px);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button--full {
+  width: 100%;
+}
+
+.auth-card__switch {
+  margin: 27px 0 0;
+  color: var(--color-brown-light);
+  font-size: 14px;
+  text-align: center;
+}
+
+.auth-card__switch button {
+  margin-left: 7px;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--color-coral);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.welcome-page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(111, 178, 255, .25), transparent 26%),
+    linear-gradient(180deg, #e7f4ff, #f6faff);
+}
+
+.welcome-card {
+  width: min(100%, 530px);
+  padding: clamp(38px, 7vw, 64px);
+  border-radius: 34px;
+  background: white;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.welcome-card__badge {
+  display: inline-block;
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: var(--color-coral-soft);
+  color: var(--color-coral);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.welcome-card__pet {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin: 22px auto 8px;
+}
+
+.welcome-card__bubble {
+  display: inline-block;
+  margin-bottom: 13px;
+  padding: 12px 17px;
+  border-radius: 16px;
+  background: #f2f4f6;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.welcome-card h1 {
+  margin: 8px 0 18px;
+  font-size: clamp(38px, 6vw, 52px);
+  line-height: 1.2;
+  letter-spacing: -.06em;
+}
+
+.welcome-card p {
+  margin: 0 0 28px;
+  color: var(--color-brown-light);
+  line-height: 1.7;
+}
+
+@keyframes mascot-sway {
+  0%, 22%, 100% {
+    transform: rotate(0deg);
+  }
+
+  38%, 52% {
+    transform: rotate(-2.5deg) translateY(-2px);
+  }
+
+  68%, 82% {
+    transform: rotate(2.5deg) translateY(-2px);
+  }
+}
+
+@media (max-width: 900px) {
+  .auth-page {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-items: start;
+    padding: 28px 20px 48px;
+  }
+
+  .auth-intro {
+    width: min(100%, 500px);
+    justify-self: center;
+  }
+
+  .auth-intro__copy {
+    margin-top: 48px;
+  }
+
+  .auth-intro__copy h1 {
+    font-size: clamp(38px, 10vw, 50px);
+  }
+
+  .auth-intro__copy p {
+    font-size: 16px;
+  }
+
+  .pet-guide {
+    position: absolute;
+    top: 27px;
+    right: 20px;
+    margin: 0;
+  }
+
+  .pet-guide__bubble {
+    display: none;
+  }
+
+  .auth-intro__pet {
+    width: 78px;
+  }
+
+  .auth-card {
+    width: min(100%, 500px);
+    justify-self: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .auth-page {
+    padding: 22px 16px 32px;
+    background: #f5faff;
+  }
+
+  .brand {
+    font-size: 22px;
+  }
+
+  .brand__paw {
+    width: 34px;
+    height: 34px;
+  }
+
+  .auth-intro__copy {
+    margin-top: 42px;
+  }
+
+  .auth-intro__copy h1 {
+    font-size: 36px;
+  }
+
+  .auth-intro__copy p {
+    margin-top: 15px;
+    font-size: 15px;
+  }
+
+  .auth-card {
+    padding: 30px 22px;
+    border-radius: 26px;
+  }
+
+  .auth-card__heading h2 {
+    font-size: 27px;
+  }
+
+  .welcome-card {
+    padding: 38px 23px;
+    border-radius: 28px;
+  }
+
+  .welcome-card__pet {
+    width: 130px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

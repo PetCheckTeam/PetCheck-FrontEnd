@@ -1,0 +1,20 @@
+# dependencies
+node_modules/
+
+# Vite build
+dist/
+
+# environment variables
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+
+# logs
+*.log
+
+# editor
+.vscode/
+.idea/
