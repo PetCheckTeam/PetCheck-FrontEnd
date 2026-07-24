@@ -15,7 +15,7 @@ const allergyOptions = [
   '생선',
 ];
 
-function Setup({ onBackToWelcome }) {
+function Setup({ onBackToWelcome, onStartScanner }) {
   const [step, setStep] = useState(1);
   const [petType, setPetType] = useState('');
   const [petName, setPetName] = useState('');
@@ -62,9 +62,16 @@ function Setup({ onBackToWelcome }) {
           <div className="setup-complete__next">
             다음 단계에서는 사료 사진을 올릴 수 있어요.
           </div>
-          <Button type="button" onClick={onBackToWelcome}>
-            소개 화면으로 돌아가기
+          <Button type="button" onClick={onStartScanner}>
+            사료 사진 올리기 →
           </Button>
+          <button
+            className="setup-complete__back"
+            type="button"
+            onClick={onBackToWelcome}
+          >
+            소개 화면으로 돌아가기
+          </button>
         </section>
       </main>
     );

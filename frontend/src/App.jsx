@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Login from './pages/Login';
+import Scanner from './pages/Scanner';
 import Setup from './pages/Setup';
 import Signup from './pages/Signup';
 import Welcome from './pages/Welcome';
@@ -21,7 +22,16 @@ function App() {
   }
 
   if (currentPage === 'setup') {
-    return <Setup onBackToWelcome={() => setCurrentPage('welcome')} />;
+    return (
+      <Setup
+        onBackToWelcome={() => setCurrentPage('welcome')}
+        onStartScanner={() => setCurrentPage('scanner')}
+      />
+    );
+  }
+
+  if (currentPage === 'scanner') {
+    return <Scanner onBackToSetup={() => setCurrentPage('setup')} />;
   }
 
   return (
