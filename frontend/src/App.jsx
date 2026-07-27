@@ -16,7 +16,12 @@ const normalizePet = (pet) => ({
   ...pet,
   id: pet?.id ?? pet?.petId,
   petName: pet?.name ?? pet?.petName ?? '',
-  petType: pet?.type?.toLowerCase?.() ?? pet?.petType ?? '',
+  petType: (
+  pet?.species
+  ?? pet?.type
+  ?? pet?.petType
+  ?? ''
+).toLowerCase(),
   allergies: toArray(pet?.avoidIngredients ?? pet?.allergies)
     .map((item) => (typeof item === 'string' ? item : item.name)),
 });
@@ -138,10 +143,8 @@ function App() {
         onRegister={async (profile) => {
           const payload = {
             name: profile.petName,
-            type: profile.petType.toUpperCase(),
-            breed: profile.breed,
-            age: Number(profile.age),
-          };
+            species: profile.petType.toUpperCase(),
+          }; 
           const saved = profile.id
             ? await petsApi.update(profile.id, payload)
             : await petsApi.create(payload);
