@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import PetIllustration from '../components/PetIllustration';
 
-const SPECIAL_CHARACTER_PATTERN = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`]/;
-
 function Welcome({
   userProfile,
   petProfiles,
   onUpdateUser,
   onLogout,
+  onDeleteAccount,
   onStartSetup,
   onEditPet,
+  onDeletePet,
   onStartChatbot,
   onStartScanner,
 }) {
@@ -19,12 +19,10 @@ function Welcome({
   const [ownerForm, setOwnerForm] = useState({
     name: userProfile?.name ?? '',
     email: userProfile?.email ?? '',
-    currentPassword: '',
-    newPassword: '',
-    newPasswordConfirm: '',
   });
   const [ownerMessage, setOwnerMessage] = useState('');
-  const handleOwnerSubmit = (event) => {
+  const [petMessage, setPetMessage] = useState('');
+  const handleOwnerSubmit = async (event) => {
     event.preventDefault();
     setOwnerMessage('');
 
@@ -33,43 +31,16 @@ function Welcome({
       return;
     }
 
-    if (
-      ownerForm.newPassword
-      && ownerForm.newPassword !== ownerForm.newPasswordConfirm
-    ) {
-      setOwnerMessage('새 비밀번호가 일치하지 않아요.');
+    try {
+      await onUpdateUser({
+        ...userProfile,
+        name: ownerForm.name.trim(),
+      });
+    } catch (error) {
+      setOwnerMessage(error.message);
       return;
     }
-
-    if (ownerForm.newPassword && !ownerForm.currentPassword) {
-      setOwnerMessage('현재 비밀번호를 입력해 주세요.');
-      return;
-    }
-
-    if (
-      ownerForm.newPassword
-      && !SPECIAL_CHARACTER_PATTERN.test(ownerForm.newPassword)
-    ) {
-      setOwnerMessage('새 비밀번호에 특수문자를 1개 이상 포함해 주세요.');
-      return;
-    }
-
-    onUpdateUser({
-      ...userProfile,
-      name: ownerForm.name.trim(),
-      email: ownerForm.email.trim(),
-    });
-    setOwnerForm((previous) => ({
-      ...previous,
-      currentPassword: '',
-      newPassword: '',
-      newPasswordConfirm: '',
-    }));
-    setOwnerMessage(
-      ownerForm.newPassword
-        ? '보호자 정보와 비밀번호를 변경했어요.'
-        : '보호자 정보를 변경했어요.',
-    );
+    setOwnerMessage('닉네임을 변경했어요.');
   };
 
   return (
@@ -210,9 +181,24 @@ function Welcome({
                   <button type="button" onClick={() => onEditPet(pet)}>
                     정보 수정
                   </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (!window.confirm(`${pet.petName}의 정보를 삭제할까요?`)) return;
+                      setPetMessage('');
+                      try {
+                        await onDeletePet(pet.id);
+                      } catch (error) {
+                        setPetMessage(error.message);
+                      }
+                    }}
+                  >
+                    삭제
+                  </button>
                 </article>
               ))}
             </div>
+            {petMessage && <p className="owner-settings__message" role="alert">{petMessage}</p>}
 
             <button
               className="pet-management__add"
@@ -251,52 +237,28 @@ function Welcome({
                 <input
                   type="email"
                   value={ownerForm.email}
-                  onChange={(event) => setOwnerForm((previous) => ({
-                    ...previous,
-                    email: event.target.value,
-                  }))}
+                  readOnly
                 />
-              </label>
-              <label>
-                <span>현재 비밀번호</span>
-                <input
-                  type="password"
-                  placeholder="비밀번호 변경 시 입력"
-                  value={ownerForm.currentPassword}
-                  onChange={(event) => setOwnerForm((previous) => ({
-                    ...previous,
-                    currentPassword: event.target.value,
-                  }))}
-                />
-              </label>
-              <label>
-                <span>새 비밀번호</span>
-                <input
-                  type="password"
-                  placeholder="새 비밀번호"
-                  value={ownerForm.newPassword}
-                  onChange={(event) => setOwnerForm((previous) => ({
-                    ...previous,
-                    newPassword: event.target.value,
-                  }))}
-                />
-                <small>특수문자를 1개 이상 포함해 주세요. 예: !, @, #</small>
-              </label>
-              <label>
-                <span>새 비밀번호 확인</span>
-                <input
-                  type="password"
-                  placeholder="새 비밀번호 다시 입력"
-                  value={ownerForm.newPasswordConfirm}
-                  onChange={(event) => setOwnerForm((previous) => ({
-                    ...previous,
-                    newPasswordConfirm: event.target.value,
-                  }))}
-                />
+                <small>이메일은 현재 API에서 변경할 수 없어요.</small>
               </label>
             </div>
             {ownerMessage && <p className="owner-settings__message">{ownerMessage}</p>}
             <button className="owner-settings__submit" type="submit">변경사항 저장</button>
+            <button
+              className="setup-complete__back"
+              type="button"
+              onClick={async () => {
+                if (!window.confirm('회원 탈퇴 시 모든 정보를 되돌릴 수 없습니다. 탈퇴할까요?')) return;
+                setOwnerMessage('');
+                try {
+                  await onDeleteAccount();
+                } catch (error) {
+                  setOwnerMessage(error.message);
+                }
+              }}
+            >
+              회원 탈퇴
+            </button>
           </form>
         )}
 

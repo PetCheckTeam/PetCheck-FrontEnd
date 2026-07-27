@@ -92,10 +92,50 @@ const verdictInfo = {
   },
 };
 
-function Results({ petProfile, onScanAgain, onGoHome, onAskAI }) {
+const normalizeStatus = (status) => {
+  const value = String(status ?? '').toLowerCase();
+  if (['danger', 'dangerous', 'avoid', 'unsafe', '위험'].includes(value)) return 'danger';
+  if (['warning', 'caution', '주의'].includes(value)) return 'warning';
+  return 'safe';
+};
+
+const normalizeAnalysisResult = (analysis, petName) => {
+  const source = analysis?.analysisResult ?? analysis?.result ?? analysis;
+  const rawIngredients = source?.ingredients ?? source?.ingredientResults ?? [];
+  const ingredients = rawIngredients.map((ingredient, index) => ({
+    ...ingredient,
+    id: ingredient.id ?? ingredient.ingredientId ?? index,
+    name: ingredient.name ?? ingredient.ingredientName ?? '이름 없는 성분',
+    status: normalizeStatus(ingredient.status ?? ingredient.riskLevel),
+    shortDescription:
+      ingredient.shortDescription ?? ingredient.summary ?? ingredient.description ?? '',
+    description: ingredient.description ?? ingredient.detail ?? '',
+    reason: ingredient.reason ?? ingredient.analysisReason ?? '',
+  }));
+  const count = (status) => ingredients.filter((item) => item.status === status).length;
+  const verdict = normalizeStatus(
+    source?.verdict
+    ?? source?.overallStatus
+    ?? (count('danger') ? 'danger' : count('warning') ? 'warning' : 'safe'),
+  );
+
+  return {
+    petName,
+    verdict,
+    safe: source?.safeCount ?? count('safe'),
+    warning: source?.warningCount ?? count('warning'),
+    danger: source?.dangerCount ?? count('danger'),
+    message: source?.message ?? source?.healthMessage ?? `${petName}의 분석 결과를 확인해 주세요.`,
+    ingredients,
+  };
+};
+
+function Results({ petProfile, analysisResult, onScanAgain, onGoHome, onAskAI }) {
   const [openIngredientId, setOpenIngredientId] = useState(null);
   const petName = petProfile.petName || '우리 아이';
-  const result = createResultData(petName, petProfile.allergies || []);
+  const result = analysisResult
+    ? normalizeAnalysisResult(analysisResult, petName)
+    : createResultData(petName, petProfile.allergies || []);
   const currentVerdict = verdictInfo[result.verdict];
 
   return (

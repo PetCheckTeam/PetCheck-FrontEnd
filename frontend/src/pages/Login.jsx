@@ -35,6 +35,8 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
     email: '',
     password: '',
   });
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const featureCards = featureSectionRef.current?.querySelectorAll(
@@ -72,12 +74,20 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // 지금은 HTML의 required 검사를 통과하면 로그인 성공으로 가정합니다.
-    // API 연결 후에는 서버 응답이 성공했을 때 이 함수를 호출하면 됩니다.
-    onLoginSuccess({ email: formValues.email.trim() });
+    setErrorMessage('');
+    setIsSubmitting(true);
+    try {
+      await onLoginSuccess({
+        email: formValues.email.trim(),
+        password: formValues.password,
+      });
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -136,8 +146,9 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
               }
               required
             />
-            <Button type="submit" fullWidth>
-              로그인하기
+            {errorMessage && <p className="auth-field__error" role="alert">{errorMessage}</p>}
+            <Button type="submit" fullWidth disabled={isSubmitting}>
+              {isSubmitting ? '로그인 중...' : '로그인하기'}
               <span aria-hidden="true">→</span>
             </Button>
           </form>

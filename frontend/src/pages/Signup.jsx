@@ -3,6 +3,7 @@ import AuthInput from '../components/AuthInput';
 import Button from '../components/Button';
 import PasswordInput from '../components/PasswordInput';
 import PetIllustration from '../components/PetIllustration';
+import { authApi } from '../api/petcheckApi';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SPECIAL_CHARACTER_PATTERN = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`]/;
@@ -15,6 +16,7 @@ function Signup({ onMoveToLogin }) {
     passwordConfirm: '',
   });
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const updateField = (field, value) => {
     setFormValues((previous) => ({ ...previous, [field]: value }));
@@ -48,13 +50,23 @@ function Signup({ onMoveToLogin }) {
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!validate()) return;
-
-    // 다음 단계에서 authApi.signup(formValues) 호출 후 로그인 화면으로 이동합니다.
-    onMoveToLogin();
+    setIsSubmitting(true);
+    try {
+      await authApi.signup({
+        email: formValues.email.trim(),
+        password: formValues.password,
+        nickname: formValues.name.trim(),
+      });
+      onMoveToLogin();
+    } catch (error) {
+      setErrors((previous) => ({ ...previous, form: error.message }));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -123,8 +135,9 @@ function Signup({ onMoveToLogin }) {
             onChange={(event) => updateField('passwordConfirm', event.target.value)}
             error={errors.passwordConfirm}
           />
-          <Button type="submit" fullWidth>
-            회원가입하기
+          {errors.form && <p className="auth-field__error" role="alert">{errors.form}</p>}
+          <Button type="submit" fullWidth disabled={isSubmitting}>
+            {isSubmitting ? '가입 중...' : '회원가입하기'}
             <span aria-hidden="true">→</span>
           </Button>
         </form>

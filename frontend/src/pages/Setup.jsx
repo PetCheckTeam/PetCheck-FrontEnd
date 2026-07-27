@@ -25,17 +25,31 @@ function Setup({
   const [step, setStep] = useState(1);
   const [petType, setPetType] = useState(initialProfile?.petType ?? '');
   const [petName, setPetName] = useState(initialProfile?.petName ?? '');
+  const [breed, setBreed] = useState(initialProfile?.breed ?? '');
+  const [age, setAge] = useState(initialProfile?.age ?? '');
   const [allergies, setAllergies] = useState(initialProfile?.allergies ?? []);
   const [isComplete, setIsComplete] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const completeRegistration = () => {
-    onRegister({
-      id: initialProfile?.id,
-      petType,
-      petName: petName.trim(),
-      allergies,
-    });
-    setIsComplete(true);
+  const completeRegistration = async () => {
+    setErrorMessage('');
+    setIsSubmitting(true);
+    try {
+      await onRegister({
+        id: initialProfile?.id,
+        petType,
+        petName: petName.trim(),
+        breed: breed.trim(),
+        age,
+        allergies,
+      });
+      setIsComplete(true);
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const toggleAllergy = (allergy) => {
@@ -178,11 +192,34 @@ function Setup({
               />
               <small>{petName.length} / 20</small>
             </label>
+            <label className="setup-name-field" htmlFor="pet-breed">
+              <span>품종</span>
+              <input
+                id="pet-breed"
+                type="text"
+                value={breed}
+                maxLength="30"
+                placeholder="예: 말티즈"
+                onChange={(event) => setBreed(event.target.value)}
+              />
+            </label>
+            <label className="setup-name-field" htmlFor="pet-age">
+              <span>나이</span>
+              <input
+                id="pet-age"
+                type="number"
+                value={age}
+                min="0"
+                max="100"
+                placeholder="예: 3"
+                onChange={(event) => setAge(event.target.value)}
+              />
+            </label>
 
             <Button
               type="button"
               fullWidth
-              disabled={!petName.trim()}
+              disabled={!petName.trim() || !breed.trim() || age === ''}
               onClick={() => setStep(3)}
             >
               {petName.trim()
@@ -211,8 +248,11 @@ function Setup({
               ))}
             </div>
 
-            <Button type="button" fullWidth onClick={completeRegistration}>
-              {allergies.length > 0
+            {errorMessage && <p className="scanner-error" role="alert">{errorMessage}</p>}
+            <Button type="button" fullWidth onClick={completeRegistration} disabled={isSubmitting}>
+              {isSubmitting
+                ? '저장 중...'
+                : allergies.length > 0
                 ? `알러지 ${allergies.length}개 ${isEditing ? '수정하기' : '저장하기'}`
                 : `알러지 없이 ${isEditing ? '수정 완료' : '등록 완료'}`}
             </Button>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { analysesApi } from '../api/petcheckApi';
 import Button from '../components/Button';
 import UploadBox from '../components/UploadBox';
 
@@ -16,6 +17,8 @@ function Scanner({
   const [previewUrl, setPreviewUrl] = useState('');
   const [scanStatus, setScanStatus] = useState('empty');
   const [errorMessage, setErrorMessage] = useState('');
+  const [productName, setProductName] = useState('');
+  const [analysisData, setAnalysisData] = useState(null);
 
   useEffect(() => {
     if (!selectedImage) {
@@ -28,17 +31,6 @@ function Scanner({
 
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedImage]);
-
-  useEffect(() => {
-    if (scanStatus !== 'scanning') return undefined;
-
-    // 실제 API 연결 후에는 이 타이머를 서버 요청으로 교체합니다.
-    const timer = window.setTimeout(() => {
-      setScanStatus('complete');
-    }, 2200);
-
-    return () => window.clearTimeout(timer);
-  }, [scanStatus]);
 
   const handleFileSelect = (file) => {
     setErrorMessage('');
@@ -61,6 +53,49 @@ function Scanner({
     setSelectedImage(null);
     setScanStatus('empty');
     setErrorMessage('');
+    setAnalysisData(null);
+  };
+
+  const handleAnalyze = async () => {
+    if (!selectedImage || !selectedPetId || !productName.trim()) return;
+
+    setErrorMessage('');
+    setScanStatus('scanning');
+    try {
+      const created = await analysesApi.create({
+        petId: selectedPetId,
+        image: selectedImage,
+        productName: productName.trim(),
+      });
+      const analysisId = created?.analysisId ?? created?.id;
+      if (!analysisId) throw new Error('분석 생성 응답에 분석 ID가 없습니다.');
+
+      let current = created;
+      let isConfirmed = false;
+      let isComplete = false;
+      for (let attempt = 0; attempt < 60; attempt += 1) {
+        current = await analysesApi.get(analysisId);
+        const status = String(current?.status ?? '').toUpperCase();
+        if (['COMPLETED', 'COMPLETE', 'SUCCESS', 'DONE', 'ANALYZED'].includes(status)) {
+          isComplete = true;
+          break;
+        }
+        if (!isConfirmed && ['OCR_COMPLETED', 'OCR_COMPLETE', 'OCR_READY'].includes(status)) {
+          await analysesApi.confirm(analysisId);
+          isConfirmed = true;
+        }
+        if (['FAILED', 'ERROR'].includes(status)) {
+          throw new Error(current?.message ?? '사료 분석에 실패했습니다.');
+        }
+        await new Promise((resolve) => window.setTimeout(resolve, 1000));
+      }
+      if (!isComplete) throw new Error('분석 시간이 오래 걸리고 있습니다. 잠시 후 다시 시도해 주세요.');
+      setAnalysisData(current);
+      setScanStatus('complete');
+    } catch (error) {
+      setErrorMessage(error.message);
+      setScanStatus('upload');
+    }
   };
 
   return (
@@ -142,7 +177,9 @@ function Scanner({
                 <h2>성분표를 모두 확인했어요!</h2>
                 <p>안전·주의·위험 성분을 구분해 두었어요.</p>
                 <div className="scan-state__actions">
-                  <Button type="button" onClick={onViewResults}>상세 분석 결과 보기</Button>
+                  <Button type="button" onClick={() => onViewResults(analysisData)}>
+                    상세 분석 결과 보기
+                  </Button>
                   <button type="button" onClick={handleRemove}>다른 사진 선택하기</button>
                 </div>
               </>
@@ -156,14 +193,28 @@ function Scanner({
               onFileSelect={handleFileSelect}
               onRemove={handleRemove}
             />
+            <label className="setup-name-field scanner-product-field" htmlFor="product-name">
+              <span>제품명</span>
+              <input
+                id="product-name"
+                type="text"
+                value={productName}
+                placeholder="예: 우리 아이 데일리 사료"
+                onChange={(event) => setProductName(event.target.value)}
+              />
+            </label>
             {errorMessage && <p className="scanner-error" role="alert">{errorMessage}</p>}
             <Button
               type="button"
               fullWidth
-              disabled={!selectedImage}
-              onClick={() => selectedImage && setScanStatus('scanning')}
+              disabled={!selectedImage || !selectedPetId || !productName.trim()}
+              onClick={handleAnalyze}
             >
-              {selectedImage ? '이 사진 분석하기' : '사진을 먼저 올려주세요'}
+              {!selectedImage
+                ? '사진을 먼저 올려주세요'
+                : !productName.trim()
+                  ? '제품명을 입력해 주세요'
+                  : '이 사진 분석하기'}
             </Button>
           </>
         )}

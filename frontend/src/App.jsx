@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { authApi, petsApi, tokenStorage, usersApi } from './api/petcheckApi';
 import Chatbot from './pages/Chatbot';
 import Login from './pages/Login';
 import Results from './pages/Results';
@@ -7,92 +8,154 @@ import Setup from './pages/Setup';
 import Signup from './pages/Signup';
 import Welcome from './pages/Welcome';
 
+const normalizeUser = (user) => ({ ...user, name: user?.nickname ?? user?.name ?? '' });
+const toArray = (value) => (
+  Array.isArray(value) ? value : value?.content ?? value?.items ?? []
+);
+const normalizePet = (pet) => ({
+  ...pet,
+  id: pet?.id ?? pet?.petId,
+  petName: pet?.name ?? pet?.petName ?? '',
+  petType: pet?.type?.toLowerCase?.() ?? pet?.petType ?? '',
+  allergies: toArray(pet?.avoidIngredients ?? pet?.allergies)
+    .map((item) => (typeof item === 'string' ? item : item.name)),
+});
+
 function App() {
-  const [userProfile, setUserProfile] = useState(() => {
-    const savedProfile = localStorage.getItem('petcheck-user-profile');
-    return savedProfile ? JSON.parse(savedProfile) : null;
-  });
-  const [currentPage, setCurrentPage] = useState(() => (
-    localStorage.getItem('petcheck-user-profile') ? 'welcome' : 'login'
-  ));
-  const [petProfiles, setPetProfiles] = useState(() => {
-    const savedProfiles = localStorage.getItem('petcheck-pet-profiles');
-    return savedProfiles ? JSON.parse(savedProfiles) : [];
-  });
+  const [userProfile, setUserProfile] = useState(null);
+  const [currentPage, setCurrentPage] = useState('loading');
+  const [petProfiles, setPetProfiles] = useState([]);
   const [selectedPetId, setSelectedPetId] = useState(null);
   const [editingPet, setEditingPet] = useState(null);
+  const [analysisResult, setAnalysisResult] = useState(null);
   const [chatbotReturnPage, setChatbotReturnPage] = useState('welcome');
 
-  const selectedPet =
-    petProfiles.find((profile) => profile.id === selectedPetId) ?? petProfiles[0] ?? null;
+  const selectedPet = petProfiles.find(
+    (profile) => String(profile.id) === String(selectedPetId),
+  ) ?? petProfiles[0] ?? null;
+
+  const loadAccount = async () => {
+    await authApi.me();
+    const [user, pets] = await Promise.all([usersApi.me(), petsApi.list()]);
+    const petList = toArray(pets);
+    const avoidIngredientResults = await Promise.allSettled(
+      petList.map((pet) => petsApi.listAvoidIngredients(pet.id ?? pet.petId)),
+    );
+    setUserProfile(normalizeUser(user));
+    setPetProfiles(petList.map((pet, index) => normalizePet({
+      ...pet,
+      avoidIngredients: avoidIngredientResults[index].status === 'fulfilled'
+        ? toArray(avoidIngredientResults[index].value)
+        : pet.avoidIngredients,
+    })));
+  };
 
   useEffect(() => {
-    localStorage.setItem('petcheck-pet-profiles', JSON.stringify(petProfiles));
-  }, [petProfiles]);
-
-  useEffect(() => {
-    if (userProfile) {
-      localStorage.setItem('petcheck-user-profile', JSON.stringify(userProfile));
-    } else {
-      localStorage.removeItem('petcheck-user-profile');
+    if (!tokenStorage.get()) {
+      setCurrentPage('login');
+      return;
     }
-  }, [userProfile]);
+    loadAccount()
+      .then(() => setCurrentPage('welcome'))
+      .catch(() => {
+        tokenStorage.clear();
+        setCurrentPage('login');
+      });
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      // 서버 세션 정리에 실패해도 로컬 로그인 정보는 반드시 제거합니다.
+    }
+    tokenStorage.clear();
+    setUserProfile(null);
+    setPetProfiles([]);
+    setCurrentPage('login');
+  };
+
+  const updateUser = async (profile) => {
+    const user = await usersApi.updateMe(profile.name);
+    setUserProfile(normalizeUser(user));
+  };
+
+  if (currentPage === 'loading') {
+    return <main className="app-loading">로그인 정보를 확인하고 있어요...</main>;
+  }
 
   if (currentPage === 'signup') {
     return <Signup onMoveToLogin={() => setCurrentPage('login')} />;
   }
 
-  if (currentPage === 'welcome') {
-    return (
-      <Welcome
-        userProfile={userProfile}
-        petProfiles={petProfiles}
-        onUpdateUser={setUserProfile}
-        onLogout={() => {
-          setUserProfile(null);
-          setCurrentPage('login');
-        }}
-        onStartSetup={() => {
-          setEditingPet(null);
-          setCurrentPage('setup');
-        }}
-        onEditPet={(pet) => {
-          setEditingPet(pet);
-          setCurrentPage('setup');
-        }}
-        onStartChatbot={(petId) => {
-          setSelectedPetId(petId);
-          setChatbotReturnPage('welcome');
-          setCurrentPage('chatbot');
-        }}
-        onStartScanner={(petId) => {
-          setSelectedPetId(petId);
-          setCurrentPage('scanner');
-        }}
-      />
-    );
-  }
+  const welcome = (
+    <Welcome
+      userProfile={userProfile}
+      petProfiles={petProfiles}
+      onUpdateUser={updateUser}
+      onLogout={handleLogout}
+      onDeleteAccount={async () => {
+        await usersApi.deleteMe();
+        tokenStorage.clear();
+        setUserProfile(null);
+        setPetProfiles([]);
+        setCurrentPage('login');
+      }}
+      onStartSetup={() => {
+        setEditingPet(null);
+        setCurrentPage('setup');
+      }}
+      onEditPet={(pet) => {
+        setEditingPet(pet);
+        setCurrentPage('setup');
+      }}
+      onDeletePet={async (petId) => {
+        await petsApi.remove(petId);
+        setPetProfiles((previous) => previous.filter(
+          (pet) => String(pet.id) !== String(petId),
+        ));
+        if (String(selectedPetId) === String(petId)) setSelectedPetId(null);
+      }}
+      onStartChatbot={(petId) => {
+        setSelectedPetId(petId);
+        setChatbotReturnPage('welcome');
+        setCurrentPage('chatbot');
+      }}
+      onStartScanner={(petId) => {
+        setSelectedPetId(petId);
+        setCurrentPage('scanner');
+      }}
+    />
+  );
+
+  if (currentPage === 'welcome') return welcome;
 
   if (currentPage === 'setup') {
     return (
       <Setup
         initialProfile={editingPet}
         onBackToWelcome={() => setCurrentPage('welcome')}
-        onRegister={(profile) => {
-          const savedProfile = {
-            ...profile,
-            id: profile.id ?? crypto.randomUUID(),
+        onRegister={async (profile) => {
+          const payload = {
+            name: profile.petName,
+            type: profile.petType.toUpperCase(),
+            breed: profile.breed,
+            age: Number(profile.age),
           };
+          const saved = profile.id
+            ? await petsApi.update(profile.id, payload)
+            : await petsApi.create(payload);
+          const normalized = normalizePet({ ...profile, ...saved });
           setPetProfiles((previous) => (
             profile.id
-              ? previous.map((pet) => (pet.id === profile.id ? savedProfile : pet))
-              : [...previous, savedProfile]
+              ? previous.map((pet) => (
+                String(pet.id) === String(profile.id) ? normalized : pet
+              ))
+              : [...previous, normalized]
           ));
-          setSelectedPetId(savedProfile.id);
+          setSelectedPetId(normalized.id);
         }}
-        onStartScanner={() => {
-          setCurrentPage('scanner');
-        }}
+        onStartScanner={() => setCurrentPage('scanner')}
       />
     );
   }
@@ -104,59 +167,33 @@ function App() {
         selectedPetId={selectedPet?.id}
         onSelectPet={setSelectedPetId}
         onBack={() => setCurrentPage('welcome')}
-        onViewResults={() => setCurrentPage('results')}
-      />
-    );
-  }
-
-  if (currentPage === 'results') {
-    return (
-      <Results
-        petProfile={selectedPet ?? { petType: '', petName: '', allergies: [] }}
-        onScanAgain={() => setCurrentPage('scanner')}
-        onGoHome={() => setCurrentPage('welcome')}
-        onAskAI={() => {
-          setChatbotReturnPage('results');
-          setCurrentPage('chatbot');
+        onViewResults={(result) => {
+          setAnalysisResult(result);
+          setCurrentPage('results');
         }}
       />
     );
   }
 
+  const results = (
+    <Results
+      petProfile={selectedPet ?? { petType: '', petName: '', allergies: [] }}
+      analysisResult={analysisResult}
+      onScanAgain={() => setCurrentPage('scanner')}
+      onGoHome={() => setCurrentPage('welcome')}
+      onAskAI={() => {
+        setChatbotReturnPage('results');
+        setCurrentPage('chatbot');
+      }}
+    />
+  );
+
+  if (currentPage === 'results') return results;
+
   if (currentPage === 'chatbot') {
     return (
       <>
-        {chatbotReturnPage === 'results' ? (
-          <Results
-            petProfile={selectedPet ?? { petType: '', petName: '', allergies: [] }}
-            onScanAgain={() => setCurrentPage('scanner')}
-            onGoHome={() => setCurrentPage('welcome')}
-            onAskAI={() => {}}
-          />
-        ) : (
-          <Welcome
-            userProfile={userProfile}
-            petProfiles={petProfiles}
-            onUpdateUser={setUserProfile}
-            onLogout={() => {
-              setUserProfile(null);
-              setCurrentPage('login');
-            }}
-            onStartSetup={() => {
-              setEditingPet(null);
-              setCurrentPage('setup');
-            }}
-            onEditPet={(pet) => {
-              setEditingPet(pet);
-              setCurrentPage('setup');
-            }}
-            onStartChatbot={() => {}}
-            onStartScanner={(petId) => {
-              setSelectedPetId(petId);
-              setCurrentPage('scanner');
-            }}
-          />
-        )}
+        {chatbotReturnPage === 'results' ? results : welcome}
         <div className="chatbot-popup-layer" role="dialog" aria-modal="true" aria-label="PetCheck AI 챗봇">
           <button
             className="chatbot-popup-layer__backdrop"
@@ -179,9 +216,9 @@ function App() {
   return (
     <Login
       onMoveToSignup={() => setCurrentPage('signup')}
-      onLoginSuccess={({ email }) => {
-        const savedName = userProfile?.email === email ? userProfile.name : email.split('@')[0];
-        setUserProfile({ name: savedName, email });
+      onLoginSuccess={async (credentials) => {
+        await authApi.login(credentials);
+        await loadAccount();
         setCurrentPage('welcome');
       }}
     />
