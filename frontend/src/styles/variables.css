@@ -1,15 +1,15 @@
 :root {
-  --color-cream: #f2f8ff;
-  --color-coral: #3182f6;
-  --color-coral-dark: #1b64da;
-  --color-coral-soft: #e8f3ff;
+  --color-cream: #f7fce8;
+  --color-coral: #03b95b;
+  --color-coral-dark: #029e4e;
+  --color-coral-soft: #edf7d9;
   --color-brown: #191f28;
   --color-brown-light: #6b7684;
-  --color-border: #e5e8eb;
-  --color-white: #ffffff;
+  --color-border: #e1e8c7;
+  --color-white: #fffff7;
   --color-error: #f04452;
   --color-success: #00a86b;
-  --shadow-card: 0 18px 60px rgba(48, 89, 138, 0.1);
+  --shadow-card: 0 18px 60px rgba(93, 122, 57, 0.11);
   --radius-card: 30px;
   --radius-input: 16px;
 }

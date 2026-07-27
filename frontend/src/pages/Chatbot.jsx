@@ -29,7 +29,13 @@ function createSampleAnswer(question, petProfile) {
   return `${petName}의 프로필과 현재 분석 결과를 기준으로 살펴볼게요. 지금은 프론트엔드 샘플 답변 단계이며, 실제 RAG 연결 후에는 제품 성분표와 근거 문서를 검색해 더 정확한 답변을 제공할 예정이에요.`;
 }
 
-function Chatbot({ petProfile, onBackToResults }) {
+function Chatbot({
+  petProfile,
+  petProfiles,
+  selectedPetId,
+  onSelectPet,
+  onBackToResults,
+}) {
   const petName = petProfile.petName || '우리 아이';
   const [messages, setMessages] = useState([
     {
@@ -49,6 +55,22 @@ function Chatbot({ petProfile, onBackToResults }) {
   useEffect(() => {
     return () => window.clearTimeout(responseTimerRef.current);
   }, []);
+
+  const changePet = (petId) => {
+    const nextPet = petProfiles.find((pet) => pet.id === petId);
+    if (!nextPet || nextPet.id === selectedPetId) return;
+
+    window.clearTimeout(responseTimerRef.current);
+    setIsResponding(false);
+    onSelectPet(nextPet.id);
+    setMessages([
+      {
+        id: Date.now(),
+        role: 'assistant',
+        content: `${nextPet.petName}의 프로필로 변경했어요. 사료와 성분에 대해 궁금한 점을 물어보세요.`,
+      },
+    ]);
+  };
 
   const sendQuestion = (question) => {
     if (isResponding) return;
@@ -115,7 +137,19 @@ function Chatbot({ petProfile, onBackToResults }) {
             </small>
           </div>
         </div>
-        <span>프로필 기반 답변</span>
+        <label className="chatbot-profile__selector">
+          <span>반려동물 선택</span>
+          <select
+            value={selectedPetId ?? ''}
+            onChange={(event) => changePet(event.target.value)}
+          >
+            {petProfiles.map((pet) => (
+              <option key={pet.id} value={pet.id}>
+                {pet.petType === 'cat' ? '🐱' : '🐶'} {pet.petName}
+              </option>
+            ))}
+          </select>
+        </label>
       </section>
 
       <section className="chatbot-body" aria-label="AI 대화">

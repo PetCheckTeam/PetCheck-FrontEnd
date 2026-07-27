@@ -3,6 +3,7 @@ import { useState } from 'react';
 function PasswordInput({
   label,
   error,
+  helperText,
   id,
   className = '',
   ...inputProps
@@ -20,7 +21,9 @@ function PasswordInput({
           type={isVisible ? 'text' : 'password'}
           className={`auth-field__input password-field__input ${error ? 'auth-field__input--error' : ''} ${className}`}
           aria-invalid={Boolean(error)}
-          aria-describedby={error ? `${id}-error` : undefined}
+          aria-describedby={
+            error ? `${id}-error` : helperText ? `${id}-helper` : undefined
+          }
           {...inputProps}
         />
         <button
@@ -35,6 +38,11 @@ function PasswordInput({
       {error && (
         <p className="auth-field__error" id={`${id}-error`}>
           {error}
+        </p>
+      )}
+      {!error && helperText && (
+        <p className="auth-field__helper" id={`${id}-helper`}>
+          {helperText}
         </p>
       )}
     </div>

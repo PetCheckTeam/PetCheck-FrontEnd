@@ -5,7 +5,13 @@ import UploadBox from '../components/UploadBox';
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
-function Scanner({ onBackToSetup, onViewResults }) {
+function Scanner({
+  petProfiles,
+  selectedPetId,
+  onSelectPet,
+  onBack,
+  onViewResults,
+}) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [scanStatus, setScanStatus] = useState('empty');
@@ -60,7 +66,7 @@ function Scanner({ onBackToSetup, onViewResults }) {
   return (
     <main className="scanner-page">
       <header className="scanner-header">
-        <button type="button" onClick={onBackToSetup} aria-label="이전 화면">←</button>
+        <button type="button" onClick={onBack} aria-label="이전 화면">←</button>
         <a className="brand" href="/" aria-label="PetCheck 홈">
           <span className="brand__paw" aria-hidden="true">P</span>
           PetCheck
@@ -68,7 +74,41 @@ function Scanner({ onBackToSetup, onViewResults }) {
         <span className="scanner-header__step">사료 분석</span>
       </header>
 
-      <section className="scanner-card">
+      <div className="scanner-layout">
+        <aside className="pet-selector" aria-label="분석할 반려동물 선택">
+          <div className="pet-selector__heading">
+            <span>분석 대상</span>
+            <strong>반려동물 선택</strong>
+          </div>
+          <div className="pet-selector__list">
+            {petProfiles.map((pet) => (
+              <button
+                key={pet.id}
+                className={`pet-selector__item ${
+                  pet.id === selectedPetId ? 'pet-selector__item--selected' : ''
+                }`}
+                type="button"
+                aria-pressed={pet.id === selectedPetId}
+                onClick={() => onSelectPet(pet.id)}
+              >
+                <span className="pet-selector__emoji" aria-hidden="true">
+                  {pet.petType === 'dog' ? '🐶' : '🐱'}
+                </span>
+                <span>
+                  <strong>{pet.petName}</strong>
+                  <small>
+                    {pet.allergies.length > 0
+                      ? `알레르기 ${pet.allergies.length}개`
+                      : '알레르기 없음'}
+                  </small>
+                </span>
+                <span className="pet-selector__check" aria-hidden="true">✓</span>
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        <section className="scanner-card">
         <div className="scanner-heading">
           <span className="eyebrow">사료 성분 확인</span>
           <h1>성분표가 잘 보이게<br />사진을 올려주세요</h1>
@@ -127,7 +167,8 @@ function Scanner({ onBackToSetup, onViewResults }) {
             </Button>
           </>
         )}
-      </section>
+        </section>
+      </div>
     </main>
   );
 }

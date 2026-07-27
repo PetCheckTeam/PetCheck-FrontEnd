@@ -5,6 +5,7 @@ import PasswordInput from '../components/PasswordInput';
 import PetIllustration from '../components/PetIllustration';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SPECIAL_CHARACTER_PATTERN = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`]/;
 
 function Signup({ onMoveToLogin }) {
   const [formValues, setFormValues] = useState({
@@ -33,6 +34,8 @@ function Signup({ onMoveToLogin }) {
 
     if (!formValues.password) {
       nextErrors.password = '비밀번호를 입력해 주세요.';
+    } else if (!SPECIAL_CHARACTER_PATTERN.test(formValues.password)) {
+      nextErrors.password = '비밀번호에 특수문자를 1개 이상 포함해 주세요.';
     }
 
     if (!formValues.passwordConfirm) {
@@ -105,6 +108,7 @@ function Signup({ onMoveToLogin }) {
             label="비밀번호"
             placeholder="비밀번호를 입력해 주세요"
             autoComplete="new-password"
+            helperText="특수문자를 1개 이상 포함해 주세요. 예: !, @, #"
             value={formValues.password}
             onChange={(event) => updateField('password', event.target.value)}
             error={errors.password}
@@ -114,6 +118,7 @@ function Signup({ onMoveToLogin }) {
             label="비밀번호 확인"
             placeholder="비밀번호를 다시 입력해 주세요"
             autoComplete="new-password"
+            helperText="위에서 입력한 비밀번호와 동일하게 입력해 주세요."
             value={formValues.passwordConfirm}
             onChange={(event) => updateField('passwordConfirm', event.target.value)}
             error={errors.passwordConfirm}

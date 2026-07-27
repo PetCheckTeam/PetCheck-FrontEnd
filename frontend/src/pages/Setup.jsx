@@ -15,12 +15,28 @@ const allergyOptions = [
   '생선',
 ];
 
-function Setup({ onBackToWelcome, onStartScanner }) {
+function Setup({
+  initialProfile,
+  onBackToWelcome,
+  onRegister,
+  onStartScanner,
+}) {
+  const isEditing = Boolean(initialProfile);
   const [step, setStep] = useState(1);
-  const [petType, setPetType] = useState('');
-  const [petName, setPetName] = useState('');
-  const [allergies, setAllergies] = useState([]);
+  const [petType, setPetType] = useState(initialProfile?.petType ?? '');
+  const [petName, setPetName] = useState(initialProfile?.petName ?? '');
+  const [allergies, setAllergies] = useState(initialProfile?.allergies ?? []);
   const [isComplete, setIsComplete] = useState(false);
+
+  const completeRegistration = () => {
+    onRegister({
+      id: initialProfile?.id,
+      petType,
+      petName: petName.trim(),
+      allergies,
+    });
+    setIsComplete(true);
+  };
 
   const toggleAllergy = (allergy) => {
     setAllergies((previous) => {
@@ -47,8 +63,8 @@ function Setup({ onBackToWelcome, onStartScanner }) {
         <section className="setup-complete">
           <span className="setup-complete__check" aria-hidden="true">✓</span>
           <PetIllustration className="setup-complete__pet" type={petType} />
-          <span className="eyebrow">등록 완료</span>
-          <h1>{petName}의 정보를<br />안전하게 저장했어요</h1>
+          <span className="eyebrow">{isEditing ? '수정 완료' : '등록 완료'}</span>
+          <h1>{petName}의 정보를<br />안전하게 {isEditing ? '수정했어요' : '저장했어요'}</h1>
           <p>
             {allergies.length > 0
               ? `알레르기 ${allergies.length}개도 함께 기억할게요.`
@@ -60,11 +76,12 @@ function Setup({ onBackToWelcome, onStartScanner }) {
             <span>{allergies.length > 0 ? allergies.join(', ') : '알레르기 없음'}</span>
           </div>
           <div className="setup-complete__next">
-            다음 단계에서는 사료 사진을 올릴 수 있어요.
+            {isEditing ? '정보 수정이 완료됐어요.' : '등록은 완료됐어요.'}
+            {' '}사료 사진은 지금 올리지 않아도 괜찮아요.
           </div>
           <Button
             type="button"
-            onClick={() => onStartScanner({ petType, petName, allergies })}
+            onClick={onStartScanner}
           >
             사료 사진 올리기 →
           </Button>
@@ -73,7 +90,7 @@ function Setup({ onBackToWelcome, onStartScanner }) {
             type="button"
             onClick={onBackToWelcome}
           >
-            소개 화면으로 돌아가기
+            사진 없이 홈으로 돌아가기
           </button>
         </section>
       </main>
@@ -98,9 +115,9 @@ function Setup({ onBackToWelcome, onStartScanner }) {
         {step === 1 && (
           <div className="setup-step">
             <div className="setup-step__heading">
-              <span className="eyebrow">첫 번째 질문</span>
+              <span className="eyebrow">{isEditing ? '반려동물 정보 수정' : '첫 번째 질문'}</span>
               <h1>어떤 반려동물과<br />함께 살고 있나요?</h1>
-              <p>한 마리씩 차근차근 등록할 수 있어요.</p>
+              <p>여러 마리라면 한 마리씩 차근차근 등록할 수 있어요.</p>
             </div>
 
             <div className="pet-type-grid">
@@ -168,7 +185,9 @@ function Setup({ onBackToWelcome, onStartScanner }) {
               disabled={!petName.trim()}
               onClick={() => setStep(3)}
             >
-              {petName.trim() ? `${petName.trim()} 등록하기 💛` : '이름을 입력해 주세요'}
+              {petName.trim()
+                ? `${petName.trim()} ${isEditing ? '수정하기' : '등록하기'} 💛`
+                : '이름을 입력해 주세요'}
             </Button>
           </div>
         )}
@@ -192,10 +211,10 @@ function Setup({ onBackToWelcome, onStartScanner }) {
               ))}
             </div>
 
-            <Button type="button" fullWidth onClick={() => setIsComplete(true)}>
+            <Button type="button" fullWidth onClick={completeRegistration}>
               {allergies.length > 0
-                ? `알레르기 ${allergies.length}개 저장하기`
-                : '알레르기 없이 등록 완료'}
+                ? `알레르기 ${allergies.length}개 ${isEditing ? '수정하기' : '저장하기'}`
+                : `알레르기 없이 ${isEditing ? '수정 완료' : '등록 완료'}`}
             </Button>
           </div>
         )}
