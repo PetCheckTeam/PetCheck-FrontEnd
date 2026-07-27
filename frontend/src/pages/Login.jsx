@@ -5,6 +5,40 @@ import FeatureCard from '../components/FeatureCard';
 import PasswordInput from '../components/PasswordInput';
 import PetIllustration from '../components/PetIllustration';
 
+const LOGIN_FAILURE_STATUSES = new Set([401, 403]);
+const EMAIL_ERROR_PATTERN = /email|e-mail|username|user[_-]?id|account|이메일|아이디|계정|사용자/;
+const PASSWORD_ERROR_PATTERN = /password|passwd|비밀번호|패스워드/;
+
+const getLoginErrors = (error) => {
+  if (!LOGIN_FAILURE_STATUSES.has(error?.status)) {
+    return { form: error?.message ?? '로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.' };
+  }
+
+  const errorDetails = [
+    error?.data?.code,
+    error?.data?.errorCode,
+    error?.data?.message,
+    error?.data?.error?.code,
+    error?.data?.error?.message,
+    error?.message,
+  ]
+    .filter((value) => typeof value === 'string')
+    .join(' ')
+    .toLowerCase();
+  const isEmailError = EMAIL_ERROR_PATTERN.test(errorDetails);
+  const isPasswordError = PASSWORD_ERROR_PATTERN.test(errorDetails);
+
+  if (isEmailError && !isPasswordError) {
+    return { email: '등록되지 않은 이메일입니다.' };
+  }
+
+  if (isPasswordError && !isEmailError) {
+    return { password: '비밀번호가 올바르지 않습니다.' };
+  }
+
+  return { form: '이메일 또는 비밀번호가 올바르지 않습니다.' };
+};
+
 const loginFeatures = [
   {
     icon: '📷',
@@ -35,8 +69,17 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
     email: '',
     password: '',
   });
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const updateField = (field, value) => {
+    setFormValues((previous) => ({ ...previous, [field]: value }));
+    setErrors((previous) => ({
+      ...previous,
+      [field]: undefined,
+      form: undefined,
+    }));
+  };
 
   useEffect(() => {
     const featureCards = featureSectionRef.current?.querySelectorAll(
@@ -76,7 +119,7 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setErrorMessage('');
+    setErrors({});
     setIsSubmitting(true);
     try {
       await onLoginSuccess({
@@ -84,7 +127,7 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
         password: formValues.password,
       });
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrors(getLoginErrors(error));
     } finally {
       setIsSubmitting(false);
     }
@@ -124,12 +167,8 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
               placeholder="hello@petcheck.com"
               autoComplete="email"
               value={formValues.email}
-              onChange={(event) =>
-                setFormValues((previous) => ({
-                  ...previous,
-                  email: event.target.value,
-                }))
-              }
+              onChange={(event) => updateField('email', event.target.value)}
+              error={errors.email}
               required
             />
             <PasswordInput
@@ -138,15 +177,11 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
               placeholder="비밀번호를 입력해 주세요"
               autoComplete="current-password"
               value={formValues.password}
-              onChange={(event) =>
-                setFormValues((previous) => ({
-                  ...previous,
-                  password: event.target.value,
-                }))
-              }
+              onChange={(event) => updateField('password', event.target.value)}
+              error={errors.password}
               required
             />
-            {errorMessage && <p className="auth-field__error" role="alert">{errorMessage}</p>}
+            {errors.form && <p className="auth-field__error" role="alert">{errors.form}</p>}
             <Button type="submit" fullWidth disabled={isSubmitting}>
               {isSubmitting ? '로그인 중...' : '로그인하기'}
               <span aria-hidden="true">→</span>
