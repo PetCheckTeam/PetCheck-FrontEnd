@@ -16,11 +16,20 @@ export const authApi = {
   }),
 
   async login(values) {
-    const data = await apiRequest('/api/v1/auth/login', {
-      method: 'POST',
-      auth: false,
-      body: values,
-    });
+    let data;
+    try {
+      data = await apiRequest('/api/v1/auth/login', {
+        method: 'POST',
+        auth: false,
+        body: values,
+      });
+    } catch (error) {
+      if (error?.status === 401 || error?.status === 403) {
+        error.message = '이메일 또는 비밀번호가 올바르지 않습니다.';
+      }
+      throw error;
+    }
+
     const token = extractToken(data);
     if (!token) throw new Error('로그인 응답에 Access Token이 없습니다.');
     tokenStorage.set(token);
