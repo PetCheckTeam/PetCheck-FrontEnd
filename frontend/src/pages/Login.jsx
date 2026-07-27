@@ -11,18 +11,21 @@ const loginFeatures = [
     title: '사료 성분 분석',
     description: '포장지 사진을 올리면 복잡한 원재료를 한눈에 보기 쉽게 정리해요.',
     badge: '사진 한 장으로 간편하게',
+    mascot: { type: 'dog', breed: 'maltese' },
   },
   {
     icon: '🛡️',
     title: '알러지 위험 확인',
-    description: '등록한 알레르기와 일치하는 성분을 찾아 안전·주의·위험으로 알려드려요.',
+    description: '등록한 알러지와 일치하는 성분을 찾아 안전·주의·위험으로 알려드려요.',
     badge: '놓치기 쉬운 성분까지',
+    mascot: { type: 'cat' },
   },
   {
     icon: '💬',
     title: '맞춤 건강 메시지',
     description: '우리 아이 정보를 바탕으로 분석 결과를 이해하기 쉬운 말로 설명해요.',
     badge: '우리 아이에게 맞춰서',
+    mascot: { type: 'dog', breed: 'shiba' },
   },
 ];
 
@@ -88,7 +91,7 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
           <div className="auth-intro__copy">
             <span className="eyebrow">우리 아이 사료, 쉽게 확인해요</span>
             <h1 id="login-heading">사진 한 장으로<br />사료 성분 체크</h1>
-            <p>알레르기 성분부터 건강 메시지까지<br />PetCheck가 알기 쉽게 알려드려요.</p>
+            <p>알러지 성분부터 건강 메시지까지<br />PetCheck가 알기 쉽게 알려드려요.</p>
           </div>
           <div className="pet-guide">
             <div className="pet-guide__bubble">오늘 먹을 사료도<br />안전한지 확인해볼까요?</div>
@@ -178,7 +181,7 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
                   <div className="feature-card__mascot" aria-hidden="true">
                     <span className="feature-card__number">0{index + 1}</span>
                     <span className="feature-card__pet-position">
-                      <PetIllustration />
+                      <PetIllustration {...feature.mascot} />
                     </span>
                     <strong>{feature.badge}</strong>
                   </div>

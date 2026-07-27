@@ -12,7 +12,7 @@ const createResultData = (petName, allergies) => {
     safe: 4,
     warning: 2,
     danger: 1,
-    message: `${petName}에게 주의가 필요한 성분이 있어요. 특히 등록한 알레르기 정보와 일치하는 성분은 급여 전에 꼭 확인해 주세요.`,
+    message: `${petName}에게 주의가 필요한 성분이 있어요. 특히 등록한 알러지 정보와 일치하는 성분은 급여 전에 꼭 확인해 주세요.`,
     ingredients: [
       {
         id: 1,
@@ -20,7 +20,7 @@ const createResultData = (petName, allergies) => {
         status: 'safe',
         shortDescription: '소화 가능한 탄수화물 원료',
         description: '현미는 식이섬유와 탄수화물을 공급하는 곡물 원료예요.',
-        reason: '등록된 알레르기 정보와 일치하지 않아요.',
+        reason: '등록된 알러지 정보와 일치하지 않아요.',
       },
       {
         id: 2,
@@ -36,7 +36,7 @@ const createResultData = (petName, allergies) => {
         status: 'safe',
         shortDescription: '식이섬유 공급원',
         description: '장 건강과 배변 활동에 도움을 줄 수 있는 섬유질 원료예요.',
-        reason: '등록된 알레르기와 관련성이 낮아요.',
+        reason: '등록된 알러지와 관련성이 낮아요.',
       },
       {
         id: 4,
@@ -52,7 +52,7 @@ const createResultData = (petName, allergies) => {
         status: 'warning',
         shortDescription: '민감한 반려동물은 주의',
         description: '식물성 단백질 공급원이지만 일부 반려동물에게 소화 부담을 줄 수 있어요.',
-        reason: '알레르기 이력이 있거나 곡물에 민감하다면 주의가 필요해요.',
+        reason: '알러지 이력이 있거나 곡물에 민감하다면 주의가 필요해요.',
       },
       {
         id: 6,
@@ -60,15 +60,15 @@ const createResultData = (petName, allergies) => {
         status: 'warning',
         shortDescription: '원료 출처 확인 필요',
         description: '표기만으로는 어떤 동물에서 얻은 지방인지 정확히 알기 어려워요.',
-        reason: '원료 출처가 명확하지 않아 알레르기 반응 여부를 확인하기 어려워요.',
+        reason: '원료 출처가 명확하지 않아 알러지 반응 여부를 확인하기 어려워요.',
       },
       {
         id: 7,
         name: primaryAllergy,
         status: 'danger',
-        shortDescription: `${petName}의 등록 알레르기와 일치`,
-        description: `${primaryAllergy}는 ${petName}의 알레르기 정보에 등록된 성분이에요.`,
-        reason: '등록한 알레르기 성분과 직접 일치하므로 급여를 피하는 것을 권장해요.',
+        shortDescription: `${petName}의 등록 알러지와 일치`,
+        description: `${primaryAllergy}는 ${petName}의 알러지 정보에 등록된 성분이에요.`,
+        reason: '등록한 알러지 성분과 직접 일치하므로 급여를 피하는 것을 권장해요.',
       },
     ],
   };
@@ -77,7 +77,7 @@ const createResultData = (petName, allergies) => {
 const verdictInfo = {
   safe: {
     label: '안심하고 급여해도 좋아요',
-    description: '등록된 알레르기와 일치하는 성분이 없어요.',
+    description: '등록된 알러지와 일치하는 성분이 없어요.',
     icon: '✓',
   },
   warning: {
@@ -87,7 +87,7 @@ const verdictInfo = {
   },
   danger: {
     label: '급여하지 않는 것이 좋아요',
-    description: '등록된 알레르기 성분이 포함되어 있어요.',
+    description: '등록된 알러지 성분이 포함되어 있어요.',
     icon: '×',
   },
 };

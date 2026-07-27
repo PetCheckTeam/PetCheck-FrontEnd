@@ -67,7 +67,7 @@ function Signup({ onMoveToLogin }) {
         <div className="auth-intro__copy">
           <span className="eyebrow">가입은 1분이면 충분해요</span>
           <h1 id="signup-heading">우리 아이 건강 관리,<br />지금 시작해요</h1>
-          <p>계정을 만들면 반려동물과 알레르기 정보를<br />안전하게 저장할 수 있어요.</p>
+          <p>계정을 만들면 반려동물과 알러지 정보를<br />안전하게 저장할 수 있어요.</p>
         </div>
         <div className="pet-guide">
           <div className="pet-guide__bubble">조금만 입력하면<br />바로 시작할 수 있어요!</div>

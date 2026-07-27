@@ -98,8 +98,8 @@ function Scanner({
                   <strong>{pet.petName}</strong>
                   <small>
                     {pet.allergies.length > 0
-                      ? `알레르기 ${pet.allergies.length}개`
-                      : '알레르기 없음'}
+                      ? `알러지 ${pet.allergies.length}개`
+                      : '알러지 없음'}
                   </small>
                 </span>
                 <span className="pet-selector__check" aria-hidden="true">✓</span>
@@ -132,7 +132,7 @@ function Scanner({
                 <div className="scan-state__steps">
                   <span className="scan-state__step--active">이미지 확인</span>
                   <span>성분 추출</span>
-                  <span>알레르기 비교</span>
+                  <span>알러지 비교</span>
                 </div>
               </>
             ) : (

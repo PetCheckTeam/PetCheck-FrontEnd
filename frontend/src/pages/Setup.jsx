@@ -67,13 +67,13 @@ function Setup({
           <h1>{petName}의 정보를<br />안전하게 {isEditing ? '수정했어요' : '저장했어요'}</h1>
           <p>
             {allergies.length > 0
-              ? `알레르기 ${allergies.length}개도 함께 기억할게요.`
-              : '등록된 알레르기는 없어요.'}
+              ? `알러지 ${allergies.length}개도 함께 기억할게요.`
+              : '등록된 알러지는 없어요.'}
           </p>
           <div className="setup-complete__summary">
             <span>{petType === 'dog' ? '🐶 강아지' : '🐱 고양이'}</span>
             <span>{petName}</span>
-            <span>{allergies.length > 0 ? allergies.join(', ') : '알레르기 없음'}</span>
+            <span>{allergies.length > 0 ? allergies.join(', ') : '알러지 없음'}</span>
           </div>
           <div className="setup-complete__next">
             {isEditing ? '정보 수정이 완료됐어요.' : '등록은 완료됐어요.'}
@@ -196,7 +196,7 @@ function Setup({
           <div className="setup-step">
             <div className="setup-step__heading">
               <span className="eyebrow">마지막 질문</span>
-              <h1>{petName}에게 피해야 할<br />알레르기가 있나요?</h1>
+              <h1>{petName}에게 피해야 할<br />알러지가 있나요?</h1>
               <p>여러 개를 선택할 수 있고, 없다면 바로 넘어가도 돼요.</p>
             </div>
 
@@ -213,8 +213,8 @@ function Setup({
 
             <Button type="button" fullWidth onClick={completeRegistration}>
               {allergies.length > 0
-                ? `알레르기 ${allergies.length}개 ${isEditing ? '수정하기' : '저장하기'}`
-                : `알레르기 없이 ${isEditing ? '수정 완료' : '등록 완료'}`}
+                ? `알러지 ${allergies.length}개 ${isEditing ? '수정하기' : '저장하기'}`
+                : `알러지 없이 ${isEditing ? '수정 완료' : '등록 완료'}`}
             </Button>
           </div>
         )}

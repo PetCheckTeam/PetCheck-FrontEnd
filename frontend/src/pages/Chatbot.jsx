@@ -5,7 +5,7 @@ import SuggestedQuestion from '../components/SuggestedQuestion';
 
 const suggestedQuestions = [
   '지금 분석한 사료를 먹여도 괜찮아?',
-  '등록한 알레르기 성분을 알려줘',
+  '등록한 알러지 성분을 알려줘',
   '사료 성분표에서 뭘 먼저 봐야 해?',
 ];
 
@@ -14,16 +14,16 @@ function createSampleAnswer(question, petProfile) {
   const allergies = petProfile.allergies || [];
   const allergyText = allergies.length > 0 ? allergies.join(', ') : '없음';
 
-  if (question.includes('알레르기') || question.includes('기피')) {
-    return `${petName}에게 등록된 알레르기 성분은 ${allergyText}이에요. 성분표에서 같은 이름뿐 아니라 분말, 추출물, 부산물처럼 다른 형태로 표시될 수 있으니 함께 확인해 주세요.`;
+  if (question.includes('알러지') || question.includes('알레르기') || question.includes('기피')) {
+    return `${petName}에게 등록된 알러지 성분은 ${allergyText}이에요. 성분표에서 같은 이름뿐 아니라 분말, 추출물, 부산물처럼 다른 형태로 표시될 수 있으니 함께 확인해 주세요.`;
   }
 
   if (question.includes('먹여') || question.includes('괜찮')) {
-    return `현재 분석 결과에서는 ${petName}에게 주의가 필요한 성분이 발견됐어요. 등록한 알레르기 성분과 일치하는 원료가 있다면 급여하지 말고, 정확한 판단이 필요할 때는 수의사와 상담해 주세요.`;
+    return `현재 분석 결과에서는 ${petName}에게 주의가 필요한 성분이 발견됐어요. 등록한 알러지 성분과 일치하는 원료가 있다면 급여하지 말고, 정확한 판단이 필요할 때는 수의사와 상담해 주세요.`;
   }
 
   if (question.includes('성분표') || question.includes('먼저')) {
-    return `성분표는 앞쪽에 표시된 주원료부터 확인하는 것이 좋아요. 그다음 ${petName}의 알레르기 성분인 ${allergyText}이 포함됐는지 살펴보고, 출처가 불분명한 동물성 원료도 확인해 보세요.`;
+    return `성분표는 앞쪽에 표시된 주원료부터 확인하는 것이 좋아요. 그다음 ${petName}의 알러지 성분인 ${allergyText}이 포함됐는지 살펴보고, 출처가 불분명한 동물성 원료도 확인해 보세요.`;
   }
 
   return `${petName}의 프로필과 현재 분석 결과를 기준으로 살펴볼게요. 지금은 프론트엔드 샘플 답변 단계이며, 실제 RAG 연결 후에는 제품 성분표와 근거 문서를 검색해 더 정확한 답변을 제공할 예정이에요.`;

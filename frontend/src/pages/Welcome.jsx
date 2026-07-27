@@ -15,6 +15,7 @@ function Welcome({
 }) {
   const hasPetProfile = petProfiles.length > 0;
   const [isEditingOwner, setIsEditingOwner] = useState(false);
+  const [isManagingPets, setIsManagingPets] = useState(false);
   const [ownerForm, setOwnerForm] = useState({
     name: userProfile?.name ?? '',
     email: userProfile?.email ?? '',
@@ -102,23 +103,41 @@ function Welcome({
         </div>
 
         <div className="dashboard__grid">
-          <article className="profile-card">
-            <div className="profile-card__icon" aria-hidden="true">👤</div>
-            <div className="profile-card__owner">
-              <span>보호자 정보</span>
-              <h2>{userProfile?.name ?? '회원'}</h2>
-              <p>{userProfile?.email}</p>
+          <div className="dashboard__owner-column">
+            <article className="profile-card">
+              <div className="profile-card__icon" aria-hidden="true">👤</div>
+              <div className="profile-card__owner">
+                <span>보호자 정보</span>
+                <h2>{userProfile?.name ?? '회원'}</h2>
+                <p>{userProfile?.email}</p>
+                <button
+                  type="button"
+                  aria-label={isEditingOwner ? '보호자 정보 수정 닫기' : '보호자 정보 수정'}
+                  onClick={() => {
+                    setIsEditingOwner((previous) => !previous);
+                    setOwnerMessage('');
+                  }}
+                >
+                  {isEditingOwner ? '닫기' : '수정'}
+                </button>
+              </div>
+            </article>
+
+            {hasPetProfile && (
               <button
+                className="pet-management-trigger"
                 type="button"
-                onClick={() => {
-                  setIsEditingOwner((previous) => !previous);
-                  setOwnerMessage('');
-                }}
+                onClick={() => setIsManagingPets((previous) => !previous)}
               >
-                {isEditingOwner ? '닫기' : '정보 수정'}
+                <span aria-hidden="true">🐾</span>
+                <div>
+                  <strong>반려동물 정보 관리</strong>
+                  <small>수정 및 추가 등록</small>
+                </div>
+                <span aria-hidden="true">{isManagingPets ? '↑' : '→'}</span>
               </button>
-            </div>
-          </article>
+            )}
+          </div>
 
           <article className="profile-card profile-card--pet">
             {hasPetProfile ? (
@@ -138,28 +157,13 @@ function Welcome({
                             {pet.petType === 'dog' ? '강아지' : '고양이'}
                             {' · '}
                             {pet.allergies.length > 0
-                              ? `알레르기 ${pet.allergies.join(', ')}`
-                              : '알레르기 없음'}
+                              ? `알러지 ${pet.allergies.join(', ')}`
+                              : '알러지 없음'}
                           </p>
-                        </div>
-                        <div className="profile-card__pet-actions">
-                          <button type="button" onClick={() => onEditPet(pet)}>
-                            수정
-                          </button>
-                          <button type="button" onClick={() => onStartScanner(pet.id)}>
-                            분석하기
-                          </button>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <button
-                    className="profile-card__add-pet"
-                    type="button"
-                    onClick={onStartSetup}
-                  >
-                    + 반려동물 추가 등록
-                  </button>
                 </div>
               </>
             ) : (
@@ -174,6 +178,52 @@ function Welcome({
             )}
           </article>
         </div>
+
+        {isManagingPets && (
+          <section className="pet-management" aria-labelledby="pet-management-heading">
+            <div className="pet-management__heading">
+              <div>
+                <span className="eyebrow">반려동물 설정</span>
+                <h2 id="pet-management-heading">반려동물 정보 관리</h2>
+                <p>등록한 정보를 수정하거나 새로운 반려동물을 추가할 수 있어요.</p>
+              </div>
+              <button type="button" onClick={() => setIsManagingPets(false)}>닫기</button>
+            </div>
+
+            <div className="pet-management__list">
+              {petProfiles.map((pet) => (
+                <article className="pet-management__item" key={pet.id}>
+                  <PetIllustration
+                    className="pet-management__pet"
+                    type={pet.petType}
+                  />
+                  <div>
+                    <strong>{pet.petName}</strong>
+                    <span>
+                      {pet.petType === 'dog' ? '강아지' : '고양이'}
+                      {' · '}
+                      {pet.allergies.length > 0
+                        ? `알러지 ${pet.allergies.join(', ')}`
+                        : '알러지 없음'}
+                    </span>
+                  </div>
+                  <button type="button" onClick={() => onEditPet(pet)}>
+                    정보 수정
+                  </button>
+                </article>
+              ))}
+            </div>
+
+            <button
+              className="pet-management__add"
+              type="button"
+              onClick={onStartSetup}
+            >
+              <span aria-hidden="true">＋</span>
+              새 반려동물 추가 등록
+            </button>
+          </section>
+        )}
 
         {isEditingOwner && (
           <form className="owner-settings" onSubmit={handleOwnerSubmit}>
