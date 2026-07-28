@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import petcheckAppIcon from '../assets/petcheck-app-icon.png';
 import PetIllustration from '../components/PetIllustration';
 
 function Welcome({
@@ -22,6 +23,38 @@ function Welcome({
   });
   const [ownerMessage, setOwnerMessage] = useState('');
   const [petMessage, setPetMessage] = useState('');
+  const [activePetIndex, setActivePetIndex] = useState(0);
+  const petSliderRef = useRef(null);
+  const petSlideStartXRef = useRef(0);
+  const petSlideScrollLeftRef = useRef(0);
+  const isPetSlideDraggingRef = useRef(false);
+  const activePet = petProfiles[activePetIndex] ?? petProfiles[0] ?? null;
+
+  useEffect(() => {
+    if (activePetIndex >= petProfiles.length) {
+      setActivePetIndex(Math.max(0, petProfiles.length - 1));
+    }
+  }, [activePetIndex, petProfiles.length]);
+
+  const finishPetSlide = (event) => {
+    if (!isPetSlideDraggingRef.current) return;
+
+    isPetSlideDraggingRef.current = false;
+    const slider = event.currentTarget;
+    const nextIndex = Math.min(
+      petProfiles.length - 1,
+      Math.max(0, Math.round(slider.scrollLeft / slider.clientWidth)),
+    );
+    slider.scrollTo({
+      left: nextIndex * slider.clientWidth,
+      behavior: 'smooth',
+    });
+    setActivePetIndex(nextIndex);
+    if (slider.hasPointerCapture(event.pointerId)) {
+      slider.releasePointerCapture(event.pointerId);
+    }
+  };
+
   const handleOwnerSubmit = async (event) => {
     event.preventDefault();
     setOwnerMessage('');
@@ -47,7 +80,7 @@ function Welcome({
     <main className="welcome-page">
       <header className="welcome-header">
         <a className="brand" href="/" aria-label="PetCheck 홈">
-          <span className="brand__paw" aria-hidden="true">P</span>
+          <img className="brand__image" src={petcheckAppIcon} alt="" />
           PetCheck
         </a>
         <button type="button" onClick={onLogout}>
@@ -57,158 +90,169 @@ function Welcome({
 
       <section className="dashboard" aria-labelledby="dashboard-heading">
         <div className="dashboard__intro">
-          <div className="dashboard__heading">
-            <span className="eyebrow">오늘의 PetCheck</span>
-            <h1 id="dashboard-heading">
-              {hasPetProfile
-                ? `${petProfiles[0].petName}와 오늘도 건강하게`
-                : `${userProfile?.name ?? '회원'}님, 반가워요`}
-            </h1>
-            <p>
-              {hasPetProfile
-                ? '우리 아이에게 맞는 사료인지 지금 바로 확인해 보세요.'
-                : '반려동물을 등록하고 맞춤 사료 분석을 시작해 보세요.'}
-            </p>
-          </div>
-          <div className="dashboard__pet-guide" aria-label="PetCheck 반려동물 안내">
-            <div className="dashboard__pet-bubble">
-              {hasPetProfile
-                ? `${petProfiles[0].petName}, 오늘 사료도 확인해볼까?`
-                : '먼저 내 정보를 등록해 주세요!'}
-            </div>
-            <PetIllustration
-              className="dashboard__guide-pet"
-              type={hasPetProfile ? petProfiles[0].petType : 'dog'}
-            />
-          </div>
-          <div className="dashboard__hero-action">
-            <div className="dashboard__active-pet">
-              <span>{hasPetProfile ? '분석 대상' : '시작하기'}</span>
-              <strong>
-                {hasPetProfile
-                  ? `${petProfiles[0].petName} · ${
-                    petProfiles[0].petType === 'dog' ? '강아지' : '고양이'
-                  }`
-                  : '반려동물 정보 등록'}
-              </strong>
-              <small>
-                {hasPetProfile && petProfiles[0].allergies.length > 0
-                  ? `알러지 ${petProfiles[0].allergies.length}개 등록됨`
-                  : hasPetProfile
-                    ? '등록된 알러지 없음'
-                    : '최초 한 번만 등록하면 돼요'}
-              </small>
-            </div>
+          <nav className="dashboard__utility-menu" aria-label="빠른 메뉴">
             <button
-              className="welcome-next dashboard__analyze-button"
               type="button"
               onClick={() => (
-                hasPetProfile ? onStartScanner(petProfiles[0].id) : onStartSetup()
+                hasPetProfile
+                  ? setIsManagingPets((previous) => !previous)
+                  : onStartSetup()
               )}
             >
-              <strong>{hasPetProfile ? '사료 분석 시작' : '반려동물 등록하기'}</strong>
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true">🐾</span>
+              <strong>반려동물</strong>
+              <small>{hasPetProfile ? `${petProfiles.length}마리` : '등록하기'}</small>
             </button>
-          </div>
-        </div>
-
-        <div className="dashboard__quick-stats" aria-label="등록 정보 요약">
-          <article>
-            <span>함께하는 반려동물</span>
-            <div>
-              <strong>{petProfiles.length}</strong>
-              <small>마리</small>
-            </div>
-          </article>
-          <article>
-            <span>기억 중인 알러지</span>
-            <div>
-              <strong>
-                {petProfiles.reduce(
-                  (total, pet) => total + (pet.allergies?.length ?? 0),
-                  0,
-                )}
-              </strong>
-              <small>개</small>
-            </div>
-          </article>
-        </div>
-
-        <div className="dashboard__grid">
-          <div className="dashboard__owner-column">
-            <article className="profile-card">
-              <div className="profile-card__icon" aria-hidden="true">👤</div>
-              <div className="profile-card__owner">
-                <span>보호자 정보</span>
-                <h2>{userProfile?.name ?? '회원'}</h2>
-                <p>{userProfile?.email}</p>
-                <button
-                  type="button"
-                  aria-label={isEditingOwner ? '보호자 정보 수정 닫기' : '보호자 정보 수정'}
-                  onClick={() => {
-                    setIsEditingOwner((previous) => !previous);
-                    setOwnerMessage('');
-                  }}
-                >
-                  {isEditingOwner ? '닫기' : '수정'}
-                </button>
-              </div>
-            </article>
-
+            <button
+              type="button"
+              onClick={() => {
+                setIsEditingOwner((previous) => !previous);
+                setOwnerMessage('');
+              }}
+            >
+              <span aria-hidden="true">👤</span>
+              <strong>보호자 정보</strong>
+              <small>{userProfile?.name ?? '회원'}</small>
+            </button>
             {hasPetProfile && (
               <button
-                className="pet-management-trigger"
                 type="button"
-                onClick={() => setIsManagingPets((previous) => !previous)}
+                onClick={() => onStartChatbot(activePet.id)}
               >
-                <span aria-hidden="true">🐾</span>
-                <div>
-                  <strong>반려동물 정보 관리</strong>
-                  <small>수정 및 추가 등록</small>
-                </div>
-                <span aria-hidden="true">{isManagingPets ? '↑' : '→'}</span>
+                <span aria-hidden="true">💬</span>
+                <strong>AI 상담</strong>
+                <small>바로 질문하기</small>
               </button>
             )}
-          </div>
+          </nav>
 
-          <article className="profile-card profile-card--pet">
-            {hasPetProfile ? (
-              <>
-                <div className="profile-card__pet-list">
-                  <span>반려동물 정보</span>
-                  <div className="profile-card__pets">
-                    {petProfiles.map((pet) => (
-                      <div className="profile-card__pet-item" key={pet.id}>
-                        <PetIllustration
-                          className="profile-card__pet"
-                          type={pet.petType}
-                        />
-                        <div>
-                          <h2>{pet.petName}</h2>
-                          <p>
-                            {pet.petType === 'dog' ? '강아지' : '고양이'}
-                            {' · '}
-                            {pet.allergies.length > 0
-                              ? `알러지 ${pet.allergies.join(', ')}`
-                              : '알러지 없음'}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+          {hasPetProfile ? (
+            <>
+              <div
+                ref={petSliderRef}
+                className="pet-carousel"
+                aria-label="등록한 반려동물"
+                onPointerDown={(event) => {
+                  isPetSlideDraggingRef.current = true;
+                  petSlideStartXRef.current = event.clientX;
+                  petSlideScrollLeftRef.current = event.currentTarget.scrollLeft;
+                  event.currentTarget.setPointerCapture(event.pointerId);
+                }}
+                onPointerMove={(event) => {
+                  if (!isPetSlideDraggingRef.current) return;
+                  event.preventDefault();
+                  event.currentTarget.scrollLeft = (
+                    petSlideScrollLeftRef.current
+                    - (event.clientX - petSlideStartXRef.current)
+                  );
+                }}
+                onPointerUp={finishPetSlide}
+                onPointerCancel={finishPetSlide}
+                onScroll={(event) => {
+                  const slideWidth = event.currentTarget.clientWidth;
+                  if (!slideWidth) return;
+                  const nextIndex = Math.round(
+                    event.currentTarget.scrollLeft / slideWidth,
+                  );
+                  if (nextIndex !== activePetIndex) setActivePetIndex(nextIndex);
+                }}
+              >
+                {petProfiles.map((pet) => (
+                  <article className="pet-carousel__slide" key={pet.id}>
+                    <div className="pet-carousel__bubble">
+                      오늘 사료도 같이 확인해볼까?
+                    </div>
+                    <PetIllustration
+                      className="pet-carousel__pet"
+                      type={pet.petType}
+                    />
+                    <h1 id={pet === activePet ? 'dashboard-heading' : undefined}>
+                      {pet.petName}
+                    </h1>
+                    <p>
+                      {pet.petType === 'dog' ? '강아지' : '고양이'}
+                      {' · '}
+                      {pet.allergies.length > 0
+                        ? `알러지 ${pet.allergies.length}개`
+                        : '알러지 없음'}
+                    </p>
+                  </article>
+                ))}
+              </div>
+
+              {petProfiles.length > 1 && (
+                <div
+                  className="pet-carousel__pagination"
+                  aria-label={`${activePetIndex + 1}번째 반려동물 표시 중`}
+                >
+                  {petProfiles.map((pet, index) => (
+                    <span
+                      className={
+                        index === activePetIndex
+                          ? 'pet-carousel__dot pet-carousel__dot--active'
+                          : 'pet-carousel__dot'
+                      }
+                      key={pet.id}
+                    />
+                  ))}
+                </div>
+              )}
+
+              <section className="pet-home-panel" aria-label={`${activePet.petName} 상세 정보`}>
+                <div className="pet-home-panel__allergy">
+                  <span className="pet-home-panel__allergy-icon" aria-hidden="true">🛡️</span>
+                  <div>
+                    <small>알러지 정보</small>
+                    <strong>
+                      {activePet.allergies.length > 0
+                        ? activePet.allergies.join(', ')
+                        : '등록된 알러지가 없어요'}
+                    </strong>
                   </div>
                 </div>
-              </>
-            ) : (
-              <>
-                <div className="profile-card__icon" aria-hidden="true">🐾</div>
-                <div>
-                  <span>반려동물 정보</span>
-                  <h2>아직 등록되지 않았어요</h2>
-                  <p>최초 한 번만 등록하면 계속 불러올 수 있어요.</p>
+                <div className="pet-home-panel__actions">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsEditingOwner((previous) => !previous);
+                      setOwnerMessage('');
+                    }}
+                  >
+                    <span aria-hidden="true">👤</span>
+                    <strong>보호자 정보</strong>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onStartScanner(activePet.id)}
+                  >
+                    <span aria-hidden="true">📷</span>
+                    <strong>사료 분석하기</strong>
+                  </button>
                 </div>
-              </>
-            )}
-          </article>
+              </section>
+            </>
+          ) : (
+            <section className="pet-carousel pet-carousel--empty">
+              <article className="pet-carousel__slide">
+                <div className="pet-carousel__bubble">
+                  내 정보를 먼저 알려주세요!
+                </div>
+                <PetIllustration
+                  className="pet-carousel__pet"
+                  type="dog"
+                />
+                <h1 id="dashboard-heading">{userProfile?.name ?? '회원'}님, 반가워요</h1>
+                <p>반려동물을 등록하면 맞춤 사료 분석을 시작할 수 있어요.</p>
+                <button
+                  className="pet-carousel__register"
+                  type="button"
+                  onClick={onStartSetup}
+                >
+                  반려동물 등록하기
+                </button>
+              </article>
+            </section>
+          )}
         </div>
 
         {isManagingPets && (
@@ -324,18 +368,6 @@ function Welcome({
         )}
 
       </section>
-
-      {hasPetProfile && (
-        <button
-          className="chatbot-launcher"
-          type="button"
-          aria-label="AI 챗봇 열기"
-          onClick={() => onStartChatbot(petProfiles[0].id)}
-        >
-          <span aria-hidden="true">💬</span>
-          <strong>AI 챗봇</strong>
-        </button>
-      )}
 
     </main>
   );
