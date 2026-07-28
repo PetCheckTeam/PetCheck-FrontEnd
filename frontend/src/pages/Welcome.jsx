@@ -11,6 +11,7 @@ function Welcome({
   onStartSetup,
   onEditPet,
   onDeletePet,
+  onStartChatbot,
   onStartScanner,
 }) {
   const hasPetProfile = petProfiles.length > 0;
@@ -188,12 +189,11 @@ function Welcome({
             {hasPetProfile && (
               <button
                 type="button"
-                disabled
-                title="사료 분석을 완료한 뒤 결과 화면에서 이용할 수 있어요."
+                onClick={() => onStartChatbot(activePet.id)}
               >
                 <span aria-hidden="true">💬</span>
                 <strong>AI 상담</strong>
-                <small>분석 후 이용</small>
+                <small>바로 질문하기</small>
               </button>
             )}
           </nav>

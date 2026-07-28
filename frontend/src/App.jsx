@@ -58,6 +58,7 @@ function App() {
   const [selectedPetId, setSelectedPetId] = useState(null);
   const [editingPet, setEditingPet] = useState(null);
   const [analysisResult, setAnalysisResult] = useState(null);
+  const [chatbotReturnPage, setChatbotReturnPage] = useState('welcome');
 
   const selectedPet = petProfiles.find(
     (profile) => String(profile.id) === String(selectedPetId),
@@ -207,6 +208,11 @@ function App() {
         ));
         if (String(selectedPetId) === String(petId)) setSelectedPetId(null);
       }}
+      onStartChatbot={(petId) => {
+        setSelectedPetId(petId);
+        setChatbotReturnPage('welcome');
+        setCurrentPage('chatbot');
+      }}
       onStartScanner={(petId) => {
         setAnalysisResult(null);
         setSelectedPetId(petId);
@@ -310,6 +316,7 @@ function App() {
       }}
       onGoHome={() => setCurrentPage('welcome')}
       onAskAI={() => {
+        setChatbotReturnPage('results');
         setCurrentPage('chatbot');
       }}
     />
@@ -320,19 +327,19 @@ function App() {
   if (currentPage === 'chatbot') {
     return (
       <>
-        {results}
+        {chatbotReturnPage === 'results' ? results : welcome}
         <div className="chatbot-popup-layer" role="dialog" aria-modal="true" aria-label="PetCheck AI 챗봇">
           <button
             className="chatbot-popup-layer__backdrop"
             type="button"
             aria-label="챗봇 닫기"
-            onClick={() => setCurrentPage('results')}
+            onClick={() => setCurrentPage(chatbotReturnPage)}
           />
           <Chatbot
             key={analysisResult?.analysisId ?? analysisResult?.id ?? 'no-analysis'}
             petProfile={selectedPet ?? { petType: '', petName: '', allergies: [] }}
             analysisResult={analysisResult}
-            onBackToResults={() => setCurrentPage('results')}
+            onBackToResults={() => setCurrentPage(chatbotReturnPage)}
           />
         </div>
       </>
