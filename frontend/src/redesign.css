@@ -3309,8 +3309,10 @@ button:not(:disabled):hover {
   }
 
   .dashboard__main-grid {
-    width: 100%;
+    width: calc(100% + 56px);
+    max-width: none;
     grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr);
+    justify-self: center;
   }
 
   .pet-stage-card,
@@ -3324,5 +3326,22 @@ button:not(:disabled):hover {
   .pet-stage-card .pet-carousel__pet {
     width: min(34vw, 310px);
     height: min(34vw, 310px);
+  }
+}
+
+@media (min-width: 781px) {
+  .dashboard__main-grid--single,
+  .dashboard__main-grid--multiple {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: stretch;
+  }
+
+  .dashboard__main-grid--single > .pet-stage-card,
+  .dashboard__main-grid--multiple > .pet-stage-card,
+  .dashboard__main-grid--single > .pet-home-panel,
+  .dashboard__main-grid--multiple > .pet-home-panel {
+    width: 100%;
+    min-height: 510px;
+    height: 510px;
   }
 }

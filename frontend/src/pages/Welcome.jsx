@@ -200,7 +200,13 @@ function Welcome({
 
           {hasPetProfile ? (
             <>
-              <div className="dashboard__main-grid">
+              <div
+                className={
+                  petProfiles.length > 1
+                    ? 'dashboard__main-grid dashboard__main-grid--multiple'
+                    : 'dashboard__main-grid dashboard__main-grid--single'
+                }
+              >
                 <section className="pet-stage-card" aria-label={`${activePet.petName} 캐릭터`}>
                   <span className="pet-stage-card__tag">
                     <i aria-hidden="true" />
