@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { authApi, petsApi, tokenStorage, usersApi } from './api/petcheckApi';
+import { INGREDIENTS } from './constants/ingredients';
 import Chatbot from './pages/Chatbot';
 import Login from './pages/Login';
 import Results from './pages/Results';
@@ -17,9 +18,14 @@ const normalizeAvoidIngredient = (ingredient) => (
     ? { ingredientId: null, standardName: ingredient }
     : {
         ...ingredient,
-        ingredientId: ingredient?.ingredientId ?? ingredient?.id ?? null,
+        ingredientId:
+          ingredient?.ingredientId
+          ?? ingredient?.ingredient?.id
+          ?? ingredient?.id
+          ?? null,
         standardName:
           ingredient?.standardName
+          ?? ingredient?.ingredient?.standardName
           ?? ingredient?.name
           ?? ingredient?.ingredientName
           ?? '',
@@ -59,7 +65,9 @@ function App() {
   ) ?? petProfiles[0] ?? null;
 
   const getIngredientCatalog = () => {
-    const catalog = new Map();
+    const catalog = new Map(
+      INGREDIENTS.map((ingredient) => [ingredient.standardName, ingredient]),
+    );
     petProfiles
       .flatMap((pet) => pet.avoidIngredients ?? [])
       .forEach((ingredient) => {

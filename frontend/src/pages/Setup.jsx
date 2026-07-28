@@ -3,17 +3,9 @@ import AllergyChip from '../components/AllergyChip';
 import Button from '../components/Button';
 import PetIllustration from '../components/PetIllustration';
 import ProgressBar from '../components/ProgressBar';
+import { INGREDIENTS } from '../constants/ingredients';
 
-const allergyOptions = [
-  '닭고기',
-  '소고기',
-  '돼지고기',
-  '밀',
-  '옥수수',
-  '우유',
-  '계란',
-  '생선',
-];
+const allergyOptions = INGREDIENTS.map((ingredient) => ingredient.standardName);
 
 function Setup({
   initialProfile,
