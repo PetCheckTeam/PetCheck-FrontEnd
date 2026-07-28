@@ -630,3 +630,420 @@ body {
     padding-inline: 14px;
   }
 }
+
+/* Toss-like character-first product surface */
+:root {
+  --toss-blue: #3182f6;
+  --toss-blue-pressed: #1b64da;
+  --toss-text: #191f28;
+  --toss-subtext: #6b7684;
+  --toss-bg: #f9fafb;
+  --toss-card: #ffffff;
+  --toss-line: #e5e8eb;
+}
+
+body {
+  color: var(--toss-text);
+  background: var(--toss-bg);
+}
+
+.button,
+.login-page .button {
+  min-height: 58px;
+  border-radius: 18px;
+  background: var(--toss-blue);
+  box-shadow: none;
+}
+
+.button:hover,
+.login-page .button:hover {
+  background: var(--toss-blue-pressed);
+  box-shadow: none;
+}
+
+.eyebrow,
+.auth-card__step,
+.login-page .eyebrow,
+.login-page .auth-card__step {
+  padding: 0;
+  background: transparent;
+  color: var(--toss-blue);
+  font-size: 14px;
+}
+
+/* Login */
+.login-page {
+  background:
+    radial-gradient(circle at 84% 5%, rgba(185, 225, 255, .72), transparent 30%),
+    radial-gradient(circle at 8% 36%, rgba(255, 224, 163, .54), transparent 29%),
+    linear-gradient(180deg, #fbfdff, #f7faff);
+}
+
+.login-page .auth-page {
+  width: min(calc(100% - 48px), 1050px);
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 54px;
+  padding: 42px 0;
+}
+
+.login-page .auth-intro {
+  min-height: 720px;
+  padding: 20px 12px 0;
+  overflow: visible;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.login-page .auth-intro .brand {
+  color: var(--toss-text);
+}
+
+.login-page .auth-intro .brand__paw {
+  background: linear-gradient(145deg, #6d73ff, #44a9ef);
+}
+
+.login-page .auth-intro__copy {
+  margin-top: 82px;
+}
+
+.login-page .auth-intro__copy .eyebrow {
+  color: var(--toss-blue);
+}
+
+.login-page .auth-intro__copy h1 {
+  max-width: 620px;
+  color: var(--toss-text);
+  font-size: clamp(50px, 5.4vw, 72px);
+  line-height: 1.08;
+}
+
+.login-page .auth-intro__copy p {
+  color: var(--toss-subtext);
+  font-size: 18px;
+}
+
+.login-preview {
+  min-height: 330px;
+  margin: auto 0 0;
+  border-radius: 0;
+  background:
+    radial-gradient(ellipse at 50% 108%, rgba(191, 225, 255, .82) 0 43%, transparent 44%);
+}
+
+.login-preview__pet {
+  bottom: -2px;
+  width: 230px;
+}
+
+.login-page .auth-card {
+  padding: 38px 32px;
+  border: 1px solid rgba(255, 255, 255, .9);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 20px 60px rgba(49, 66, 94, .1);
+  backdrop-filter: blur(20px);
+}
+
+.login-page .auth-field__input {
+  border: 0;
+  border-radius: 16px;
+  background: #f2f4f6;
+}
+
+.login-page .auth-field__input:focus {
+  box-shadow: 0 0 0 3px rgba(49, 130, 246, .15);
+}
+
+/* Main pet screen */
+.welcome-page {
+  background:
+    radial-gradient(circle at 82% 3%, rgba(180, 223, 255, .82), transparent 29%),
+    radial-gradient(circle at 8% 30%, rgba(255, 224, 161, .62), transparent 30%),
+    linear-gradient(180deg, #fbfdff 0%, #ffffff 66%, #ddecff 100%);
+}
+
+.welcome-header,
+.dashboard {
+  width: min(calc(100% - 36px), 820px);
+}
+
+.welcome-header {
+  padding-top: 24px;
+}
+
+.welcome-header > button {
+  border: 0;
+  background: rgba(255, 255, 255, .72);
+  box-shadow: none;
+  color: var(--toss-subtext);
+}
+
+.dashboard__intro {
+  display: flex;
+  min-height: 820px;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 0;
+  padding: 10px 0 30px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dashboard__utility-menu {
+  width: 100%;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.dashboard__utility-menu button {
+  min-height: 84px;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  justify-items: center;
+  padding: 10px 6px;
+  border: 0;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, .66);
+  box-shadow: none;
+  text-align: center;
+  backdrop-filter: blur(16px);
+}
+
+.dashboard__utility-menu button > span,
+.dashboard__utility-menu button strong,
+.dashboard__utility-menu button small {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+.pet-carousel {
+  width: 100%;
+  min-height: 0;
+  margin: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.pet-carousel__slide {
+  min-height: 480px;
+  justify-content: flex-end;
+  padding: 92px 20px 20px;
+}
+
+.pet-carousel__bubble {
+  top: 44px;
+  padding: 16px 22px;
+  border: 0;
+  border-radius: 22px 22px 6px 22px;
+  background: white;
+  box-shadow: 0 14px 34px rgba(35, 49, 76, .09);
+  color: var(--toss-text);
+  font-size: 15px;
+}
+
+.pet-carousel__pet {
+  width: min(44vw, 350px);
+  height: min(44vw, 350px);
+  filter: drop-shadow(0 28px 24px rgba(62, 79, 115, .16));
+}
+
+.pet-carousel__pagination {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  margin: -3px 0 18px;
+}
+
+.pet-carousel__dot--active {
+  background: var(--toss-blue);
+}
+
+.pet-home-panel {
+  width: min(100%, 650px);
+  margin-inline: auto;
+  padding: 24px;
+  border: 0;
+  border-radius: 30px;
+  background: white;
+  box-shadow: 0 18px 48px rgba(46, 61, 90, .1);
+}
+
+.pet-home-panel__profile > strong {
+  background: #f2f4f6;
+  color: var(--toss-subtext);
+}
+
+.pet-home-panel__progress span {
+  background: linear-gradient(90deg, #7378ff, #45aef1);
+}
+
+.pet-home-panel__allergy {
+  background: #f5f6f8;
+}
+
+.pet-home-panel__actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pet-home-panel__actions button,
+.pet-home-panel__actions button:last-child {
+  min-height: 80px;
+  flex-direction: column;
+  border-radius: 21px;
+}
+
+.pet-home-panel__actions button {
+  background: #f2f4f6;
+  color: var(--toss-text);
+}
+
+.pet-home-panel__actions button:last-child {
+  background: var(--toss-blue);
+}
+
+/* Upload */
+.scanner-page {
+  background:
+    radial-gradient(circle at 86% 2%, rgba(182, 224, 255, .74), transparent 28%),
+    linear-gradient(180deg, #fbfdff, #f7faff);
+}
+
+.scanner-layout {
+  width: min(calc(100% - 36px), 900px);
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.pet-selector {
+  padding: 16px;
+  border: 0;
+  background: rgba(255, 255, 255, .86);
+  box-shadow: 0 16px 45px rgba(48, 64, 92, .08);
+}
+
+.pet-selector__list {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.pet-selector__item {
+  background: #f2f4f6;
+}
+
+.pet-selector__item--selected {
+  border-color: #8ebfff;
+  background: #e8f3ff;
+}
+
+.scanner-card {
+  padding: clamp(30px, 6vw, 58px);
+  border: 0;
+  background: rgba(255, 255, 255, .9);
+  box-shadow: 0 20px 60px rgba(48, 64, 92, .09);
+}
+
+.scanner-heading {
+  text-align: center;
+}
+
+.scanner-heading h1 {
+  color: var(--toss-text);
+}
+
+.scanner-tips div {
+  background: #f2f4f6;
+}
+
+.upload-box {
+  border-color: #9dc9ff;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, .98), transparent 30%),
+    linear-gradient(145deg, #e8f4ff, #f7fbff);
+}
+
+.upload-box__icon {
+  background: var(--toss-blue);
+}
+
+.scanner-product-field input {
+  background: #f2f4f6;
+}
+
+/* Results */
+.results-page {
+  background:
+    radial-gradient(circle at 84% 2%, rgba(184, 224, 255, .76), transparent 27%),
+    linear-gradient(180deg, #fbfdff, #f7faff);
+}
+
+.result-hero {
+  background:
+    radial-gradient(circle at 82% 42%, rgba(255, 255, 255, .3), transparent 25%),
+    linear-gradient(135deg, #3478f6, #76b7f8);
+  box-shadow: 0 24px 60px rgba(49, 130, 246, .18);
+}
+
+.result-count {
+  border: 0;
+  background: white;
+  box-shadow: 0 12px 32px rgba(48, 64, 92, .06);
+}
+
+.health-message,
+.result-ai-cta {
+  background: #eaf4ff;
+}
+
+@media (max-width: 800px) {
+  .login-page .auth-page {
+    gap: 16px;
+    padding: 0 14px 36px;
+  }
+
+  .login-page .auth-intro {
+    min-height: 640px;
+    padding: max(22px, env(safe-area-inset-top)) 8px 0;
+  }
+
+  .login-page .auth-intro__copy {
+    margin-top: 58px;
+  }
+
+  .login-preview {
+    min-height: 250px;
+    margin-inline: 0;
+  }
+
+  .welcome-header,
+  .dashboard {
+    width: 100%;
+  }
+
+  .dashboard {
+    padding-inline: 16px;
+  }
+
+  .dashboard__intro {
+    min-height: calc(100svh - 100px);
+  }
+
+  .pet-carousel__slide {
+    min-height: 430px;
+  }
+
+  .pet-carousel__pet {
+    width: min(68vw, 290px);
+    height: min(68vw, 290px);
+  }
+
+  .pet-home-panel {
+    padding: 19px;
+  }
+
+  .scanner-layout {
+    width: 100%;
+  }
+}
