@@ -36,6 +36,22 @@ function Welcome({
     }
   }, [activePetIndex, petProfiles.length]);
 
+  const moveToPet = (index) => {
+    const nextIndex = Math.min(
+      petProfiles.length - 1,
+      Math.max(0, index),
+    );
+    const slider = petSliderRef.current;
+
+    if (slider) {
+      slider.scrollTo({
+        left: nextIndex * slider.clientWidth,
+        behavior: 'smooth',
+      });
+    }
+    setActivePetIndex(nextIndex);
+  };
+
   const finishPetSlide = (event) => {
     if (!isPetSlideDraggingRef.current) return;
 
@@ -136,6 +152,10 @@ function Welcome({
                   isPetSlideDraggingRef.current = true;
                   petSlideStartXRef.current = event.clientX;
                   petSlideScrollLeftRef.current = event.currentTarget.scrollLeft;
+                  if (event.pointerType !== 'mouse') {
+                    isPetSlideDraggingRef.current = false;
+                    return;
+                  }
                   event.currentTarget.setPointerCapture(event.pointerId);
                 }}
                 onPointerMove={(event) => {
@@ -154,11 +174,19 @@ function Welcome({
                   const nextIndex = Math.round(
                     event.currentTarget.scrollLeft / slideWidth,
                   );
-                  if (nextIndex !== activePetIndex) setActivePetIndex(nextIndex);
+                  const boundedIndex = Math.min(
+                    petProfiles.length - 1,
+                    Math.max(0, nextIndex),
+                  );
+                  if (boundedIndex !== activePetIndex) setActivePetIndex(boundedIndex);
                 }}
               >
-                {petProfiles.map((pet) => (
-                  <article className="pet-carousel__slide" key={pet.id}>
+                {petProfiles.map((pet, index) => (
+                  <article
+                    className="pet-carousel__slide"
+                    key={pet.id}
+                    aria-hidden={index !== activePetIndex}
+                  >
                     <div className="pet-carousel__bubble">
                       오늘 사료도 같이 확인해볼까?
                     </div>
@@ -186,13 +214,17 @@ function Welcome({
                   aria-label={`${activePetIndex + 1}번째 반려동물 표시 중`}
                 >
                   {petProfiles.map((pet, index) => (
-                    <span
+                    <button
+                      type="button"
                       className={
                         index === activePetIndex
                           ? 'pet-carousel__dot pet-carousel__dot--active'
                           : 'pet-carousel__dot'
                       }
                       key={pet.id}
+                      aria-label={`${index + 1}번째 반려동물 보기`}
+                      aria-current={index === activePetIndex ? 'true' : undefined}
+                      onClick={() => moveToPet(index)}
                     />
                   ))}
                 </div>
