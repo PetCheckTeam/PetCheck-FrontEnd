@@ -6159,3 +6159,233 @@ body {
     margin-inline: -8px;
   }
 }
+
+/* Responsive home and unified login surface */
+@media (min-width: 701px) {
+  .welcome-header,
+  .dashboard {
+    width: min(calc(100% - 64px), 1480px);
+  }
+
+  .dashboard {
+    padding-top: 24px;
+  }
+
+  .dashboard__intro {
+    min-height: 820px;
+    padding: clamp(30px, 3.5vw, 52px);
+  }
+
+  .dashboard__utility-menu {
+    width: 100%;
+    max-width: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .dashboard__utility-menu button {
+    min-height: 112px;
+  }
+
+  .pet-carousel {
+    width: calc(100% + clamp(60px, 7vw, 104px));
+    margin-inline: calc(clamp(30px, 3.5vw, 52px) * -1);
+  }
+
+  .pet-carousel__slide {
+    min-height: 500px;
+    padding-top: 80px;
+  }
+
+  .pet-carousel__pet {
+    width: clamp(290px, 22vw, 360px);
+    height: clamp(290px, 22vw, 360px);
+  }
+
+  .pet-home-panel {
+    width: min(100%, 1080px);
+  }
+}
+
+.login-page,
+.login-features {
+  background:
+    radial-gradient(circle at 10% 8%, rgba(214, 224, 241, .72), transparent 28%),
+    radial-gradient(circle at 88% 42%, rgba(224, 235, 218, .62), transparent 30%),
+    linear-gradient(155deg, #fbfcff 0%, #f6f8f5 55%, #fffaf0 100%);
+}
+
+.login-page {
+  position: relative;
+}
+
+.login-features {
+  border-top: 0;
+}
+
+@media (max-width: 900px) {
+  .login-page .auth-page {
+    width: 100%;
+    max-width: 620px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    margin: 0 auto;
+    padding:
+      max(24px, env(safe-area-inset-top))
+      20px
+      56px;
+  }
+
+  .login-page .auth-intro {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .login-page .auth-intro__copy {
+    margin-top: 38px;
+  }
+
+  .login-page .auth-intro__copy h1 {
+    max-width: 520px;
+    font-size: clamp(38px, 9vw, 50px);
+  }
+
+  .login-page .auth-intro__copy p {
+    font-size: 16px;
+  }
+
+  .login-preview {
+    width: 100%;
+    min-height: 270px;
+  }
+
+  .login-page .auth-card {
+    width: 100%;
+    padding: 34px;
+  }
+}
+
+@media (max-width: 500px) {
+  .login-page,
+  .login-features {
+    background:
+      radial-gradient(circle at 12% 4%, rgba(214, 224, 241, .72), transparent 25%),
+      radial-gradient(circle at 92% 54%, rgba(224, 235, 218, .55), transparent 30%),
+      linear-gradient(165deg, #fbfcff 0%, #f7f9f6 58%, #fffaf2 100%);
+  }
+
+  .login-page .auth-page {
+    gap: 18px;
+    padding:
+      max(20px, env(safe-area-inset-top))
+      16px
+      40px;
+  }
+
+  .login-page .brand {
+    font-size: 23px;
+  }
+
+  .login-page .brand__paw {
+    width: 40px;
+    height: 40px;
+  }
+
+  .login-page .auth-intro__copy {
+    margin-top: 30px;
+    padding-inline: 4px;
+  }
+
+  .login-page .auth-intro__copy h1 {
+    margin-top: 14px;
+    font-size: clamp(34px, 10vw, 42px);
+    line-height: 1.12;
+  }
+
+  .login-page .auth-intro__copy p {
+    margin-top: 15px;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .login-preview {
+    min-height: 230px;
+    margin-top: 22px;
+    border-radius: 28px;
+  }
+
+  .login-preview__metric {
+    top: 22px;
+    left: 22px;
+  }
+
+  .login-preview__metric strong {
+    font-size: 21px;
+  }
+
+  .login-preview__bubble {
+    top: 24px;
+    right: 18px;
+    max-width: 43%;
+    padding: 10px 12px;
+    font-size: 10px;
+  }
+
+  .login-preview__pet {
+    right: 16%;
+    bottom: 22px;
+    width: 132px;
+  }
+
+  .login-preview__progress {
+    right: 20px;
+    bottom: 15px;
+    left: 20px;
+  }
+
+  .login-page .auth-card {
+    padding: 26px 20px 24px;
+    border-radius: 28px;
+    box-shadow:
+      0 20px 50px rgba(71, 81, 106, .12),
+      inset 0 1px 0 white;
+  }
+
+  .login-page .auth-card__heading {
+    margin-bottom: 25px;
+  }
+
+  .login-page .auth-card__heading h2 {
+    font-size: 27px;
+  }
+
+  .login-page .auth-field__input {
+    height: 54px;
+  }
+
+  .login-page .button {
+    min-height: 54px;
+  }
+
+  .login-features {
+    margin-top: 0;
+    padding: 88px 16px 72px;
+  }
+
+  .login-features__heading {
+    margin-bottom: 34px;
+  }
+
+  .login-features__heading h2 {
+    font-size: 34px;
+  }
+
+  .feature-scene {
+    min-height: auto;
+    margin-bottom: 24px;
+  }
+
+  .login-features .feature-card {
+    width: 100%;
+  }
+}
