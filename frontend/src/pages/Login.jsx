@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import petcheckAppIcon from '../assets/petcheck-app-icon.png';
 import AuthInput from '../components/AuthInput';
 import Button from '../components/Button';
 import FeatureCard from '../components/FeatureCard';
@@ -138,7 +139,7 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
       <div className="auth-page">
         <section className="auth-intro" aria-labelledby="login-heading">
           <a className="brand" href="/" aria-label="PetCheck 홈">
-            <span className="brand__paw" aria-hidden="true">P</span>
+            <img className="brand__image" src={petcheckAppIcon} alt="" />
             PetCheck
           </a>
           <div className="auth-intro__copy">

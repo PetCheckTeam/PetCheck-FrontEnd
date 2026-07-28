@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import petcheckAppIcon from '../assets/petcheck-app-icon.png';
 import AllergyChip from '../components/AllergyChip';
 import Button from '../components/Button';
 import PetIllustration from '../components/PetIllustration';
@@ -110,7 +111,7 @@ function Setup({
           ←
         </button>
         <a className="brand" href="/" aria-label="PetCheck 홈">
-          <span className="brand__paw" aria-hidden="true">P</span>
+          <img className="brand__image" src={petcheckAppIcon} alt="" />
           PetCheck
         </a>
       </header>

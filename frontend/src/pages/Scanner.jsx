@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { analysesApi } from '../api/petcheckApi';
+import petcheckAppIcon from '../assets/petcheck-app-icon.png';
 import Button from '../components/Button';
 import PetIllustration from '../components/PetIllustration';
 import UploadBox from '../components/UploadBox';
@@ -104,7 +105,7 @@ function Scanner({
       <header className="scanner-header">
         <button type="button" onClick={onBack} aria-label="이전 화면">←</button>
         <a className="brand" href="/" aria-label="PetCheck 홈">
-          <span className="brand__paw" aria-hidden="true">P</span>
+          <img className="brand__image" src={petcheckAppIcon} alt="" />
           PetCheck
         </a>
         <span className="scanner-header__step">사료 분석</span>
@@ -146,7 +147,7 @@ function Scanner({
         <section className="scanner-card">
         <div className="scanner-heading">
           <span className="eyebrow">사료 성분 확인</span>
-          <h1>성분표가 잘 보이게<br />사진을 올려주세요</h1>
+          <h1>성분표가 잘 보이게 사진을 올려주세요</h1>
           <p>글자가 선명할수록 더 정확하게 확인할 수 있어요.</p>
         </div>
 
