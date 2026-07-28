@@ -6053,65 +6053,6 @@ body {
   background: linear-gradient(135deg, #4385fa, #2e6ce9);
 }
 
-.login-features {
-  padding: 110px 24px;
-  border: 0;
-  background: #fff;
-}
-
-.login-features__floating-icons {
-  display: none;
-}
-
-.login-features__heading {
-  max-width: 760px;
-  margin-bottom: 60px;
-}
-
-.login-features__heading h2 {
-  color: var(--pc-ink);
-  font-size: clamp(38px, 5vw, 58px);
-}
-
-.login-features__list {
-  display: grid;
-  width: min(100%, 1100px);
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.feature-scene,
-.feature-scene:nth-child(even) {
-  min-height: 0;
-  justify-content: stretch;
-}
-
-.login-features .feature-card,
-.feature-scene:nth-child(even) .feature-card {
-  width: 100%;
-  min-height: 480px;
-  grid-template-columns: 1fr;
-  grid-template-rows: 260px auto;
-  gap: 24px;
-  padding: 16px 16px 28px;
-  border-radius: 32px;
-  background: #f8faff;
-  box-shadow: none;
-  text-align: left;
-  transform: none;
-}
-
-.feature-scene:nth-child(even) .feature-card__visual {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.login-features .feature-card__visual {
-  min-height: 260px;
-  border-radius: 25px;
-  background: linear-gradient(145deg, #dcecff, #edf6ff);
-}
-
 /* Photo upload */
 .scanner-layout {
   display: grid;
@@ -6326,20 +6267,6 @@ body {
   .login-page .auth-card {
     padding: 26px 20px;
     border-radius: 28px;
-  }
-
-  .login-features {
-    padding: 72px 16px;
-  }
-
-  .login-features__list {
-    grid-template-columns: 1fr;
-  }
-
-  .login-features .feature-card,
-  .feature-scene:nth-child(even) .feature-card {
-    min-height: 0;
-    grid-template-rows: 220px auto;
   }
 
   .scanner-layout {
