@@ -137,6 +137,34 @@ function Welcome({
 
       <section className="dashboard" aria-labelledby="dashboard-heading">
         <div className="dashboard__intro">
+          <div className="dashboard__sparkles" aria-hidden="true">
+            <span>✦</span>
+            <span>♥</span>
+            <span>✿</span>
+            <span>★</span>
+          </div>
+
+          <section className="dashboard__welcome-copy">
+            <div>
+              <span className="dashboard__day-label">
+                <span aria-hidden="true">☀️</span>
+                오늘의 PetCheck
+              </span>
+              <h1>
+                {userProfile?.name ?? '보호자'}님,
+                <br />
+                오늘도 <em>건강한 하루</em>를 시작해요!
+              </h1>
+              <p>
+                우리 아이에게 꼭 맞는 사료인지 사진 한 장으로 쉽고 재미있게 확인해 보세요.
+              </p>
+            </div>
+            <div className="dashboard__care-badges" aria-label="PetCheck 특징">
+              <span><i aria-hidden="true">✓</i> 알러지 맞춤 확인</span>
+              <span><i aria-hidden="true">✓</i> 쉬운 성분 설명</span>
+            </div>
+          </section>
+
           <nav className="dashboard__utility-menu" aria-label="빠른 메뉴">
             <button
               type="button"
@@ -175,133 +203,167 @@ function Welcome({
 
           {hasPetProfile ? (
             <>
-              <div
-                ref={petSliderRef}
-                className="pet-carousel"
-                aria-label="등록한 반려동물"
-                onPointerDown={(event) => {
-                  isPetSlideDraggingRef.current = true;
-                  petSlideStartXRef.current = event.clientX;
-                  petSlideScrollLeftRef.current = event.currentTarget.scrollLeft;
-                  if (event.pointerType !== 'mouse') {
-                    isPetSlideDraggingRef.current = false;
-                    return;
-                  }
-                  event.currentTarget.setPointerCapture(event.pointerId);
-                }}
-                onPointerMove={(event) => {
-                  if (!isPetSlideDraggingRef.current) return;
-                  event.preventDefault();
-                  event.currentTarget.scrollLeft = (
-                    petSlideScrollLeftRef.current
-                    - (event.clientX - petSlideStartXRef.current)
-                  );
-                }}
-                onPointerUp={finishPetSlide}
-                onPointerCancel={finishPetSlide}
-                onScroll={(event) => {
-                  const slideWidth = event.currentTarget.clientWidth;
-                  if (!slideWidth) return;
-                  const nextIndex = Math.round(
-                    event.currentTarget.scrollLeft / slideWidth,
-                  );
-                  const boundedIndex = Math.min(
-                    petProfiles.length - 1,
-                    Math.max(0, nextIndex),
-                  );
-                  if (boundedIndex !== activePetIndex) setActivePetIndex(boundedIndex);
-                }}
-              >
-                {petProfiles.map((pet, index) => (
-                  <article
-                    className="pet-carousel__slide"
-                    key={pet.id}
-                    aria-hidden={index !== activePetIndex}
-                  >
-                    <div className="pet-carousel__bubble">
-                      오늘 사료도 같이 확인해볼까?
-                    </div>
-                    <PetIllustration
-                      className="pet-carousel__pet"
-                      type={pet.petType}
-                    />
-                    <h1>
-                      {pet.petName}
-                    </h1>
-                    <p>
-                      {pet.petType === 'dog' ? '강아지' : '고양이'}
-                      {' · '}
-                      {pet.allergies.length > 0
-                        ? `알러지 ${pet.allergies.length}개`
-                        : '알러지 없음'}
-                    </p>
-                  </article>
-                ))}
-              </div>
+              <div className="dashboard__main-grid">
+                <section className="pet-stage-card" aria-label={`${activePet.petName} 캐릭터`}>
+                  <span className="pet-stage-card__tag">
+                    <i aria-hidden="true" />
+                    오늘도 건강 체크!
+                  </span>
+                  <div className="pet-stage-card__decorations" aria-hidden="true">
+                    <span>🐾</span>
+                    <span>🦴</span>
+                    <span>♥</span>
+                  </div>
 
-              {petProfiles.length > 1 && (
-                <div
-                  className="pet-carousel__pagination"
-                  aria-label={`${activePetIndex + 1}번째 반려동물 표시 중`}
-                >
-                  {petProfiles.map((pet, index) => (
-                    <button
-                      type="button"
-                      className={
-                        index === activePetIndex
-                          ? 'pet-carousel__dot pet-carousel__dot--active'
-                          : 'pet-carousel__dot'
+                  <div
+                    ref={petSliderRef}
+                    className="pet-carousel"
+                    aria-label="등록한 반려동물"
+                    onPointerDown={(event) => {
+                      isPetSlideDraggingRef.current = true;
+                      petSlideStartXRef.current = event.clientX;
+                      petSlideScrollLeftRef.current = event.currentTarget.scrollLeft;
+                      if (event.pointerType !== 'mouse') {
+                        isPetSlideDraggingRef.current = false;
+                        return;
                       }
-                      key={pet.id}
-                      aria-label={`${index + 1}번째 반려동물 보기`}
-                      aria-current={index === activePetIndex ? 'true' : undefined}
-                      onClick={() => moveToPet(index)}
-                    />
-                  ))}
-                </div>
-              )}
-
-              <section className="pet-home-panel" aria-label={`${activePet.petName} 상세 정보`}>
-                <div className="pet-home-panel__profile">
-                  <div>
-                    <span>PetCheck care</span>
-                    <h2 id="dashboard-heading">{activePet.petName}</h2>
-                  </div>
-                  <strong>
-                    {activePet.petType === 'dog' ? '강아지' : '고양이'}
-                  </strong>
-                </div>
-                <div className="pet-home-panel__allergy">
-                  <span className="pet-home-panel__allergy-icon" aria-hidden="true">🛡️</span>
-                  <div>
-                    <small>알러지 정보</small>
-                    <strong>
-                      {activePet.allergies.length > 0
-                        ? activePet.allergies.join(', ')
-                        : '등록된 알러지가 없어요'}
-                    </strong>
-                  </div>
-                </div>
-                <div className="pet-home-panel__actions">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsEditingOwner((previous) => !previous);
-                      setOwnerMessage('');
+                      event.currentTarget.setPointerCapture(event.pointerId);
+                    }}
+                    onPointerMove={(event) => {
+                      if (!isPetSlideDraggingRef.current) return;
+                      event.preventDefault();
+                      event.currentTarget.scrollLeft = (
+                        petSlideScrollLeftRef.current
+                        - (event.clientX - petSlideStartXRef.current)
+                      );
+                    }}
+                    onPointerUp={finishPetSlide}
+                    onPointerCancel={finishPetSlide}
+                    onScroll={(event) => {
+                      const slideWidth = event.currentTarget.clientWidth;
+                      if (!slideWidth) return;
+                      const nextIndex = Math.round(
+                        event.currentTarget.scrollLeft / slideWidth,
+                      );
+                      const boundedIndex = Math.min(
+                        petProfiles.length - 1,
+                        Math.max(0, nextIndex),
+                      );
+                      if (boundedIndex !== activePetIndex) setActivePetIndex(boundedIndex);
                     }}
                   >
-                    <span aria-hidden="true">👤</span>
-                    <strong>보호자 정보</strong>
-                  </button>
+                    {petProfiles.map((pet, index) => (
+                      <article
+                        className="pet-carousel__slide"
+                        key={pet.id}
+                        aria-hidden={index !== activePetIndex}
+                      >
+                        <div className="pet-carousel__bubble">
+                          오늘 사료도 같이 확인해볼까?
+                        </div>
+                        <PetIllustration
+                          className="pet-carousel__pet"
+                          type={pet.petType}
+                        />
+                        <h2>
+                          {pet.petName}
+                        </h2>
+                        <p>
+                          {pet.petType === 'dog' ? '강아지' : '고양이'}
+                          {' · '}
+                          {pet.allergies.length > 0
+                            ? `알러지 ${pet.allergies.length}개`
+                            : '알러지 없음'}
+                        </p>
+                      </article>
+                    ))}
+                  </div>
+
+                  {petProfiles.length > 1 && (
+                    <div
+                      className="pet-carousel__pagination"
+                      aria-label={`${activePetIndex + 1}번째 반려동물 표시 중`}
+                    >
+                      {petProfiles.map((pet, index) => (
+                        <button
+                          type="button"
+                          className={
+                            index === activePetIndex
+                              ? 'pet-carousel__dot pet-carousel__dot--active'
+                              : 'pet-carousel__dot'
+                          }
+                          key={pet.id}
+                          aria-label={`${index + 1}번째 반려동물 보기`}
+                          aria-current={index === activePetIndex ? 'true' : undefined}
+                          onClick={() => moveToPet(index)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </section>
+
+                <section className="pet-home-panel" aria-label={`${activePet.petName} 상세 정보`}>
+                  <div className="pet-home-panel__status">
+                    <span aria-hidden="true">🌱</span>
+                    <strong>오늘도 건강해요!</strong>
+                  </div>
+                  <div className="pet-home-panel__profile">
+                    <div>
+                      <span>MY LITTLE FRIEND</span>
+                      <h2 id="dashboard-heading">{activePet.petName}</h2>
+                      <p>PetCheck가 꼼꼼하게 지켜줄게요.</p>
+                    </div>
+                    <strong>
+                      {activePet.petType === 'dog' ? '🐶 강아지' : '🐱 고양이'}
+                    </strong>
+                  </div>
+                  <div className="pet-home-panel__allergy">
+                    <span className="pet-home-panel__allergy-icon" aria-hidden="true">🛡️</span>
+                    <div>
+                      <small>꼭 피해야 하는 성분</small>
+                      <strong>
+                        {activePet.allergies.length > 0
+                          ? activePet.allergies.join(', ')
+                          : '등록된 알러지가 없어요'}
+                      </strong>
+                    </div>
+                    <span className="pet-home-panel__allergy-check" aria-hidden="true">✓</span>
+                  </div>
+                  <div className="pet-home-panel__actions">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsEditingOwner((previous) => !previous);
+                        setOwnerMessage('');
+                      }}
+                    >
+                      <span aria-hidden="true">👤</span>
+                      <strong>보호자 정보</strong>
+                      <small>내 정보 확인하기</small>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onStartScanner(activePet.id)}
+                    >
+                      <span aria-hidden="true">📷</span>
+                      <strong>사료 분석하기</strong>
+                      <small>사진으로 바로 확인</small>
+                    </button>
+                  </div>
                   <button
+                    className="pet-home-panel__ai"
                     type="button"
-                    onClick={() => onStartScanner(activePet.id)}
+                    onClick={() => onStartChatbot(activePet.id)}
                   >
-                    <span aria-hidden="true">📷</span>
-                    <strong>사료 분석하기</strong>
+                    <span aria-hidden="true">✨</span>
+                    <span>
+                      <strong>PetCheck AI에게 물어보기</strong>
+                      <small>우리 아이 맞춤 답변을 받아보세요</small>
+                    </span>
+                    <i aria-hidden="true">→</i>
                   </button>
-                </div>
-              </section>
+                </section>
+              </div>
             </>
           ) : (
             <section className="pet-carousel pet-carousel--empty">
