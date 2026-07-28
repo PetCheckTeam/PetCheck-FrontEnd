@@ -5,77 +5,6 @@ import resultDogImage from '../assets/result-danger-dog.png';
 import Button from '../components/Button';
 import IngredientCard from '../components/IngredientCard';
 
-const createResultData = (petName, allergies) => {
-  const primaryAllergy = allergies[0] || '닭고기';
-
-  return {
-    petName,
-    verdict: 'warning',
-    safe: 4,
-    warning: 2,
-    danger: 1,
-    message: `${petName}에게 주의가 필요한 성분이 있어요. 특히 등록한 알러지 정보와 일치하는 성분은 급여 전에 꼭 확인해 주세요.`,
-    ingredients: [
-      {
-        id: 1,
-        name: '현미',
-        status: 'safe',
-        shortDescription: '소화 가능한 탄수화물 원료',
-        description: '현미는 식이섬유와 탄수화물을 공급하는 곡물 원료예요.',
-        reason: '등록된 알러지 정보와 일치하지 않아요.',
-      },
-      {
-        id: 2,
-        name: '연어 오일',
-        status: 'safe',
-        shortDescription: '오메가-3 지방산 공급원',
-        description: '피부와 털 건강에 도움을 줄 수 있는 지방 원료예요.',
-        reason: '일반적인 급여 기준에서 안전한 성분으로 분류했어요.',
-      },
-      {
-        id: 3,
-        name: '비트 펄프',
-        status: 'safe',
-        shortDescription: '식이섬유 공급원',
-        description: '장 건강과 배변 활동에 도움을 줄 수 있는 섬유질 원료예요.',
-        reason: '등록된 알러지와 관련성이 낮아요.',
-      },
-      {
-        id: 4,
-        name: '비타민 혼합제',
-        status: 'safe',
-        shortDescription: '필수 영양소 보충',
-        description: '사료의 영양 균형을 맞추기 위해 포함되는 비타민 성분이에요.',
-        reason: '표시된 범위에서는 특별한 위험 신호가 없어요.',
-      },
-      {
-        id: 5,
-        name: '옥수수 글루텐',
-        status: 'warning',
-        shortDescription: '민감한 반려동물은 주의',
-        description: '식물성 단백질 공급원이지만 일부 반려동물에게 소화 부담을 줄 수 있어요.',
-        reason: '알러지 이력이 있거나 곡물에 민감하다면 주의가 필요해요.',
-      },
-      {
-        id: 6,
-        name: '동물성 지방',
-        status: 'warning',
-        shortDescription: '원료 출처 확인 필요',
-        description: '표기만으로는 어떤 동물에서 얻은 지방인지 정확히 알기 어려워요.',
-        reason: '원료 출처가 명확하지 않아 알러지 반응 여부를 확인하기 어려워요.',
-      },
-      {
-        id: 7,
-        name: primaryAllergy,
-        status: 'danger',
-        shortDescription: `${petName}의 등록 알러지와 일치`,
-        description: `${primaryAllergy}는 ${petName}의 알러지 정보에 등록된 성분이에요.`,
-        reason: '등록한 알러지 성분과 직접 일치하므로 급여를 피하는 것을 권장해요.',
-      },
-    ],
-  };
-};
-
 const verdictInfo = {
   safe: {
     label: '안심하고 급여해도 좋아요',
@@ -228,12 +157,61 @@ const normalizeAnalysisResult = (analysis, petName) => {
   };
 };
 
+const completedStatuses = new Set([
+  'COMPLETED',
+  'COMPLETE',
+  'SUCCESS',
+  'DONE',
+  'ANALYZED',
+]);
+
+const hasAnalysisData = (analysis) => Boolean(
+  analysis?.aiAnalysisResult
+  || analysis?.analysisResult
+  || analysis?.result
+  || analysis?.ingredientResults?.length
+  || analysis?.ingredients?.length,
+);
+
+function ResultsHeader({ onScanAgain, onGoHome }) {
+  return (
+    <header className="results-header">
+      <button type="button" onClick={onScanAgain} aria-label="이전 화면">←</button>
+      <a className="brand" href="/" aria-label="PetCheck 홈">
+        <img className="brand__image" src={petcheckAppIcon} alt="" />
+        PetCheck
+      </a>
+      <button type="button" onClick={onGoHome}>홈</button>
+    </header>
+  );
+}
+
 function Results({ petProfile, analysisResult, onScanAgain, onGoHome, onAskAI }) {
   const [openIngredientId, setOpenIngredientId] = useState(null);
   const petName = petProfile.petName || '우리 아이';
-  const result = analysisResult
-    ? normalizeAnalysisResult(analysisResult, petName)
-    : createResultData(petName, petProfile.allergies || []);
+  const analysisId = analysisResult?.analysisId ?? analysisResult?.id ?? null;
+  const analysisStatus = String(analysisResult?.status ?? '').toUpperCase();
+  const canAskAI = Boolean(
+    analysisResult
+    && analysisId
+    && (completedStatuses.has(analysisStatus) || hasAnalysisData(analysisResult)),
+  );
+
+  if (!analysisResult) {
+    return (
+      <main className="results-page">
+        <ResultsHeader onScanAgain={onScanAgain} onGoHome={onGoHome} />
+        <section className="result-empty-state" role="status">
+          <span aria-hidden="true">!</span>
+          <h1>분석 결과를 불러오지 못했습니다.</h1>
+          <p>성분표 사진을 다시 분석한 뒤 결과를 확인해 주세요.</p>
+          <Button type="button" onClick={onScanAgain}>다시 분석하기</Button>
+        </section>
+      </main>
+    );
+  }
+
+  const result = normalizeAnalysisResult(analysisResult, petName);
   const currentVerdict = verdictInfo[result.verdict];
   const resultPetImage = petProfile.petType === 'cat'
     ? resultCatImage
@@ -242,14 +220,7 @@ function Results({ petProfile, analysisResult, onScanAgain, onGoHome, onAskAI })
 
   return (
     <main className="results-page">
-      <header className="results-header">
-        <button type="button" onClick={onScanAgain} aria-label="이전 화면">←</button>
-        <a className="brand" href="/" aria-label="PetCheck 홈">
-          <img className="brand__image" src={petcheckAppIcon} alt="" />
-          PetCheck
-        </a>
-        <button type="button" onClick={onGoHome}>홈</button>
-      </header>
+      <ResultsHeader onScanAgain={onScanAgain} onGoHome={onGoHome} />
 
       <section className={`result-hero result-hero--${result.verdict}`}>
         <div className="result-hero__copy">
@@ -330,7 +301,15 @@ function Results({ petProfile, analysisResult, onScanAgain, onGoHome, onAskAI })
               <p>{petName}의 프로필을 참고해 AI가 쉽게 설명해 드려요.</p>
             </div>
           </div>
-          <Button type="button" onClick={onAskAI}>AI에게 물어보기 →</Button>
+          <Button
+            type="button"
+            disabled={!canAskAI}
+            onClick={() => {
+              if (canAskAI) onAskAI();
+            }}
+          >
+            {canAskAI ? 'AI에게 물어보기 →' : '분석 완료 후 이용할 수 있어요'}
+          </Button>
         </div>
 
         <div className="result-actions">

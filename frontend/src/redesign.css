@@ -2833,6 +2833,120 @@ button:not(:disabled):hover {
   }
 }
 
+/* Analysis-bound chatbot states and compact answer sources */
+.dashboard__utility-menu button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  filter: grayscale(.18);
+  transform: none;
+}
+
+.chatbot-analysis-required {
+  margin: 0 0 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #fff4e5;
+  color: #9a5a00;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.chat-message__content .chat-message__error {
+  border: 1px solid #ffd0d5;
+  background: #fff1f3;
+  color: #c92a3a;
+}
+
+.chat-message__sources {
+  display: grid;
+  gap: 8px;
+  margin-top: 9px;
+  padding: 12px;
+  border: 1px solid rgba(49, 130, 246, .13);
+  border-radius: 15px;
+  background: rgba(241, 247, 255, .92);
+}
+
+.chat-message__sources > strong {
+  color: #536077;
+  font-size: 11px;
+}
+
+.chat-message__sources ul {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chat-message__sources li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #333d4b;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.chat-message__sources em {
+  flex: 0 0 auto;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #ffe8eb;
+  color: #d43b4f;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.result-empty-state {
+  display: flex;
+  width: min(calc(100% - 32px), 720px);
+  min-height: 440px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  margin: 32px auto 80px;
+  padding: 40px 24px;
+  border: 1px solid rgba(255, 255, 255, .9);
+  border-radius: 36px;
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 24px 60px rgba(69, 85, 125, .1);
+  text-align: center;
+}
+
+.result-empty-state > span {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff0d8;
+  color: #e58a00;
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.result-empty-state h1 {
+  margin: 8px 0 0;
+  color: #20263b;
+  font-size: clamp(27px, 5vw, 38px);
+}
+
+.result-empty-state p {
+  margin: 0 0 10px;
+  color: #7b8497;
+  line-height: 1.6;
+}
+
+.result-empty-state .button {
+  min-width: 180px;
+}
+
 /* Login finale — balanced product hero on web and a compact app flow */
 .login-page {
   min-height: 100svh;

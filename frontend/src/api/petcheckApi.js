@@ -109,6 +109,16 @@ export const analysesApi = {
     method: 'POST',
     body: { retryStep },
   }),
+  chat: (analysisId, message, history = []) => apiRequest(
+    `/api/v1/analyses/${analysisId}/chat`,
+    {
+      method: 'POST',
+      body: {
+        message,
+        history,
+      },
+    },
+  ),
   remove: (analysisId) => apiRequest(`/api/v1/analyses/${analysisId}`, {
     method: 'DELETE',
   }),

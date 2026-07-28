@@ -1,103 +1,133 @@
 import { useEffect, useRef, useState } from 'react';
+import { analysesApi } from '../api/petcheckApi';
 import ChatInput from '../components/ChatInput';
 import ChatMessage from '../components/ChatMessage';
 import PetIllustration from '../components/PetIllustration';
 import SuggestedQuestion from '../components/SuggestedQuestion';
 
 const suggestedQuestions = [
-  '지금 분석한 사료를 먹여도 괜찮아?',
-  '등록한 알러지 성분을 알려줘',
-  '사료 성분표에서 뭘 먼저 봐야 해?',
+  '이 사료를 먹여도 괜찮아?',
+  '기피 성분과 일치한 원료를 설명해 줘',
+  '왜 이 원료가 해당 성분으로 분류되었어?',
 ];
 
-function createSampleAnswer(question, petProfile) {
-  const petName = petProfile.petName || '우리 아이';
-  const allergies = petProfile.allergies || [];
-  const allergyText = allergies.length > 0 ? allergies.join(', ') : '없음';
-
-  if (question.includes('알러지') || question.includes('알레르기') || question.includes('기피')) {
-    return `${petName}에게 등록된 알러지 성분은 ${allergyText}이에요. 성분표에서 같은 이름뿐 아니라 분말, 추출물, 부산물처럼 다른 형태로 표시될 수 있으니 함께 확인해 주세요.`;
-  }
-
-  if (question.includes('먹여') || question.includes('괜찮')) {
-    return `현재 분석 결과에서는 ${petName}에게 주의가 필요한 성분이 발견됐어요. 등록한 알러지 성분과 일치하는 원료가 있다면 급여하지 말고, 정확한 판단이 필요할 때는 수의사와 상담해 주세요.`;
-  }
-
-  if (question.includes('성분표') || question.includes('먼저')) {
-    return `성분표는 앞쪽에 표시된 주원료부터 확인하는 것이 좋아요. 그다음 ${petName}의 알러지 성분인 ${allergyText}이 포함됐는지 살펴보고, 출처가 불분명한 동물성 원료도 확인해 보세요.`;
-  }
-
-  return `${petName}의 프로필과 현재 분석 결과를 기준으로 살펴볼게요. 지금은 프론트엔드 샘플 답변 단계이며, 실제 RAG 연결 후에는 제품 성분표와 근거 문서를 검색해 더 정확한 답변을 제공할 예정이에요.`;
-}
+const getInitialMessage = (petName, hasAnalysisId) => ({
+  id: `greeting-${Date.now()}`,
+  role: 'assistant',
+  content: hasAnalysisId
+    ? `안녕하세요! ${petName}의 현재 사료 분석 결과를 기준으로 궁금한 점을 물어보세요.`
+    : '사료 분석 결과를 먼저 완료한 뒤 질문해 주세요.',
+  excludeFromHistory: true,
+});
 
 function Chatbot({
   petProfile,
-  petProfiles,
-  selectedPetId,
-  onSelectPet,
+  analysisResult,
   onBackToResults,
 }) {
   const petName = petProfile.petName || '우리 아이';
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      role: 'assistant',
-      content: `안녕하세요! ${petName}의 사료와 성분에 대해 궁금한 점을 물어보세요. 등록한 프로필을 참고해 쉽게 설명해 드릴게요.`,
-    },
+  const analysisId = analysisResult?.analysisId ?? analysisResult?.id ?? null;
+  const [messages, setMessages] = useState(() => [
+    getInitialMessage(petName, Boolean(analysisId)),
   ]);
   const [isResponding, setIsResponding] = useState(false);
   const messageEndRef = useRef(null);
-  const responseTimerRef = useRef(null);
+  const isMountedRef = useRef(true);
+  const isRespondingRef = useRef(false);
+  const requestSequenceRef = useRef(0);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isResponding]);
 
   useEffect(() => {
-    return () => window.clearTimeout(responseTimerRef.current);
+    requestSequenceRef.current += 1;
+    isRespondingRef.current = false;
+    setIsResponding(false);
+    setMessages([getInitialMessage(petName, Boolean(analysisId))]);
+  }, [analysisId, petName]);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      requestSequenceRef.current += 1;
+    };
   }, []);
 
-  const changePet = (petId) => {
-    const nextPet = petProfiles.find((pet) => pet.id === petId);
-    if (!nextPet || nextPet.id === selectedPetId) return;
-
-    window.clearTimeout(responseTimerRef.current);
+  const resetConversation = () => {
+    requestSequenceRef.current += 1;
+    isRespondingRef.current = false;
     setIsResponding(false);
-    onSelectPet(nextPet.id);
-    setMessages([
-      {
-        id: Date.now(),
-        role: 'assistant',
-        content: `${nextPet.petName}의 프로필로 변경했어요. 사료와 성분에 대해 궁금한 점을 물어보세요.`,
-      },
-    ]);
+    setMessages([getInitialMessage(petName, Boolean(analysisId))]);
   };
 
-  const sendQuestion = (question) => {
-    if (isResponding) return;
+  const sendQuestion = async (question) => {
+    const trimmedQuestion = question.trim();
+    if (!trimmedQuestion || !analysisId || isRespondingRef.current) return;
 
+    const history = messages
+      .filter((message) => (
+        !message.excludeFromHistory
+        && (message.role === 'user' || message.role === 'assistant')
+      ))
+      .slice(-10)
+      .map(({ role, content }) => ({ role, content }));
+    const requestSequence = requestSequenceRef.current + 1;
+    requestSequenceRef.current = requestSequence;
+    isRespondingRef.current = true;
     setMessages((previous) => [
       ...previous,
       {
-        id: Date.now(),
+        id: `user-${Date.now()}`,
         role: 'user',
-        content: question,
+        content: trimmedQuestion,
       },
     ]);
     setIsResponding(true);
 
-    // 실제 RAG 연결 후에는 이 타이머를 챗봇 API 요청으로 교체합니다.
-    responseTimerRef.current = window.setTimeout(() => {
+    try {
+      const response = await analysesApi.chat(
+        analysisId,
+        trimmedQuestion,
+        history,
+      );
+      const answer = String(response?.answer ?? '').trim();
+      if (!answer) {
+        throw new Error('챗봇 답변이 비어 있습니다. 잠시 후 다시 시도해 주세요.');
+      }
+      if (!isMountedRef.current || requestSequenceRef.current !== requestSequence) return;
+
       setMessages((previous) => [
         ...previous,
         {
-          id: Date.now() + 1,
+          id: `assistant-${Date.now()}`,
           role: 'assistant',
-          content: createSampleAnswer(question, petProfile),
+          content: answer,
+          sources: Array.isArray(response?.sources) ? response.sources : [],
         },
       ]);
-      setIsResponding(false);
-    }, 1200);
+    } catch (error) {
+      if (!isMountedRef.current || requestSequenceRef.current !== requestSequence) return;
+
+      setMessages((previous) => [
+        ...previous,
+        {
+          id: `error-${Date.now()}`,
+          role: 'assistant',
+          content:
+            error?.message
+            || '챗봇 답변을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.',
+          isError: true,
+          excludeFromHistory: true,
+        },
+      ]);
+    } finally {
+      if (isMountedRef.current && requestSequenceRef.current === requestSequence) {
+        isRespondingRef.current = false;
+        setIsResponding(false);
+      }
+    }
   };
 
   return (
@@ -108,19 +138,15 @@ function Chatbot({
         </button>
         <div>
           <strong>PetCheck AI</strong>
-          <span><i aria-hidden="true" /> 답변 가능</span>
+          <span>
+            <i aria-hidden="true" />
+            {analysisId ? '분석 결과 연결됨' : '분석 결과 필요'}
+          </span>
         </div>
         <button
           type="button"
-          onClick={() =>
-            setMessages([
-              {
-                id: Date.now(),
-                role: 'assistant',
-                content: `새 대화를 시작할게요. ${petName}에 대해 무엇이 궁금한가요?`,
-              },
-            ])
-          }
+          disabled={isResponding}
+          onClick={resetConversation}
         >
           새 대화
         </button>
@@ -132,7 +158,7 @@ function Chatbot({
             <PetIllustration type={petProfile.petType} />
           </span>
           <div>
-            <strong>{petName}의 프로필 적용 중</strong>
+            <strong>{petName}의 분석 결과 적용 중</strong>
             <small>
               기피 성분: {petProfile.allergies?.length
                 ? petProfile.allergies.join(', ')
@@ -140,19 +166,6 @@ function Chatbot({
             </small>
           </div>
         </div>
-        <label className="chatbot-profile__selector">
-          <span>반려동물 선택</span>
-          <select
-            value={selectedPetId ?? ''}
-            onChange={(event) => changePet(event.target.value)}
-          >
-            {petProfiles.map((pet) => (
-              <option key={pet.id} value={pet.id}>
-                {pet.petType === 'cat' ? '🐱' : '🐶'} {pet.petName}
-              </option>
-            ))}
-          </select>
-        </label>
       </section>
 
       <section className="chatbot-body" aria-label="AI 대화">
@@ -181,7 +194,7 @@ function Chatbot({
             {suggestedQuestions.map((question) => (
               <SuggestedQuestion
                 key={question}
-                disabled={isResponding}
+                disabled={isResponding || !analysisId}
                 onClick={() => sendQuestion(question)}
               >
                 {question}
@@ -189,7 +202,12 @@ function Chatbot({
             ))}
           </div>
         </div>
-        <ChatInput onSend={sendQuestion} disabled={isResponding} />
+        {!analysisId && (
+          <p className="chatbot-analysis-required" role="status">
+            분석 결과를 먼저 완료한 뒤 질문해 주세요.
+          </p>
+        )}
+        <ChatInput onSend={sendQuestion} disabled={isResponding || !analysisId} />
         <p>AI 답변은 참고 정보이며, 건강 이상이 있다면 수의사와 상담해 주세요.</p>
       </footer>
     </main>

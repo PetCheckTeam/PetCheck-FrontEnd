@@ -58,7 +58,6 @@ function App() {
   const [selectedPetId, setSelectedPetId] = useState(null);
   const [editingPet, setEditingPet] = useState(null);
   const [analysisResult, setAnalysisResult] = useState(null);
-  const [chatbotReturnPage, setChatbotReturnPage] = useState('welcome');
 
   const selectedPet = petProfiles.find(
     (profile) => String(profile.id) === String(selectedPetId),
@@ -162,6 +161,7 @@ function App() {
     tokenStorage.clear();
     setUserProfile(null);
     setPetProfiles([]);
+    setAnalysisResult(null);
     setCurrentPage('login');
   };
 
@@ -189,6 +189,7 @@ function App() {
         tokenStorage.clear();
         setUserProfile(null);
         setPetProfiles([]);
+        setAnalysisResult(null);
         setCurrentPage('login');
       }}
       onStartSetup={() => {
@@ -206,12 +207,8 @@ function App() {
         ));
         if (String(selectedPetId) === String(petId)) setSelectedPetId(null);
       }}
-      onStartChatbot={(petId) => {
-        setSelectedPetId(petId);
-        setChatbotReturnPage('welcome');
-        setCurrentPage('chatbot');
-      }}
       onStartScanner={(petId) => {
+        setAnalysisResult(null);
         setSelectedPetId(petId);
         setCurrentPage('scanner');
       }}
@@ -277,7 +274,10 @@ function App() {
           ));
           setSelectedPetId(normalized.id);
         }}
-        onStartScanner={() => setCurrentPage('scanner')}
+        onStartScanner={() => {
+          setAnalysisResult(null);
+          setCurrentPage('scanner');
+        }}
       />
     );
   }
@@ -287,7 +287,10 @@ function App() {
       <Scanner
         petProfiles={petProfiles}
         selectedPetId={selectedPet?.id}
-        onSelectPet={setSelectedPetId}
+        onSelectPet={(petId) => {
+          setAnalysisResult(null);
+          setSelectedPetId(petId);
+        }}
         onBack={() => setCurrentPage('welcome')}
         onViewResults={(result) => {
           setAnalysisResult(result);
@@ -301,10 +304,12 @@ function App() {
     <Results
       petProfile={selectedPet ?? { petType: '', petName: '', allergies: [] }}
       analysisResult={analysisResult}
-      onScanAgain={() => setCurrentPage('scanner')}
+      onScanAgain={() => {
+        setAnalysisResult(null);
+        setCurrentPage('scanner');
+      }}
       onGoHome={() => setCurrentPage('welcome')}
       onAskAI={() => {
-        setChatbotReturnPage('results');
         setCurrentPage('chatbot');
       }}
     />
@@ -315,20 +320,19 @@ function App() {
   if (currentPage === 'chatbot') {
     return (
       <>
-        {chatbotReturnPage === 'results' ? results : welcome}
+        {results}
         <div className="chatbot-popup-layer" role="dialog" aria-modal="true" aria-label="PetCheck AI 챗봇">
           <button
             className="chatbot-popup-layer__backdrop"
             type="button"
             aria-label="챗봇 닫기"
-            onClick={() => setCurrentPage(chatbotReturnPage)}
+            onClick={() => setCurrentPage('results')}
           />
           <Chatbot
+            key={analysisResult?.analysisId ?? analysisResult?.id ?? 'no-analysis'}
             petProfile={selectedPet ?? { petType: '', petName: '', allergies: [] }}
-            petProfiles={petProfiles}
-            selectedPetId={selectedPet?.id}
-            onSelectPet={setSelectedPetId}
-            onBackToResults={() => setCurrentPage(chatbotReturnPage)}
+            analysisResult={analysisResult}
+            onBackToResults={() => setCurrentPage('results')}
           />
         </div>
       </>
