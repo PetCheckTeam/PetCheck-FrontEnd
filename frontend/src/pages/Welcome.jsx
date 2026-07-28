@@ -232,6 +232,15 @@ function Welcome({
                   className="pet-carousel__pagination"
                   aria-label={`${activePetIndex + 1}번째 반려동물 표시 중`}
                 >
+                  <button
+                    className="pet-carousel__arrow"
+                    type="button"
+                    aria-label="이전 반려동물 보기"
+                    disabled={activePetIndex === 0}
+                    onClick={() => moveToPet(activePetIndex - 1)}
+                  >
+                    ‹
+                  </button>
                   {petProfiles.map((pet, index) => (
                     <button
                       type="button"
@@ -246,6 +255,15 @@ function Welcome({
                       onClick={() => moveToPet(index)}
                     />
                   ))}
+                  <button
+                    className="pet-carousel__arrow"
+                    type="button"
+                    aria-label="다음 반려동물 보기"
+                    disabled={activePetIndex === petProfiles.length - 1}
+                    onClick={() => moveToPet(activePetIndex + 1)}
+                  >
+                    ›
+                  </button>
                 </div>
               )}
 
@@ -258,9 +276,6 @@ function Welcome({
                   <strong>
                     {activePet.petType === 'dog' ? '강아지' : '고양이'}
                   </strong>
-                </div>
-                <div className="pet-home-panel__progress" aria-label="반려동물 정보 등록 완료">
-                  <span />
                 </div>
                 <div className="pet-home-panel__allergy">
                   <span className="pet-home-panel__allergy-icon" aria-hidden="true">🛡️</span>
