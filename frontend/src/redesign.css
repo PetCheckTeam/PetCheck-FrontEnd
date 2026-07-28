@@ -1441,7 +1441,37 @@ body {
   font-size: 14px;
 }
 
+/* Home allergy information spacing */
+.pet-home-panel__allergy {
+  gap: 17px;
+  margin-top: 18px;
+  padding: 16px 18px;
+}
+
+.pet-home-panel__allergy small {
+  margin-bottom: 7px;
+  line-height: 1.3;
+}
+
+.pet-home-panel__allergy strong {
+  line-height: 1.55;
+}
+
+.pet-home-panel__actions {
+  margin-top: 14px;
+}
+
 @media (max-width: 600px) {
+  .pet-home-panel__allergy {
+    gap: 13px;
+    margin-top: 15px;
+    padding: 14px;
+  }
+
+  .pet-home-panel__allergy small {
+    margin-bottom: 5px;
+  }
+
   .scanner-product-field input {
     height: 54px;
     font-size: 16px;
