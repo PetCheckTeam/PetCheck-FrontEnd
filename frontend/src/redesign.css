@@ -2829,10 +2829,10 @@ button:not(:disabled):hover {
 }
 
 .login-page .auth-page {
-  width: min(calc(100% - 72px), 1400px);
+  width: min(calc(100% - 64px), 1500px);
   min-height: 100svh;
-  grid-template-columns: minmax(0, 1fr) minmax(500px, 550px);
-  gap: clamp(54px, 5vw, 96px);
+  grid-template-columns: minmax(0, 1fr) minmax(580px, 650px);
+  gap: clamp(48px, 4vw, 80px);
   margin: 0 auto;
   padding: clamp(34px, 5vh, 58px) 0;
 }
@@ -2977,11 +2977,11 @@ button:not(:disabled):hover {
 
 .login-page .auth-card {
   width: 100%;
-  min-height: 650px;
+  min-height: 720px;
   align-self: center;
-  padding: 54px 48px 46px;
-  border: 1px solid rgba(255, 255, 255, .94);
-  border-radius: 38px;
+  padding: 62px 56px 52px;
+  border: 1px solid rgba(255, 255, 255, .96);
+  border-radius: 42px;
   background: rgba(255, 255, 255, .88);
   box-shadow:
     0 34px 90px rgba(66, 86, 128, .14),
@@ -2990,47 +2990,47 @@ button:not(:disabled):hover {
 }
 
 .login-page .auth-card__heading {
-  margin-bottom: 40px;
+  margin-bottom: 46px;
 }
 
 .login-page .auth-card__step {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 800;
 }
 
 .login-page .auth-card__heading h2 {
-  margin: 11px 0 10px;
+  margin: 13px 0 12px;
   color: #20263b;
-  font-size: 40px;
+  font-size: 44px;
   line-height: 1.2;
 }
 
 .login-page .auth-card__heading p {
   color: #7b8497;
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .login-page .auth-form {
-  gap: 26px;
+  gap: 29px;
 }
 
 .login-page .auth-field {
-  gap: 10px;
+  gap: 11px;
 }
 
 .login-page .auth-field__label {
   color: #3e4657;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 750;
 }
 
 .login-page .auth-field__input {
-  height: 72px;
-  padding-inline: 22px;
+  height: 78px;
+  padding-inline: 24px;
   border: 1px solid rgba(76, 91, 130, .08);
-  border-radius: 19px;
+  border-radius: 21px;
   background: rgba(244, 247, 251, .92);
-  font-size: 18px;
+  font-size: 19px;
 }
 
 .login-page .auth-field__input:hover {
@@ -3045,20 +3045,20 @@ button:not(:disabled):hover {
 }
 
 .login-page .password-field__toggle {
-  right: 17px;
-  padding: 11px;
-  font-size: 15px;
+  right: 19px;
+  padding: 12px;
+  font-size: 16px;
 }
 
 .login-page .button {
-  min-height: 70px;
+  min-height: 76px;
   margin-top: 4px;
   border: 1px solid rgba(49, 130, 246, .2);
-  border-radius: 19px;
+  border-radius: 21px;
   background: linear-gradient(135deg, #3182f6, #5978f6);
   box-shadow: 0 15px 30px rgba(49, 130, 246, .22);
   color: white;
-  font-size: 18px;
+  font-size: 19px;
 }
 
 .login-page .button:hover {
@@ -3070,8 +3070,8 @@ button:not(:disabled):hover {
 }
 
 .login-page .auth-card__switch {
-  margin-top: 33px;
-  font-size: 16px;
+  margin-top: 37px;
+  font-size: 17px;
 }
 
 .login-page .auth-card__switch button {
