@@ -5952,3 +5952,210 @@ body {
     border-radius: 0;
   }
 }
+
+/* Final mobile dashboard constraints
+   Keep these rules last so the dashboard theme cannot override them. */
+@media (max-width: 700px) {
+  html,
+  body,
+  #root,
+  .welcome-page {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .welcome-header {
+    width: 100%;
+    max-width: 100%;
+    padding:
+      max(18px, env(safe-area-inset-top))
+      16px
+      10px;
+  }
+
+  .welcome-header .brand {
+    min-width: 0;
+    font-size: clamp(21px, 6.5vw, 25px);
+  }
+
+  .welcome-header .brand__image {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+  }
+
+  .welcome-header > button {
+    min-height: 40px;
+    flex: 0 0 auto;
+    padding-inline: 16px;
+    font-size: 14px;
+  }
+
+  .dashboard {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding:
+      12px
+      16px
+      calc(48px + env(safe-area-inset-bottom));
+  }
+
+  .dashboard__intro {
+    width: 100%;
+    min-width: 0;
+    min-height: auto;
+    padding: 18px 12px 16px;
+    border-radius: 30px;
+  }
+
+  .dashboard__utility-menu {
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin-bottom: 4px;
+  }
+
+  .dashboard__utility-menu button {
+    width: 100%;
+    min-width: 0;
+    min-height: 88px;
+    padding: 10px 4px;
+    border-radius: 19px;
+  }
+
+  .dashboard__utility-menu button > span {
+    font-size: 23px;
+  }
+
+  .dashboard__utility-menu button strong {
+    width: 100%;
+    font-size: 11px;
+  }
+
+  .dashboard__utility-menu button small {
+    width: 100%;
+    font-size: 9px;
+  }
+
+  .pet-carousel {
+    width: calc(100% + 24px);
+    max-width: none;
+    margin-inline: -12px;
+  }
+
+  .pet-carousel__slide {
+    width: 100%;
+    min-width: 100%;
+    min-height: 400px;
+    flex-basis: 100%;
+    padding: 68px 12px 18px;
+  }
+
+  .pet-carousel__bubble {
+    top: 24px;
+    width: max-content;
+    min-width: 0;
+    max-width: calc(100% - 40px);
+    padding: 12px 15px;
+    font-size: 12px;
+    white-space: normal;
+  }
+
+  .pet-carousel__pet {
+    width: min(62vw, 230px);
+    height: min(62vw, 230px);
+  }
+
+  .pet-carousel__slide h1 {
+    margin-top: 3px;
+    font-size: 31px;
+  }
+
+  .pet-carousel__slide p {
+    font-size: 13px;
+  }
+
+  .pet-carousel__pagination {
+    margin: 0 0 12px;
+  }
+
+  .pet-home-panel {
+    width: 100%;
+    min-width: 0;
+    padding: 13px;
+    border-radius: 24px;
+  }
+
+  .pet-home-panel__allergy {
+    min-width: 0;
+    min-height: 72px;
+    padding: 11px;
+    border-radius: 18px;
+  }
+
+  .pet-home-panel__allergy-icon {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .pet-home-panel__allergy strong {
+    max-width: 100%;
+    font-size: 14px;
+  }
+
+  .pet-home-panel__actions {
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .pet-home-panel__actions button {
+    min-width: 0;
+    min-height: 76px;
+    border-radius: 19px;
+  }
+
+  .dashboard > .pet-management,
+  .dashboard > .owner-settings {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 14px;
+  }
+}
+
+@media (max-width: 370px) {
+  .welcome-header {
+    padding-inline: 12px;
+  }
+
+  .welcome-header > button {
+    padding-inline: 13px;
+    font-size: 13px;
+  }
+
+  .dashboard {
+    padding-inline: 10px;
+  }
+
+  .dashboard__intro {
+    padding-inline: 8px;
+    border-radius: 26px;
+  }
+
+  .dashboard__utility-menu {
+    gap: 5px;
+  }
+
+  .dashboard__utility-menu button {
+    min-height: 82px;
+    border-radius: 17px;
+  }
+
+  .pet-carousel {
+    width: calc(100% + 16px);
+    margin-inline: -8px;
+  }
+}
