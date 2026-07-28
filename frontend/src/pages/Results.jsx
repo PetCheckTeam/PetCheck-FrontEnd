@@ -81,6 +81,51 @@ const parseAnalysisPayload = (value) => {
   }
 };
 
+const statusPriority = {
+  safe: 0,
+  warning: 1,
+  danger: 2,
+};
+
+const groupIngredientsByExactName = (items) => {
+  const groupedIngredients = new Map();
+
+  items.forEach((item, index) => {
+    const groupKey = item.exactName
+      ? `name:${item.exactName}`
+      : `unnamed:${index}`;
+    const existing = groupedIngredients.get(groupKey);
+
+    if (!existing) {
+      groupedIngredients.set(groupKey, item);
+      return;
+    }
+
+    if (statusPriority[item.status] > statusPriority[existing.status]) {
+      groupedIngredients.set(groupKey, {
+        ...existing,
+        ...item,
+        id: existing.id,
+        name: existing.name,
+      });
+      return;
+    }
+
+    groupedIngredients.set(groupKey, {
+      ...existing,
+      shortDescription: existing.shortDescription || item.shortDescription,
+      description: existing.description || item.description,
+      reason: existing.reason || item.reason,
+    });
+  });
+
+  return [...groupedIngredients.values()].map((item) => {
+    const ingredient = { ...item };
+    delete ingredient.exactName;
+    return ingredient;
+  });
+};
+
 const normalizeAnalysisResult = (analysis, petName) => {
   const parsedAiResult = parseAnalysisPayload(analysis?.aiAnalysisResult);
   const source = (
@@ -90,23 +135,34 @@ const normalizeAnalysisResult = (analysis, petName) => {
     ?? analysis
   );
   const rawIngredients = source?.ingredients ?? source?.ingredientResults ?? [];
-  const ingredients = rawIngredients.map((ingredient, index) => ({
-    ...ingredient,
-    id: ingredient.id ?? ingredient.ingredientId ?? index,
-    name: ingredient.name ?? ingredient.ingredientName ?? '이름 없는 성분',
-    status: normalizeStatus(
-      ingredient.matchStatus
-      ?? ingredient.status
-      ?? ingredient.riskLevel,
-    ),
-    shortDescription:
-      ingredient.shortDescription ?? ingredient.summary ?? ingredient.description ?? '',
-    description: ingredient.description ?? ingredient.detail ?? '',
-    reason:
-      ingredient.reason
-      || ingredient.analysisReason
-      || createMatchReason(ingredient),
-  }));
+  const ingredients = groupIngredientsByExactName(
+    rawIngredients.map((ingredient, index) => {
+      const exactName = String(
+        ingredient.name
+        ?? ingredient.ingredientName
+        ?? '',
+      ).trim();
+
+      return {
+        ...ingredient,
+        exactName,
+        id: ingredient.id ?? ingredient.ingredientId ?? index,
+        name: exactName || '이름 없는 성분',
+        status: normalizeStatus(
+          ingredient.matchStatus
+          ?? ingredient.status
+          ?? ingredient.riskLevel,
+        ),
+        shortDescription:
+          ingredient.shortDescription ?? ingredient.summary ?? ingredient.description ?? '',
+        description: ingredient.description ?? ingredient.detail ?? '',
+        reason:
+          ingredient.reason
+          || ingredient.analysisReason
+          || createMatchReason(ingredient),
+      };
+    }),
+  );
   const count = (status) => ingredients.filter((item) => item.status === status).length;
   const hasMatchStatus = rawIngredients.some(
     (ingredient) => ingredient.matchStatus != null,
@@ -149,9 +205,9 @@ const normalizeAnalysisResult = (analysis, petName) => {
   return {
     petName,
     verdict,
-    safe: hasMatchStatus ? count('safe') : source?.safeCount ?? count('safe'),
-    warning: hasMatchStatus ? count('warning') : source?.warningCount ?? count('warning'),
-    danger: hasMatchedCount ? matchedCount : source?.dangerCount ?? count('danger'),
+    safe: count('safe'),
+    warning: count('warning'),
+    danger: count('danger'),
     message,
     ingredients,
   };
