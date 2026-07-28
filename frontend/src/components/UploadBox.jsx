@@ -60,7 +60,7 @@ function UploadBox({ previewUrl, fileName, onFileSelect, onRemove }) {
           <span className="upload-box__icon" aria-hidden="true">📷</span>
           <strong>성분표 사진을 올려주세요</strong>
           <span>사진을 선택하거나 이곳에 끌어다 놓으세요.</span>
-          <small>JPG, PNG, WEBP · 최대 10MB</small>
+          <small>!JPEG 형식의 파일만 가능해요!</small>
         </button>
       )}
     </div>
