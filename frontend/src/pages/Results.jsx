@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import petcheckAppIcon from '../assets/petcheck-app-icon.png';
+import resultCatImage from '../assets/result-danger-cat.png';
+import resultDogImage from '../assets/result-danger-dog.png';
 import Button from '../components/Button';
 import IngredientCard from '../components/IngredientCard';
-import PetIllustration from '../components/PetIllustration';
 
 const createResultData = (petName, allergies) => {
   const primaryAllergy = allergies[0] || '닭고기';
@@ -234,6 +235,10 @@ function Results({ petProfile, analysisResult, onScanAgain, onGoHome, onAskAI })
     ? normalizeAnalysisResult(analysisResult, petName)
     : createResultData(petName, petProfile.allergies || []);
   const currentVerdict = verdictInfo[result.verdict];
+  const resultPetImage = petProfile.petType === 'cat'
+    ? resultCatImage
+    : resultDogImage;
+  const resultPetLabel = petProfile.petType === 'cat' ? '고양이' : '강아지';
 
   return (
     <main className="results-page">
@@ -255,7 +260,11 @@ function Results({ petProfile, analysisResult, onScanAgain, onGoHome, onAskAI })
           <h1>{currentVerdict.label}</h1>
           <p>{currentVerdict.description}</p>
         </div>
-        <PetIllustration className="result-hero__pet" type={petProfile.petType} />
+        <img
+          className="pet-illustration result-hero__pet result-hero__pet--verdict"
+          src={resultPetImage}
+          alt={`화난 표정의 PetCheck ${resultPetLabel} 캐릭터`}
+        />
       </section>
 
       <section className="result-content">

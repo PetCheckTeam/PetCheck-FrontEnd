@@ -453,6 +453,22 @@ body {
   width: min(31vw, 310px);
 }
 
+.result-hero--safe .result-hero__copy h1,
+.result-hero--warning .result-hero__copy h1 {
+  color: #fff;
+}
+
+.result-hero--danger .result-hero__copy h1 {
+  color: #ff334f;
+  text-shadow: 0 3px 20px rgba(111, 8, 24, .16);
+}
+
+.result-hero__pet--verdict {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+}
+
 .result-content {
   width: min(calc(100% - 48px), 1080px);
 }
