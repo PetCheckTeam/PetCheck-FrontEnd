@@ -213,7 +213,7 @@ function Welcome({
                       className="pet-carousel__pet"
                       type={pet.petType}
                     />
-                    <h1 id={pet === activePet ? 'dashboard-heading' : undefined}>
+                    <h1>
                       {pet.petName}
                     </h1>
                     <p>
@@ -250,6 +250,18 @@ function Welcome({
               )}
 
               <section className="pet-home-panel" aria-label={`${activePet.petName} 상세 정보`}>
+                <div className="pet-home-panel__profile">
+                  <div>
+                    <span>PetCheck care</span>
+                    <h2 id="dashboard-heading">{activePet.petName}</h2>
+                  </div>
+                  <strong>
+                    {activePet.petType === 'dog' ? '강아지' : '고양이'}
+                  </strong>
+                </div>
+                <div className="pet-home-panel__progress" aria-label="반려동물 정보 등록 완료">
+                  <span />
+                </div>
                 <div className="pet-home-panel__allergy">
                   <span className="pet-home-panel__allergy-icon" aria-hidden="true">🛡️</span>
                   <div>
