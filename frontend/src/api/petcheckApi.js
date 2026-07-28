@@ -72,6 +72,16 @@ export const petsApi = {
     `/api/v1/pets/${petId}/avoid-ingredients/${ingredientId}`,
     { method: 'DELETE' },
   ),
+  chat: (petId, message, history = []) => apiRequest(
+    `/api/v1/pets/${petId}/chat`,
+    {
+      method: 'POST',
+      body: {
+        message,
+        history,
+      },
+    },
+  ),
 };
 
 export const analysesApi = {

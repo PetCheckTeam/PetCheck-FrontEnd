@@ -51,6 +51,22 @@ const normalizePet = (pet) => {
   };
 };
 
+const getPetChatIdFromPath = () => {
+  const match = window.location.pathname.match(/^\/pets\/([^/]+)\/chat\/?$/);
+  if (!match) return null;
+
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    return null;
+  }
+};
+
+const updateBrowserPath = (path, method = 'pushState') => {
+  if (window.location.pathname === path) return;
+  window.history[method]({}, '', path);
+};
+
 function App() {
   const [userProfile, setUserProfile] = useState(null);
   const [currentPage, setCurrentPage] = useState('loading');
@@ -59,6 +75,7 @@ function App() {
   const [editingPet, setEditingPet] = useState(null);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [chatbotReturnPage, setChatbotReturnPage] = useState('welcome');
+  const [chatMode, setChatMode] = useState('pet');
 
   const selectedPet = petProfiles.find(
     (profile) => String(profile.id) === String(selectedPetId),
@@ -131,13 +148,32 @@ function App() {
     const avoidIngredientResults = await Promise.allSettled(
       petList.map((pet) => petsApi.listAvoidIngredients(pet.id ?? pet.petId)),
     );
-    setUserProfile(normalizeUser(user));
-    setPetProfiles(petList.map((pet, index) => normalizePet({
+    const normalizedPets = petList.map((pet, index) => normalizePet({
       ...pet,
       avoidIngredients: avoidIngredientResults[index].status === 'fulfilled'
         ? toArray(avoidIngredientResults[index].value)
         : pet.avoidIngredients,
-    })));
+    }));
+    setUserProfile(normalizeUser(user));
+    setPetProfiles(normalizedPets);
+    return normalizedPets;
+  };
+
+  const restorePetChatFromPath = (profiles) => {
+    const pathPetId = getPetChatIdFromPath();
+    if (!pathPetId) return false;
+
+    const pathPet = profiles.find((pet) => String(pet.id) === String(pathPetId));
+    if (!pathPet) {
+      updateBrowserPath('/', 'replaceState');
+      return false;
+    }
+
+    setSelectedPetId(pathPet.id);
+    setChatMode('pet');
+    setChatbotReturnPage('welcome');
+    setCurrentPage('chatbot');
+    return true;
   };
 
   useEffect(() => {
@@ -146,12 +182,39 @@ function App() {
       return;
     }
     loadAccount()
-      .then(() => setCurrentPage('welcome'))
+      .then((profiles) => {
+        if (!restorePetChatFromPath(profiles)) setCurrentPage('welcome');
+      })
       .catch(() => {
         tokenStorage.clear();
         setCurrentPage('login');
       });
   }, []);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const pathPetId = getPetChatIdFromPath();
+      if (pathPetId) {
+        const pathPet = petProfiles.find(
+          (pet) => String(pet.id) === String(pathPetId),
+        );
+        if (!pathPet) return;
+
+        setSelectedPetId(pathPet.id);
+        setChatMode('pet');
+        setChatbotReturnPage('welcome');
+        setCurrentPage('chatbot');
+        return;
+      }
+
+      if (currentPage === 'chatbot' && chatMode === 'pet') {
+        setCurrentPage('welcome');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [chatMode, currentPage, petProfiles]);
 
   const handleLogout = async () => {
     try {
@@ -163,6 +226,7 @@ function App() {
     setUserProfile(null);
     setPetProfiles([]);
     setAnalysisResult(null);
+    updateBrowserPath('/', 'replaceState');
     setCurrentPage('login');
   };
 
@@ -191,6 +255,7 @@ function App() {
         setUserProfile(null);
         setPetProfiles([]);
         setAnalysisResult(null);
+        updateBrowserPath('/', 'replaceState');
         setCurrentPage('login');
       }}
       onStartSetup={() => {
@@ -209,8 +274,16 @@ function App() {
         if (String(selectedPetId) === String(petId)) setSelectedPetId(null);
       }}
       onStartChatbot={(petId) => {
+        if (petId == null) {
+          setEditingPet(null);
+          setCurrentPage('setup');
+          return;
+        }
+
         setSelectedPetId(petId);
+        setChatMode('pet');
         setChatbotReturnPage('welcome');
+        updateBrowserPath(`/pets/${encodeURIComponent(petId)}/chat`);
         setCurrentPage('chatbot');
       }}
       onStartScanner={(petId) => {
@@ -316,6 +389,7 @@ function App() {
       }}
       onGoHome={() => setCurrentPage('welcome')}
       onAskAI={() => {
+        setChatMode('analysis');
         setChatbotReturnPage('results');
         setCurrentPage('chatbot');
       }}
@@ -325,6 +399,11 @@ function App() {
   if (currentPage === 'results') return results;
 
   if (currentPage === 'chatbot') {
+    const closeChatbot = () => {
+      if (chatMode === 'pet') updateBrowserPath('/', 'replaceState');
+      setCurrentPage(chatbotReturnPage);
+    };
+
     return (
       <>
         {chatbotReturnPage === 'results' ? results : welcome}
@@ -333,13 +412,17 @@ function App() {
             className="chatbot-popup-layer__backdrop"
             type="button"
             aria-label="챗봇 닫기"
-            onClick={() => setCurrentPage(chatbotReturnPage)}
+            onClick={closeChatbot}
           />
           <Chatbot
-            key={analysisResult?.analysisId ?? analysisResult?.id ?? 'no-analysis'}
+            key={
+              chatMode === 'analysis'
+                ? `analysis:${analysisResult?.analysisId ?? analysisResult?.id ?? 'missing'}`
+                : `pet:${selectedPet?.id ?? 'missing'}`
+            }
             petProfile={selectedPet ?? { petType: '', petName: '', allergies: [] }}
-            analysisResult={analysisResult}
-            onBackToResults={() => setCurrentPage(chatbotReturnPage)}
+            analysisResult={chatMode === 'analysis' ? analysisResult : null}
+            onClose={closeChatbot}
           />
         </div>
       </>
@@ -351,8 +434,8 @@ function App() {
       onMoveToSignup={() => setCurrentPage('signup')}
       onLoginSuccess={async (credentials) => {
         await authApi.login(credentials);
-        await loadAccount();
-        setCurrentPage('welcome');
+        const profiles = await loadAccount();
+        if (!restorePetChatFromPath(profiles)) setCurrentPage('welcome');
       }}
     />
   );

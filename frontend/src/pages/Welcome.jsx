@@ -186,16 +186,18 @@ function Welcome({
               <strong>보호자 정보</strong>
               <small>{userProfile?.name ?? '회원'}</small>
             </button>
-            {hasPetProfile && (
-              <button
-                type="button"
-                onClick={() => onStartChatbot(activePet.id)}
-              >
-                <span aria-hidden="true">💬</span>
-                <strong>AI 상담</strong>
-                <small>바로 질문하기</small>
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => (
+                activePet
+                  ? onStartChatbot(activePet.id)
+                  : onStartChatbot(null)
+              )}
+            >
+              <span aria-hidden="true">💬</span>
+              <strong>AI 상담</strong>
+              <small>{activePet ? '바로 질문하기' : '반려동물 등록 후 이용'}</small>
+            </button>
           </nav>
 
           {hasPetProfile ? (
