@@ -6389,3 +6389,117 @@ body {
     width: 100%;
   }
 }
+
+/* Character-first simplification */
+@media (min-width: 701px) {
+  .welcome-header,
+  .dashboard {
+    width: min(calc(100% - 72px), 1180px);
+  }
+
+  .dashboard__intro {
+    min-height: 0;
+    padding: 34px 38px 36px;
+    border-radius: 38px;
+    background:
+      radial-gradient(circle at 22% 22%, rgba(255, 255, 255, .94), transparent 28%),
+      radial-gradient(circle at 82% 78%, rgba(187, 218, 255, .38), transparent 30%),
+      linear-gradient(145deg, #fdfbf4 0%, #edf4fb 48%, #dfeaf8 100%);
+  }
+
+  .dashboard__utility-menu {
+    width: min(100%, 760px);
+    margin-inline: auto;
+    gap: 12px;
+  }
+
+  .dashboard__utility-menu button {
+    min-height: 96px;
+    border-radius: 22px;
+  }
+
+  .pet-carousel {
+    width: calc(100% + 76px);
+    margin-inline: -38px;
+  }
+
+  .pet-carousel__slide {
+    min-height: 400px;
+    padding: 67px 24px 18px;
+  }
+
+  .pet-carousel__bubble {
+    top: 24px;
+  }
+
+  .pet-carousel__pet {
+    width: clamp(245px, 19vw, 300px);
+    height: clamp(245px, 19vw, 300px);
+  }
+
+  .pet-carousel__slide h1 {
+    font-size: 34px;
+  }
+
+  .pet-carousel__pagination {
+    margin-bottom: 12px;
+  }
+
+  .pet-home-panel {
+    width: min(100%, 760px);
+    padding: 16px;
+    border-radius: 28px;
+  }
+
+  .pet-home-panel__allergy {
+    min-height: 70px;
+    padding: 12px 15px;
+  }
+
+  .pet-home-panel__actions button {
+    min-height: 76px;
+  }
+}
+
+.login-preview {
+  background:
+    radial-gradient(circle at 50% 105%, rgba(255, 255, 255, .94) 0 34%, transparent 35%),
+    linear-gradient(155deg, #dcecff 0%, #eef6ff 52%, #fff7e7 100%);
+}
+
+.login-preview::before,
+.login-preview__metric,
+.login-preview__bubble,
+.login-preview__progress {
+  display: none;
+}
+
+.login-preview__pet {
+  right: 0;
+  left: 0;
+  bottom: 12px;
+  width: min(48%, 190px);
+  margin-inline: auto;
+}
+
+@media (max-width: 500px) {
+  .login-preview {
+    min-height: 190px;
+    border-radius: 26px;
+  }
+
+  .login-preview__pet {
+    right: 0;
+    left: 0;
+    bottom: 6px;
+    width: 138px;
+  }
+
+  .login-features__floating-icons {
+    display: none;
+  }
+
+  .login-features {
+    padding-top: 68px;
+  }
+}

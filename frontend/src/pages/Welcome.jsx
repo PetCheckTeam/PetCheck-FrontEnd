@@ -52,6 +52,25 @@ function Welcome({
     setActivePetIndex(nextIndex);
   };
 
+  useEffect(() => {
+    const slider = petSliderRef.current;
+    if (!slider || !('ResizeObserver' in window)) return undefined;
+
+    let animationFrame;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = requestAnimationFrame(() => {
+        slider.scrollLeft = activePetIndex * slider.clientWidth;
+      });
+    });
+
+    observer.observe(slider);
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      observer.disconnect();
+    };
+  }, [activePetIndex]);
+
   const finishPetSlide = (event) => {
     if (!isPetSlideDraggingRef.current) return;
 
