@@ -73,6 +73,28 @@ function Welcome({
           </div>
         </div>
 
+        <div className="dashboard__quick-stats" aria-label="등록 정보 요약">
+          <article>
+            <span>함께하는 반려동물</span>
+            <div>
+              <strong>{petProfiles.length}</strong>
+              <small>마리</small>
+            </div>
+          </article>
+          <article>
+            <span>기억 중인 알러지</span>
+            <div>
+              <strong>
+                {petProfiles.reduce(
+                  (total, pet) => total + (pet.allergies?.length ?? 0),
+                  0,
+                )}
+              </strong>
+              <small>개</small>
+            </div>
+          </article>
+        </div>
+
         <div className="dashboard__grid">
           <div className="dashboard__owner-column">
             <article className="profile-card">

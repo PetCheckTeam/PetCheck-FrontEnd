@@ -3823,6 +3823,455 @@ a {
   }
 }
 
+/* Walking-app reference refinement */
+.auth-card::before {
+  display: none;
+}
+
+.brand__paw,
+.login-page .brand__paw {
+  background: #5d7395;
+  box-shadow: 0 10px 24px rgba(76, 94, 126, .22);
+}
+
+.eyebrow,
+.auth-card__step,
+.login-page .eyebrow,
+.login-page .auth-card__step,
+.login-page .auth-card__switch button,
+.login-page .password-field__toggle {
+  color: #536b8e;
+}
+
+.button,
+.login-page .button {
+  background: #5d7395;
+  box-shadow: 0 14px 30px rgba(76, 94, 126, .2);
+}
+
+.button:hover,
+.login-page .button:hover {
+  background: #485d7c;
+  box-shadow: 0 17px 34px rgba(76, 94, 126, .26);
+}
+
+.login-page {
+  background:
+    radial-gradient(circle at 84% 14%, rgba(198, 214, 234, .38), transparent 25%),
+    linear-gradient(150deg, #fffdf8 0%, #f5f4ee 56%, #edf2ed 100%);
+}
+
+.login-page .auth-page {
+  grid-template-columns: minmax(480px, 1.12fr) minmax(380px, 440px);
+  gap: clamp(42px, 6vw, 88px);
+}
+
+.login-page .auth-intro__copy {
+  margin-top: 45px;
+}
+
+.login-page .auth-intro__copy h1 {
+  font-size: clamp(46px, 4.6vw, 66px);
+}
+
+.login-preview {
+  position: relative;
+  width: min(100%, 600px);
+  min-height: 300px;
+  margin-top: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .92);
+  border-radius: 38px;
+  background:
+    radial-gradient(ellipse at 20% 108%, #fffdf5 0 31%, transparent 32%),
+    radial-gradient(ellipse at 78% 108%, #f5f2e7 0 36%, transparent 37%),
+    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, .9) 0 4%, transparent 4.5%),
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, .72) 0 2.5%, transparent 3%),
+    linear-gradient(180deg, #dcebf2 0%, #edf6f5 68%, #fff9e8 100%);
+  box-shadow: 0 26px 65px rgba(82, 96, 119, .14);
+}
+
+.login-preview::before {
+  position: absolute;
+  right: -18px;
+  bottom: 28px;
+  width: 200px;
+  height: 115px;
+  border-radius: 58% 42% 0 0;
+  background:
+    radial-gradient(circle at 35% 40%, #8faf86 0 20%, transparent 21%),
+    radial-gradient(circle at 58% 42%, #aac69e 0 25%, transparent 26%);
+  opacity: .72;
+  content: "";
+  filter: blur(.2px);
+}
+
+.login-preview__metric {
+  position: absolute;
+  top: 30px;
+  left: 32px;
+  z-index: 2;
+}
+
+.login-preview__metric span {
+  display: block;
+  margin-bottom: 9px;
+  color: #6f7f91;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.login-preview__metric strong {
+  color: #222b39;
+  font-size: clamp(23px, 2.4vw, 32px);
+  line-height: 1.18;
+  letter-spacing: -.05em;
+}
+
+.login-preview__bubble {
+  position: absolute;
+  top: 29px;
+  right: 28px;
+  z-index: 3;
+  padding: 13px 17px;
+  border: 1px solid rgba(255, 255, 255, .88);
+  border-radius: 18px 18px 4px 18px;
+  background: rgba(255, 253, 246, .9);
+  box-shadow: 0 12px 28px rgba(77, 91, 112, .1);
+  color: #566276;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.login-preview__pet {
+  position: absolute;
+  right: 29%;
+  bottom: 24px;
+  z-index: 2;
+  width: 174px;
+  animation: mascot-sway 4.2s ease-in-out infinite;
+  filter: drop-shadow(0 20px 18px rgba(69, 82, 102, .2));
+}
+
+.login-preview__progress {
+  position: absolute;
+  right: 32px;
+  bottom: 20px;
+  left: 32px;
+  z-index: 4;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .78);
+}
+
+.login-preview__progress span {
+  display: block;
+  width: 42%;
+  height: 100%;
+  border-radius: inherit;
+  background: #ef8c5b;
+}
+
+.login-page .auth-card {
+  border-color: rgba(226, 227, 222, .9);
+  border-radius: 34px;
+  background: rgba(255, 253, 247, .96);
+  box-shadow: 0 28px 70px rgba(75, 84, 100, .13);
+}
+
+.auth-card__heading h2 {
+  font-size: 32px;
+}
+
+.login-page .auth-field__input {
+  border-color: #dfe3e6;
+  background: #f2f4f3;
+}
+
+.login-page .auth-field__input:focus {
+  border-color: #8192aa;
+  box-shadow: 0 0 0 4px rgba(93, 115, 149, .12);
+}
+
+.login-features {
+  background:
+    radial-gradient(circle at 16% 18%, rgba(198, 214, 234, .5), transparent 25%),
+    radial-gradient(circle at 84% 72%, rgba(208, 231, 198, .52), transparent 28%),
+    #fffaf0;
+}
+
+.feature-card__visual,
+.feature-scene:nth-child(2) .feature-card__visual,
+.feature-scene:nth-child(3) .feature-card__visual {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, .65), transparent 24%),
+    linear-gradient(160deg, #dcebf2, #cfe4d0 58%, #fff4d8);
+}
+
+.feature-card__number {
+  color: rgba(76, 94, 126, .14);
+}
+
+.dashboard__intro {
+  position: relative;
+  min-height: 360px;
+  border-color: rgba(255, 255, 255, .95);
+  background:
+    radial-gradient(ellipse at 12% 112%, rgba(255, 253, 245, .95) 0 28%, transparent 29%),
+    radial-gradient(ellipse at 82% 112%, rgba(244, 241, 229, .82) 0 34%, transparent 35%),
+    linear-gradient(180deg, #dcebf2 0%, #eef5f3 72%, #fff9e8 100%);
+  box-shadow: 0 26px 65px rgba(82, 96, 119, .13);
+}
+
+.dashboard__pet-guide {
+  min-height: 270px;
+  border: 0;
+  background:
+    radial-gradient(circle at 62% 30%, rgba(255, 255, 255, .7) 0 3%, transparent 3.5%),
+    radial-gradient(circle at 30% 42%, rgba(255, 255, 255, .55) 0 2%, transparent 2.5%);
+  box-shadow: none;
+}
+
+.dashboard__pet-guide::before,
+.dashboard__pet-guide::after {
+  display: none;
+}
+
+.dashboard__pet-bubble {
+  border-color: rgba(255, 255, 255, .92);
+  background: rgba(255, 253, 246, .92);
+  box-shadow: 0 12px 28px rgba(77, 91, 112, .1);
+  color: #526075;
+}
+
+.dashboard__pet-bubble::after {
+  background: #fffdf6;
+}
+
+.dashboard__guide-pet {
+  width: 220px;
+  height: 220px;
+  filter: drop-shadow(0 22px 19px rgba(69, 82, 102, .2));
+}
+
+.dashboard__quick-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.dashboard__quick-stats article {
+  display: flex;
+  min-height: 120px;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 25px 28px;
+  border: 1px solid rgba(255, 255, 255, .9);
+  border-radius: 27px;
+  box-shadow: 0 16px 38px rgba(75, 84, 100, .08);
+}
+
+.dashboard__quick-stats article:first-child {
+  background: #dcebf2;
+}
+
+.dashboard__quick-stats article:last-child {
+  background: #d8ead0;
+}
+
+.dashboard__quick-stats article > span {
+  color: #5d6878;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.dashboard__quick-stats article div {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.dashboard__quick-stats strong {
+  color: #263141;
+  font-size: 40px;
+  letter-spacing: -.06em;
+}
+
+.dashboard__quick-stats small {
+  color: #687486;
+  font-size: 13px;
+}
+
+.dashboard__grid {
+  grid-template-columns: .82fr 1.18fr;
+}
+
+.profile-card,
+.owner-settings,
+.pet-management,
+.setup-card,
+.scanner-card,
+.result-count,
+.health-message,
+.ingredient-card {
+  border-color: rgba(224, 225, 220, .88);
+  background: rgba(255, 253, 247, .96);
+  box-shadow: 0 16px 42px rgba(75, 84, 100, .08);
+}
+
+.dashboard__action {
+  border-color: rgba(224, 225, 220, .9);
+  background: rgba(255, 253, 247, .96);
+  box-shadow: 0 18px 46px rgba(75, 84, 100, .09);
+  color: #263141;
+}
+
+.dashboard__action > div span {
+  color: #6a7482;
+}
+
+.dashboard__action .welcome-next {
+  border: 0;
+  background: #5d7395;
+  color: white;
+}
+
+.dashboard__action .welcome-next:hover {
+  background: #485d7c;
+}
+
+.pet-management-trigger {
+  background: #5d7395;
+  box-shadow: 0 16px 32px rgba(76, 94, 126, .18);
+}
+
+.chatbot-launcher {
+  background: #5d7395;
+  box-shadow: 0 15px 34px rgba(76, 94, 126, .24);
+}
+
+.progress__value,
+.login-preview__progress span {
+  background: #ef8c5b;
+}
+
+.pet-type-card--selected,
+.pet-selector__check,
+.setup-complete__check,
+.upload-box__icon,
+.scan-state__loader,
+.scan-state__complete-icon {
+  background: #5d7395;
+}
+
+.allergy-chip--selected,
+.pet-selector__item--selected {
+  border-color: #5d7395;
+  background: #e5edf2;
+  color: #4f6688;
+}
+
+.result-hero,
+.result-hero--safe,
+.result-hero--warning,
+.result-hero--danger {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, .75), transparent 23%),
+    linear-gradient(160deg, #dcebf2, #cfe4d0 62%, #fff4d8);
+  box-shadow: 0 28px 64px rgba(82, 96, 119, .15);
+  color: #263141;
+}
+
+.result-hero .result-verdict,
+.result-hero--safe .result-verdict,
+.result-hero--warning .result-verdict,
+.result-hero--danger .result-verdict,
+.result-hero p {
+  color: #5e6c7e;
+}
+
+.chatbot-profile {
+  background: #5d7395;
+  box-shadow: 0 14px 30px rgba(76, 94, 126, .18);
+}
+
+.chat-message--user .chat-message__content p,
+.chat-input button {
+  background: #5d7395;
+  box-shadow: 0 8px 20px rgba(76, 94, 126, .2);
+}
+
+@media (max-width: 900px) {
+  .login-page .auth-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-preview {
+    width: min(100%, 560px);
+  }
+
+  .dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .login-page .auth-intro__copy {
+    margin-top: 34px;
+  }
+
+  .login-preview {
+    min-height: 270px;
+    margin-top: 22px;
+    border-radius: 30px;
+  }
+
+  .login-preview__metric {
+    top: 23px;
+    left: 22px;
+  }
+
+  .login-preview__metric strong {
+    font-size: 24px;
+  }
+
+  .login-preview__bubble {
+    top: 22px;
+    right: 18px;
+    padding: 10px 12px;
+    font-size: 10px;
+  }
+
+  .login-preview__pet {
+    right: calc(50% - 72px);
+    bottom: 21px;
+    width: 144px;
+  }
+
+  .login-preview__progress {
+    right: 22px;
+    left: 22px;
+  }
+
+  .dashboard__quick-stats {
+    gap: 10px;
+  }
+
+  .dashboard__quick-stats article {
+    min-height: 105px;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 19px 17px;
+  }
+
+  .dashboard__quick-stats strong {
+    font-size: 34px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .feature-card--reveal {
     opacity: 1;
@@ -3838,17 +4287,17 @@ a {
   }
 }
 
-/* 2026 cool-blue visual refresh */
+/* 2026 soft-palette visual refresh */
 body {
   background:
-    radial-gradient(circle at 18% 12%, rgba(105, 137, 255, .18), transparent 28%),
-    radial-gradient(circle at 84% 82%, rgba(171, 187, 255, .22), transparent 30%),
-    #eef1f8;
+    radial-gradient(circle at 16% 12%, rgba(197, 212, 233, .55), transparent 28%),
+    radial-gradient(circle at 86% 84%, rgba(209, 231, 198, .55), transparent 30%),
+    #fff9e8;
 }
 
 ::selection {
-  background: #c9d5ff;
-  color: #142254;
+  background: #c5d4e9;
+  color: #1c2130;
 }
 
 .login-page,
@@ -3859,9 +4308,10 @@ body {
 .results-page {
   overflow-x: clip;
   background:
-    radial-gradient(circle at 9% 8%, rgba(132, 158, 255, .22), transparent 24%),
-    radial-gradient(circle at 92% 34%, rgba(215, 222, 249, .72), transparent 29%),
-    linear-gradient(145deg, #f6f7fb 0%, #edf0f8 52%, #f8f8fb 100%);
+    radial-gradient(circle at 8% 9%, rgba(174, 182, 201, .27), transparent 25%),
+    radial-gradient(circle at 91% 31%, rgba(198, 214, 234, .58), transparent 29%),
+    radial-gradient(circle at 72% 88%, rgba(208, 231, 198, .36), transparent 25%),
+    linear-gradient(145deg, #fffdf7 0%, #f4f6f5 52%, #fff8e4 100%);
 }
 
 .brand {
@@ -3895,7 +4345,7 @@ body {
 .auth-card__step {
   padding: 7px 12px;
   border-radius: 999px;
-  background: #e8eeff;
+  background: #dce7f3;
   font-size: 12px;
   letter-spacing: .01em;
 }
@@ -3924,15 +4374,15 @@ body {
 .login-page .auth-field__input,
 .setup-name-field input,
 .owner-settings__fields input {
-  border: 1px solid #e2e6f1;
-  background: #f5f7fc;
+  border: 1px solid #dce1e9;
+  background: #f3f5f7;
   color: #151a2d;
 }
 
 .auth-field__input:hover,
 .login-page .auth-field__input:hover,
 .setup-name-field input:hover {
-  background: #f0f3fa;
+  background: #edf1f4;
 }
 
 .auth-field__input:focus,
@@ -3970,14 +4420,32 @@ body {
 
 .auth-card,
 .login-page .auth-card {
+  position: relative;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, .92);
   border-radius: 38px;
-  background: rgba(255, 255, 255, .86);
+  background: rgba(255, 253, 246, .93);
   box-shadow:
-    0 30px 80px rgba(40, 55, 105, .13),
+    0 30px 80px rgba(71, 81, 106, .14),
     inset 0 1px 0 white;
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+}
+
+.auth-card::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 7px;
+  background: linear-gradient(
+    90deg,
+    #aeb6c9 0 25%,
+    #c6d6ea 25% 50%,
+    #d0e7c6 50% 75%,
+    #fff5d8 75% 100%
+  );
+  content: "";
 }
 
 .pet-guide {
@@ -3987,30 +4455,21 @@ body {
 }
 
 .pet-guide::before {
-  position: absolute;
-  right: 13px;
-  bottom: 5px;
-  width: 170px;
-  height: 170px;
-  border-radius: 46% 54% 60% 40% / 55% 42% 58% 45%;
-  background: linear-gradient(145deg, #527df7, #2f59df);
-  box-shadow: 0 28px 50px rgba(49, 94, 234, .23);
-  content: "";
-  transform: rotate(-7deg);
+  display: none;
 }
 
 .pet-guide__bubble,
 .login-page .pet-guide__bubble {
   z-index: 2;
   margin-bottom: 55px;
-  border: 1px solid rgba(255, 255, 255, .92);
-  background: rgba(255, 255, 255, .88);
-  box-shadow: 0 16px 35px rgba(45, 60, 107, .1);
+  border: 1px solid rgba(174, 182, 201, .28);
+  background: rgba(255, 253, 246, .94);
+  box-shadow: 0 16px 35px rgba(71, 81, 106, .11);
 }
 
 .pet-guide__bubble::after,
 .login-page .pet-guide__bubble::after {
-  background: #fff;
+  background: #fffdf6;
 }
 
 .auth-intro__pet {
@@ -4025,28 +4484,28 @@ body {
 
 .login-features {
   background:
-    linear-gradient(rgba(255, 255, 255, .62), rgba(246, 248, 253, .92)),
-    radial-gradient(circle at 50% 18%, #dfe7ff, transparent 35%);
+    linear-gradient(rgba(255, 253, 246, .74), rgba(255, 249, 232, .92)),
+    radial-gradient(circle at 50% 18%, #c6d6ea, transparent 35%);
 }
 
 .login-features .feature-card {
   border: 1px solid rgba(255, 255, 255, .92);
   border-radius: 38px;
-  background: rgba(255, 255, 255, .85);
-  box-shadow: 0 32px 84px rgba(46, 64, 122, .13);
+  background: rgba(255, 253, 246, .9);
+  box-shadow: 0 32px 84px rgba(71, 81, 106, .13);
 }
 
 .feature-card__visual {
   border-radius: 29px;
-  background: linear-gradient(145deg, #eef2ff, #dce5ff);
+  background: linear-gradient(145deg, #c6d6ea, #dce5ef);
 }
 
 .feature-scene:nth-child(2) .feature-card__visual {
-  background: linear-gradient(145deg, #315eea, #537bf0);
+  background: linear-gradient(145deg, #aeb6c9, #c2c9d8);
 }
 
 .feature-scene:nth-child(3) .feature-card__visual {
-  background: linear-gradient(145deg, #e7ebf8, #d7def1);
+  background: linear-gradient(145deg, #d0e7c6, #e5f1df);
 }
 
 .feature-card__number {
@@ -4095,8 +4554,8 @@ body {
   border: 1px solid rgba(255, 255, 255, .82);
   border-radius: 40px;
   background:
-    linear-gradient(120deg, rgba(255, 255, 255, .94), rgba(238, 242, 255, .83));
-  box-shadow: 0 30px 80px rgba(47, 60, 112, .12);
+    linear-gradient(120deg, rgba(255, 253, 246, .96), rgba(198, 214, 234, .72));
+  box-shadow: 0 30px 80px rgba(71, 81, 106, .12);
 }
 
 .dashboard__heading {
@@ -4124,9 +4583,9 @@ body {
   align-self: center;
   border-radius: 36px;
   background:
-    radial-gradient(circle at 50% 48%, rgba(132, 164, 255, .95), transparent 28%),
-    linear-gradient(145deg, #3868f4, #3159d9);
-  box-shadow: 0 28px 55px rgba(49, 94, 234, .25);
+    radial-gradient(circle at 50% 48%, rgba(255, 253, 246, .5), transparent 30%),
+    linear-gradient(145deg, #aeb6c9, #c6d6ea);
+  box-shadow: 0 28px 55px rgba(71, 81, 106, .2);
 }
 
 .dashboard__pet-guide::before,
@@ -4189,8 +4648,8 @@ body {
 .health-message,
 .ingredient-card {
   border: 1px solid rgba(255, 255, 255, .9);
-  background: rgba(255, 255, 255, .87);
-  box-shadow: 0 18px 48px rgba(46, 59, 106, .09);
+  background: rgba(255, 253, 246, .9);
+  box-shadow: 0 18px 48px rgba(71, 81, 106, .09);
 }
 
 .profile-card {
@@ -4199,20 +4658,20 @@ body {
 
 .profile-card__icon {
   border-radius: 20px;
-  background: #e8eeff;
+  background: #d0e7c6;
 }
 
 .profile-card__pet-item,
 .scan-state,
 .upload-box,
 .upload-preview__footer {
-  background: #f2f5fc;
+  background: #eef3ea;
 }
 
 .profile-card__pet {
   padding: 4px;
   border-radius: 18px;
-  background: linear-gradient(145deg, #dfe7ff, #f5f7ff);
+  background: linear-gradient(145deg, #c6d6ea, #eef2f5);
 }
 
 .pet-management-trigger {
@@ -4233,14 +4692,14 @@ body {
 }
 
 .pet-management__item {
-  border-color: #e4e8f2;
-  background: #f5f7fc;
+  border-color: #dce1e9;
+  background: #f3f6ef;
 }
 
 .pet-management__pet {
   padding: 5px;
   border-radius: 18px;
-  background: #e5ebff;
+  background: #c6d6ea;
 }
 
 .pet-management__add,
@@ -4293,11 +4752,11 @@ body {
 .setup-card,
 .scanner-card {
   border-radius: 38px;
-  background: rgba(255, 255, 255, .9);
+  background: rgba(255, 253, 246, .94);
 }
 
 .progress__track {
-  background: #e6eaf4;
+  background: #e1e5e7;
 }
 
 .progress__value {
@@ -4312,9 +4771,9 @@ body {
 .pet-type-card {
   min-height: 220px;
   overflow: hidden;
-  border: 1px solid #e3e7f0;
+  border: 1px solid #dce1e9;
   border-radius: 28px;
-  background: linear-gradient(145deg, #f5f7fc, #edf1fa);
+  background: linear-gradient(145deg, #f0f4ed, #dce8d6);
 }
 
 .pet-type-card:hover {
@@ -4337,7 +4796,7 @@ body {
   place-items: end center;
   margin: 0 auto 5px;
   border-radius: 50%;
-  background: #e3eaff;
+  background: #c6d6ea;
 }
 
 .pet-type-card__visual .pet-illustration {
@@ -4356,13 +4815,13 @@ body {
 }
 
 .allergy-chip {
-  border-color: #e0e5f0;
-  background: #f5f7fc;
+  border-color: #dce1e9;
+  background: #f3f6ef;
 }
 
 .allergy-chip:hover {
   border-color: #99adf2;
-  background: #edf2ff;
+  background: #e6eedf;
 }
 
 .allergy-chip--selected {
@@ -4374,9 +4833,9 @@ body {
 .setup-complete {
   border: 1px solid rgba(255, 255, 255, .9);
   background:
-    radial-gradient(circle at 50% 28%, #dce6ff, transparent 29%),
-    rgba(255, 255, 255, .9);
-  box-shadow: 0 32px 80px rgba(46, 59, 106, .13);
+    radial-gradient(circle at 50% 28%, #c6d6ea, transparent 29%),
+    rgba(255, 253, 246, .94);
+  box-shadow: 0 32px 80px rgba(71, 81, 106, .13);
 }
 
 .setup-complete__check {
@@ -4390,8 +4849,8 @@ body {
 
 .setup-complete__summary,
 .setup-complete__next {
-  border-color: #dfe5f2;
-  background: #f2f5fc;
+  border-color: #dce1e9;
+  background: #eef3ea;
 }
 
 /* Scanner */
@@ -4402,13 +4861,13 @@ body {
 .pet-selector {
   border: 1px solid rgba(255, 255, 255, .9);
   border-radius: 29px;
-  background: rgba(255, 255, 255, .78);
-  box-shadow: 0 18px 48px rgba(46, 59, 106, .08);
+  background: rgba(255, 253, 246, .84);
+  box-shadow: 0 18px 48px rgba(71, 81, 106, .08);
 }
 
 .pet-selector__item {
-  border-color: #e1e6f1;
-  background: #f5f7fc;
+  border-color: #dce1e9;
+  background: #f3f6ef;
 }
 
 .pet-selector__item--selected {
@@ -4419,7 +4878,7 @@ body {
 
 .pet-selector__emoji {
   overflow: hidden;
-  background: #dfe7ff;
+  background: #c6d6ea;
 }
 
 .pet-selector__emoji .pet-illustration {
@@ -4433,15 +4892,15 @@ body {
 }
 
 .scanner-tips div {
-  border: 1px solid #e6e9f2;
-  background: #f4f6fb;
+  border: 1px solid #dce1e9;
+  background: #f3f6ef;
 }
 
 .upload-box {
-  border-color: #ccd6f6;
+  border-color: #c6d6ea;
   background:
-    radial-gradient(circle at 50% 42%, #e6ecff, transparent 38%),
-    #f5f7fc;
+    radial-gradient(circle at 50% 42%, #d0e7c6, transparent 38%),
+    #f7f5ea;
 }
 
 .upload-box--dragging {
@@ -4503,8 +4962,8 @@ body {
 
 .health-message,
 .result-ai-cta {
-  border: 1px solid #dce4fb;
-  background: linear-gradient(135deg, #eef3ff, #f5f2ff);
+  border: 1px solid #c6d6ea;
+  background: linear-gradient(135deg, #e5edf5, #eef3ea);
 }
 
 .health-message span {
@@ -4524,7 +4983,7 @@ body {
 .chatbot-page {
   border-color: rgba(255, 255, 255, .72);
   border-radius: 34px;
-  background: #eef2fb;
+  background: #edf1ef;
   box-shadow: 0 28px 90px rgba(31, 44, 91, .25);
 }
 
@@ -4570,8 +5029,8 @@ body {
 
 .chatbot-body {
   background:
-    radial-gradient(circle at 100% 0, rgba(181, 198, 255, .55), transparent 31%),
-    #eef2fb;
+    radial-gradient(circle at 100% 0, rgba(198, 214, 234, .7), transparent 31%),
+    #edf1ef;
   scrollbar-color: #cbd4ef transparent;
 }
 
@@ -4590,8 +5049,8 @@ body {
 }
 
 .suggested-question {
-  border-color: #dfe4f0;
-  background: #f4f6fb;
+  border-color: #dce1e9;
+  background: #f3f6ef;
   color: #505a73;
 }
 
@@ -4601,8 +5060,8 @@ body {
 }
 
 .chat-input {
-  border-color: #dce2ef;
-  background: #f4f6fb;
+  border-color: #dce1e9;
+  background: #f3f5f3;
 }
 
 .chat-input:focus-within {
@@ -4653,8 +5112,9 @@ body {
   .scanner-page,
   .results-page {
     background:
-      radial-gradient(circle at 10% 5%, rgba(132, 158, 255, .2), transparent 22%),
-      #f2f4f9;
+      radial-gradient(circle at 10% 5%, rgba(198, 214, 234, .55), transparent 22%),
+      radial-gradient(circle at 88% 88%, rgba(208, 231, 198, .45), transparent 25%),
+      #fffaf0;
   }
 
   .auth-page {

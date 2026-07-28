@@ -146,9 +146,18 @@ function Login({ onMoveToSignup, onLoginSuccess }) {
             <h1 id="login-heading">사진 한 장으로<br />사료 성분 체크</h1>
             <p>알러지 성분부터 건강 메시지까지<br />PetCheck가 알기 쉽게 알려드려요.</p>
           </div>
-          <div className="pet-guide">
-            <div className="pet-guide__bubble">오늘 먹을 사료도<br />안전한지 확인해볼까요?</div>
-            <PetIllustration className="auth-intro__pet" />
+          <div className="login-preview" aria-label="PetCheck 서비스 미리보기">
+            <div className="login-preview__metric">
+              <span>오늘의 PetCheck</span>
+              <strong>안전한 한 끼를<br />함께 확인해요</strong>
+            </div>
+            <div className="login-preview__bubble">
+              성분표만 보여주면<br />내가 꼼꼼히 볼게요!
+            </div>
+            <PetIllustration className="login-preview__pet" />
+            <div className="login-preview__progress" aria-hidden="true">
+              <span />
+            </div>
           </div>
         </section>
 
