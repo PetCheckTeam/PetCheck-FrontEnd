@@ -76,11 +76,26 @@ export const petsApi = {
 
 export const analysesApi = {
   create({ petId, image, productName }) {
-    const body = new FormData();
-    body.append('petId', String(petId));
-    body.append('image', image);
-    body.append('productName', productName);
-    return apiRequest('/api/v1/analyses', { method: 'POST', body });
+  const body = new FormData();
+
+  const data = {
+    petId: Number(petId),
+    productName,
+  };
+
+  body.append(
+    'data',
+    new Blob([JSON.stringify(data)], {
+      type: 'application/json',
+    }),
+  );
+
+  body.append('image', image);
+
+  return apiRequest('/api/v1/analyses', {
+    method: 'POST',
+    body,
+  });
   },
   get: (analysisId) => apiRequest(`/api/v1/analyses/${analysisId}`),
   updateOcr: (analysisId, ingredients) => apiRequest(
