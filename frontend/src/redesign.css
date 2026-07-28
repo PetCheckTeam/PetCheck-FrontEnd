@@ -1253,6 +1253,31 @@ body {
   }
 }
 
+/* Scanner back button: unmistakable hover and keyboard focus feedback. */
+.scanner-header > button:hover {
+  border-color: #ff5968 !important;
+  background: #ff5968 !important;
+  box-shadow: 0 12px 26px rgba(255, 72, 91, .3) !important;
+  color: #fff !important;
+  transform: translateY(-2px) scale(1.06);
+}
+
+.scanner-header > button:focus-visible {
+  border-color: #ff5968 !important;
+  outline: 3px solid rgba(255, 89, 104, .22);
+  outline-offset: 3px;
+  background: #ff5968 !important;
+  color: #fff !important;
+}
+
+.scanner-header > button:active {
+  border-color: #e94252 !important;
+  background: #e94252 !important;
+  box-shadow: 0 6px 15px rgba(224, 50, 69, .24) !important;
+  color: #fff !important;
+  transform: translateY(0) scale(.98);
+}
+
 /* Selected button system: B — tinted glass */
 .button,
 .login-page .button,

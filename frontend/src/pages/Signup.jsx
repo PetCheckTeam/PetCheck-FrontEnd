@@ -211,7 +211,7 @@ function Signup({ onMoveToLogin }) {
                 id="signup-name"
                 label="이름"
                 type="text"
-                placeholder="예: 안나경"
+                placeholder="예: 홍길동"
                 autoComplete="name"
                 autoFocus
                 value={formValues.name}

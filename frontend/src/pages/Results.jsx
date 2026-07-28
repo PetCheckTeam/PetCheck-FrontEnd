@@ -94,10 +94,51 @@ const verdictInfo = {
 };
 
 const normalizeStatus = (status) => {
-  const value = String(status ?? '').toLowerCase();
-  if (['danger', 'dangerous', 'avoid', 'unsafe', '위험'].includes(value)) return 'danger';
-  if (['warning', 'caution', '주의'].includes(value)) return 'warning';
-  return 'safe';
+  const value = String(status ?? '').trim().toLowerCase();
+
+  if (
+    ['matched', 'danger', 'dangerous', 'avoid', 'unsafe', '위험', '알러지 일치']
+      .includes(value)
+  ) {
+    return 'danger';
+  }
+
+  if (
+    ['unknown', 'warning', 'caution', '주의', '확인 필요']
+      .includes(value)
+  ) {
+    return 'warning';
+  }
+
+  if (
+    ['not_matched', 'not-matched', 'notmatched', 'safe', '안전', '미일치']
+      .includes(value)
+  ) {
+    return 'safe';
+  }
+
+  return 'warning';
+};
+
+const createMatchReason = (ingredient) => {
+  const matchStatus = String(ingredient.matchStatus ?? '').trim().toUpperCase();
+
+  if (matchStatus === 'MATCHED') {
+    const matchedName = ingredient.matchedAvoidIngredientName;
+    return matchedName
+      ? `등록한 알러지 성분 '${matchedName}'과 일치해요.`
+      : '등록한 알러지 성분과 일치해요.';
+  }
+
+  if (matchStatus === 'UNKNOWN') {
+    return '성분을 정확히 비교하기 어려워 확인이 필요해요.';
+  }
+
+  if (matchStatus === 'NOT_MATCHED') {
+    return '등록한 알러지 성분과 정확히 일치하지 않아요.';
+  }
+
+  return '';
 };
 
 const parseAnalysisPayload = (value) => {
@@ -123,30 +164,65 @@ const normalizeAnalysisResult = (analysis, petName) => {
     ...ingredient,
     id: ingredient.id ?? ingredient.ingredientId ?? index,
     name: ingredient.name ?? ingredient.ingredientName ?? '이름 없는 성분',
-    status: normalizeStatus(ingredient.status ?? ingredient.riskLevel),
+    status: normalizeStatus(
+      ingredient.matchStatus
+      ?? ingredient.status
+      ?? ingredient.riskLevel,
+    ),
     shortDescription:
       ingredient.shortDescription ?? ingredient.summary ?? ingredient.description ?? '',
     description: ingredient.description ?? ingredient.detail ?? '',
-    reason: ingredient.reason ?? ingredient.analysisReason ?? '',
+    reason:
+      ingredient.reason
+      || ingredient.analysisReason
+      || createMatchReason(ingredient),
   }));
   const count = (status) => ingredients.filter((item) => item.status === status).length;
-  const verdict = normalizeStatus(
-    source?.verdict
-    ?? source?.overallStatus
-    ?? (count('danger') ? 'danger' : count('warning') ? 'warning' : 'safe'),
+  const hasMatchStatus = rawIngredients.some(
+    (ingredient) => ingredient.matchStatus != null,
   );
+  const hasUnknownMatch = rawIngredients.some(
+    (ingredient) =>
+      String(ingredient.matchStatus ?? '').trim().toUpperCase() === 'UNKNOWN',
+  );
+  const parsedMatchedCount = Number(source?.matchedCount);
+  const hasMatchedCount = (
+    source?.matchedCount != null
+    && source.matchedCount !== ''
+    && Number.isFinite(parsedMatchedCount)
+  );
+  const matchedCount = hasMatchedCount
+    ? Math.max(0, parsedMatchedCount)
+    : count('danger');
+  const verdict = (hasMatchedCount || hasMatchStatus)
+    ? matchedCount > 0
+      ? 'danger'
+      : hasUnknownMatch
+        ? 'warning'
+        : 'safe'
+    : normalizeStatus(
+      source?.verdict
+      ?? source?.overallStatus
+      ?? (count('danger') ? 'danger' : count('warning') ? 'warning' : 'safe'),
+    );
+  const message = matchedCount > 0
+    ? `${petName}에게 등록된 알러지 성분과 일치하는 원료가 ${matchedCount}개 발견됐어요.`
+    : (
+      source?.message
+      ?? source?.healthMessage
+      ?? (typeof analysis?.aiAnalysisResult === 'string' && !parsedAiResult
+        ? analysis.aiAnalysisResult
+        : null)
+      ?? `${petName}의 분석 결과를 확인해 주세요.`
+    );
 
   return {
     petName,
     verdict,
-    safe: source?.safeCount ?? count('safe'),
-    warning: source?.warningCount ?? count('warning'),
-    danger: source?.dangerCount ?? count('danger'),
-    message:
-      source?.message
-      ?? source?.healthMessage
-      ?? (typeof analysis?.aiAnalysisResult === 'string' ? analysis.aiAnalysisResult : null)
-      ?? `${petName}의 분석 결과를 확인해 주세요.`,
+    safe: hasMatchStatus ? count('safe') : source?.safeCount ?? count('safe'),
+    warning: hasMatchStatus ? count('warning') : source?.warningCount ?? count('warning'),
+    danger: hasMatchedCount ? matchedCount : source?.dangerCount ?? count('danger'),
+    message,
     ingredients,
   };
 };
@@ -185,17 +261,17 @@ function Results({ petProfile, analysisResult, onScanAgain, onGoHome, onAskAI })
       <section className="result-content">
         <div className="result-summary" aria-label="성분 분석 요약">
           <article className="result-count result-count--safe">
-            <span>안전</span>
+            <span>미일치</span>
             <strong>{result.safe}</strong>
             <small>개 성분</small>
           </article>
           <article className="result-count result-count--warning">
-            <span>주의</span>
+            <span>확인 필요</span>
             <strong>{result.warning}</strong>
             <small>개 성분</small>
           </article>
           <article className="result-count result-count--danger">
-            <span>위험</span>
+            <span>알러지 일치</span>
             <strong>{result.danger}</strong>
             <small>개 성분</small>
           </article>

@@ -1,7 +1,7 @@
 const statusLabels = {
-  safe: '안전',
-  warning: '주의',
-  danger: '위험',
+  safe: '미일치',
+  warning: '확인 필요',
+  danger: '알러지 일치',
 };
 
 function IngredientCard({ ingredient, isOpen, onToggle }) {
