@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { analysesApi } from '../api/petcheckApi';
 import Button from '../components/Button';
+import PetIllustration from '../components/PetIllustration';
 import UploadBox from '../components/UploadBox';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -127,7 +128,7 @@ function Scanner({
                 onClick={() => onSelectPet(pet.id)}
               >
                 <span className="pet-selector__emoji" aria-hidden="true">
-                  {pet.petType === 'dog' ? '🐶' : '🐱'}
+                  <PetIllustration type={pet.petType} />
                 </span>
                 <span>
                   <strong>{pet.petName}</strong>

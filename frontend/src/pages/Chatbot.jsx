@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import ChatInput from '../components/ChatInput';
 import ChatMessage from '../components/ChatMessage';
+import PetIllustration from '../components/PetIllustration';
 import SuggestedQuestion from '../components/SuggestedQuestion';
 
 const suggestedQuestions = [
@@ -127,7 +128,9 @@ function Chatbot({
 
       <section className="chatbot-profile">
         <div>
-          <span>{petProfile.petType === 'cat' ? '🐱' : '🐶'}</span>
+          <span>
+            <PetIllustration type={petProfile.petType} />
+          </span>
           <div>
             <strong>{petName}의 프로필 적용 중</strong>
             <small>

@@ -133,7 +133,9 @@ function Setup({
                 aria-pressed={petType === 'dog'}
                 onClick={() => setPetType('dog')}
               >
-                <span aria-hidden="true">🐶</span>
+                <span className="pet-type-card__visual" aria-hidden="true">
+                  <PetIllustration type="dog" />
+                </span>
                 <strong>강아지</strong>
                 <small>멍멍!</small>
               </button>
@@ -143,7 +145,9 @@ function Setup({
                 aria-pressed={petType === 'cat'}
                 onClick={() => setPetType('cat')}
               >
-                <span aria-hidden="true">🐱</span>
+                <span className="pet-type-card__visual" aria-hidden="true">
+                  <PetIllustration type="cat" />
+                </span>
                 <strong>고양이</strong>
                 <small>야옹!</small>
               </button>

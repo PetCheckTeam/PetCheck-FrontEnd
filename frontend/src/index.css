@@ -3837,3 +3837,918 @@ a {
     transition-duration: .01ms !important;
   }
 }
+
+/* 2026 cool-blue visual refresh */
+body {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(105, 137, 255, .18), transparent 28%),
+    radial-gradient(circle at 84% 82%, rgba(171, 187, 255, .22), transparent 30%),
+    #eef1f8;
+}
+
+::selection {
+  background: #c9d5ff;
+  color: #142254;
+}
+
+.login-page,
+.auth-page--signup,
+.welcome-page,
+.setup-page,
+.scanner-page,
+.results-page {
+  overflow-x: clip;
+  background:
+    radial-gradient(circle at 9% 8%, rgba(132, 158, 255, .22), transparent 24%),
+    radial-gradient(circle at 92% 34%, rgba(215, 222, 249, .72), transparent 29%),
+    linear-gradient(145deg, #f6f7fb 0%, #edf0f8 52%, #f8f8fb 100%);
+}
+
+.brand {
+  color: #151a2d;
+  letter-spacing: -.045em;
+}
+
+.brand__paw,
+.login-page .brand__paw {
+  border-radius: 50%;
+  background: #315eea;
+  box-shadow: 0 10px 24px rgba(49, 94, 234, .25);
+}
+
+.brand__paw::after {
+  content: "•";
+  margin-left: -3px;
+  color: #aebfff;
+}
+
+.eyebrow,
+.auth-card__step,
+.login-page .eyebrow,
+.login-page .auth-card__step,
+.login-page .auth-card__switch button,
+.login-page .password-field__toggle {
+  color: #315eea;
+}
+
+.eyebrow,
+.auth-card__step {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #e8eeff;
+  font-size: 12px;
+  letter-spacing: .01em;
+}
+
+.button,
+.login-page .button {
+  min-height: 58px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #3868f4, #2f59dc);
+  box-shadow: 0 14px 30px rgba(49, 94, 234, .24);
+}
+
+.button:hover,
+.login-page .button:hover {
+  background: linear-gradient(135deg, #4774f4, #274fcf);
+  box-shadow: 0 17px 34px rgba(49, 94, 234, .3);
+  transform: translateY(-2px);
+}
+
+.button:disabled {
+  background: #cfd5e5;
+  box-shadow: none;
+}
+
+.auth-field__input,
+.login-page .auth-field__input,
+.setup-name-field input,
+.owner-settings__fields input {
+  border: 1px solid #e2e6f1;
+  background: #f5f7fc;
+  color: #151a2d;
+}
+
+.auth-field__input:hover,
+.login-page .auth-field__input:hover,
+.setup-name-field input:hover {
+  background: #f0f3fa;
+}
+
+.auth-field__input:focus,
+.login-page .auth-field__input:focus,
+.setup-name-field input:focus,
+.owner-settings__fields input:focus {
+  border-color: #6687f4;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(49, 94, 234, .11);
+}
+
+/* Login / signup */
+.auth-page {
+  width: min(100% - 48px, 1180px);
+  grid-template-columns: minmax(360px, 1.06fr) minmax(390px, 470px);
+  gap: clamp(40px, 7vw, 110px);
+  margin: 0 auto;
+  padding-inline: 0;
+}
+
+.auth-intro__copy {
+  margin-top: clamp(54px, 7vh, 84px);
+}
+
+.auth-intro__copy h1 {
+  max-width: 650px;
+  margin-top: 18px;
+  font-size: clamp(46px, 5vw, 70px);
+  line-height: 1.08;
+}
+
+.auth-intro__copy p {
+  color: #6f768b;
+}
+
+.auth-card,
+.login-page .auth-card {
+  border: 1px solid rgba(255, 255, 255, .92);
+  border-radius: 38px;
+  background: rgba(255, 255, 255, .86);
+  box-shadow:
+    0 30px 80px rgba(40, 55, 105, .13),
+    inset 0 1px 0 white;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.pet-guide {
+  position: relative;
+  min-height: 190px;
+  margin-top: 30px;
+}
+
+.pet-guide::before {
+  position: absolute;
+  right: 13px;
+  bottom: 5px;
+  width: 170px;
+  height: 170px;
+  border-radius: 46% 54% 60% 40% / 55% 42% 58% 45%;
+  background: linear-gradient(145deg, #527df7, #2f59df);
+  box-shadow: 0 28px 50px rgba(49, 94, 234, .23);
+  content: "";
+  transform: rotate(-7deg);
+}
+
+.pet-guide__bubble,
+.login-page .pet-guide__bubble {
+  z-index: 2;
+  margin-bottom: 55px;
+  border: 1px solid rgba(255, 255, 255, .92);
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 16px 35px rgba(45, 60, 107, .1);
+}
+
+.pet-guide__bubble::after,
+.login-page .pet-guide__bubble::after {
+  background: #fff;
+}
+
+.auth-intro__pet {
+  z-index: 1;
+  width: 155px;
+  filter: drop-shadow(0 18px 18px rgba(24, 35, 76, .2));
+}
+
+.auth-card__switch button {
+  color: #315eea;
+}
+
+.login-features {
+  background:
+    linear-gradient(rgba(255, 255, 255, .62), rgba(246, 248, 253, .92)),
+    radial-gradient(circle at 50% 18%, #dfe7ff, transparent 35%);
+}
+
+.login-features .feature-card {
+  border: 1px solid rgba(255, 255, 255, .92);
+  border-radius: 38px;
+  background: rgba(255, 255, 255, .85);
+  box-shadow: 0 32px 84px rgba(46, 64, 122, .13);
+}
+
+.feature-card__visual {
+  border-radius: 29px;
+  background: linear-gradient(145deg, #eef2ff, #dce5ff);
+}
+
+.feature-scene:nth-child(2) .feature-card__visual {
+  background: linear-gradient(145deg, #315eea, #537bf0);
+}
+
+.feature-scene:nth-child(3) .feature-card__visual {
+  background: linear-gradient(145deg, #e7ebf8, #d7def1);
+}
+
+.feature-card__number {
+  color: rgba(49, 94, 234, .16);
+}
+
+/* Main dashboard */
+.welcome-header,
+.setup-header,
+.scanner-header,
+.results-header {
+  position: relative;
+  z-index: 3;
+}
+
+.welcome-header {
+  width: min(100% - 48px, 1120px);
+  padding-top: 28px;
+}
+
+.welcome-header > button,
+.setup-header > button,
+.scanner-header > button,
+.results-header > button {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, .92);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .78);
+  box-shadow: 0 9px 24px rgba(53, 65, 106, .08);
+  color: #5d6477;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.dashboard {
+  width: min(100% - 48px, 1120px);
+  padding-top: 36px;
+}
+
+.dashboard__intro {
+  min-height: 325px;
+  align-items: stretch;
+  padding: clamp(34px, 5vw, 58px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .82);
+  border-radius: 40px;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, .94), rgba(238, 242, 255, .83));
+  box-shadow: 0 30px 80px rgba(47, 60, 112, .12);
+}
+
+.dashboard__heading {
+  z-index: 1;
+  align-self: center;
+}
+
+.dashboard__heading h1 {
+  max-width: 620px;
+  margin-top: 17px;
+  font-size: clamp(41px, 5vw, 62px);
+  line-height: 1.1;
+}
+
+.dashboard__heading p {
+  max-width: 470px;
+  color: #70768a;
+  font-size: 17px;
+}
+
+.dashboard__pet-guide {
+  width: 355px;
+  min-width: 355px;
+  min-height: 270px;
+  align-self: center;
+  border-radius: 36px;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(132, 164, 255, .95), transparent 28%),
+    linear-gradient(145deg, #3868f4, #3159d9);
+  box-shadow: 0 28px 55px rgba(49, 94, 234, .25);
+}
+
+.dashboard__pet-guide::before,
+.dashboard__pet-guide::after {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 50%;
+  content: "";
+}
+
+.dashboard__pet-guide::before {
+  inset: 23px;
+}
+
+.dashboard__pet-guide::after {
+  top: 33px;
+  right: 35px;
+  width: 13px;
+  height: 13px;
+  background: white;
+  box-shadow: 0 0 0 7px rgba(255, 255, 255, .13);
+}
+
+.dashboard__pet-bubble {
+  top: 24px;
+  left: 24px;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, .38);
+  background: rgba(255, 255, 255, .18);
+  box-shadow: none;
+  color: white;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.dashboard__pet-bubble::after {
+  background: rgba(255, 255, 255, .18);
+}
+
+.dashboard__guide-pet {
+  z-index: 1;
+  width: 205px;
+  height: 205px;
+  margin-top: 62px;
+  margin-left: 108px;
+  filter: drop-shadow(0 24px 20px rgba(18, 34, 91, .28));
+}
+
+.dashboard__grid {
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.profile-card,
+.owner-settings,
+.pet-management,
+.setup-card,
+.scanner-card,
+.result-count,
+.health-message,
+.ingredient-card {
+  border: 1px solid rgba(255, 255, 255, .9);
+  background: rgba(255, 255, 255, .87);
+  box-shadow: 0 18px 48px rgba(46, 59, 106, .09);
+}
+
+.profile-card {
+  border-radius: 29px;
+}
+
+.profile-card__icon {
+  border-radius: 20px;
+  background: #e8eeff;
+}
+
+.profile-card__pet-item,
+.scan-state,
+.upload-box,
+.upload-preview__footer {
+  background: #f2f5fc;
+}
+
+.profile-card__pet {
+  padding: 4px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #dfe7ff, #f5f7ff);
+}
+
+.pet-management-trigger {
+  border-color: rgba(255, 255, 255, .92);
+  border-radius: 24px;
+  background: linear-gradient(135deg, #315eea, #466fec);
+  box-shadow: 0 18px 35px rgba(49, 94, 234, .2);
+  color: white;
+}
+
+.pet-management-trigger small,
+.pet-management-trigger > span:last-child {
+  color: rgba(255, 255, 255, .75);
+}
+
+.pet-management-trigger:hover {
+  background: linear-gradient(135deg, #3868f4, #2d55d2);
+}
+
+.pet-management__item {
+  border-color: #e4e8f2;
+  background: #f5f7fc;
+}
+
+.pet-management__pet {
+  padding: 5px;
+  border-radius: 18px;
+  background: #e5ebff;
+}
+
+.pet-management__add,
+.owner-settings__submit {
+  border-radius: 999px;
+  background: #315eea;
+}
+
+.dashboard__action {
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 30px;
+  background: linear-gradient(135deg, #315eea, #5279ed);
+  box-shadow: 0 24px 55px rgba(49, 94, 234, .23);
+  color: white;
+}
+
+.dashboard__action > div span {
+  color: rgba(255, 255, 255, .74);
+}
+
+.dashboard__action .welcome-next {
+  border-color: rgba(255, 255, 255, .35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 12px 28px rgba(27, 45, 113, .18);
+  color: #315eea;
+}
+
+.dashboard__action .welcome-next:hover {
+  background: white;
+}
+
+.chatbot-launcher {
+  border-color: rgba(255, 255, 255, .5);
+  background: #315eea;
+  box-shadow: 0 17px 38px rgba(49, 94, 234, .3);
+  color: white;
+}
+
+.chatbot-launcher:hover {
+  background: #244bc9;
+}
+
+/* Pet registration */
+.setup-page,
+.scanner-page {
+  min-height: 100vh;
+}
+
+.setup-card,
+.scanner-card {
+  border-radius: 38px;
+  background: rgba(255, 255, 255, .9);
+}
+
+.progress__track {
+  background: #e6eaf4;
+}
+
+.progress__value {
+  background: linear-gradient(90deg, #315eea, #7391f4);
+  box-shadow: 0 4px 12px rgba(49, 94, 234, .25);
+}
+
+.pet-type-grid {
+  gap: 16px;
+}
+
+.pet-type-card {
+  min-height: 220px;
+  overflow: hidden;
+  border: 1px solid #e3e7f0;
+  border-radius: 28px;
+  background: linear-gradient(145deg, #f5f7fc, #edf1fa);
+}
+
+.pet-type-card:hover {
+  border-color: #9eb2f5;
+  background: #edf2ff;
+  transform: translateY(-3px);
+}
+
+.pet-type-card--selected {
+  border-color: #315eea;
+  background: linear-gradient(145deg, #315eea, #557cf1);
+  box-shadow: 0 20px 38px rgba(49, 94, 234, .23);
+  color: white;
+}
+
+.pet-type-card__visual {
+  display: grid;
+  width: 120px;
+  height: 112px;
+  place-items: end center;
+  margin: 0 auto 5px;
+  border-radius: 50%;
+  background: #e3eaff;
+}
+
+.pet-type-card__visual .pet-illustration {
+  width: 106px;
+  height: 106px;
+  animation: none;
+  filter: drop-shadow(0 13px 12px rgba(31, 48, 108, .17));
+}
+
+.pet-type-card--selected .pet-type-card__visual {
+  background: rgba(255, 255, 255, .18);
+}
+
+.pet-type-card--selected small {
+  color: rgba(255, 255, 255, .72);
+}
+
+.allergy-chip {
+  border-color: #e0e5f0;
+  background: #f5f7fc;
+}
+
+.allergy-chip:hover {
+  border-color: #99adf2;
+  background: #edf2ff;
+}
+
+.allergy-chip--selected {
+  border-color: #315eea;
+  background: #e8eeff;
+  color: #315eea;
+}
+
+.setup-complete {
+  border: 1px solid rgba(255, 255, 255, .9);
+  background:
+    radial-gradient(circle at 50% 28%, #dce6ff, transparent 29%),
+    rgba(255, 255, 255, .9);
+  box-shadow: 0 32px 80px rgba(46, 59, 106, .13);
+}
+
+.setup-complete__check {
+  background: #315eea;
+  box-shadow: 0 12px 25px rgba(49, 94, 234, .25);
+}
+
+.setup-complete__pet {
+  filter: drop-shadow(0 18px 18px rgba(31, 48, 108, .18));
+}
+
+.setup-complete__summary,
+.setup-complete__next {
+  border-color: #dfe5f2;
+  background: #f2f5fc;
+}
+
+/* Scanner */
+.scanner-layout {
+  gap: 18px;
+}
+
+.pet-selector {
+  border: 1px solid rgba(255, 255, 255, .9);
+  border-radius: 29px;
+  background: rgba(255, 255, 255, .78);
+  box-shadow: 0 18px 48px rgba(46, 59, 106, .08);
+}
+
+.pet-selector__item {
+  border-color: #e1e6f1;
+  background: #f5f7fc;
+}
+
+.pet-selector__item--selected {
+  border-color: #315eea;
+  background: #e9efff;
+  box-shadow: inset 0 0 0 1px #315eea;
+}
+
+.pet-selector__emoji {
+  overflow: hidden;
+  background: #dfe7ff;
+}
+
+.pet-selector__emoji .pet-illustration {
+  width: 47px;
+  height: 47px;
+  animation: none;
+}
+
+.pet-selector__check {
+  background: #315eea;
+}
+
+.scanner-tips div {
+  border: 1px solid #e6e9f2;
+  background: #f4f6fb;
+}
+
+.upload-box {
+  border-color: #ccd6f6;
+  background:
+    radial-gradient(circle at 50% 42%, #e6ecff, transparent 38%),
+    #f5f7fc;
+}
+
+.upload-box--dragging {
+  border-color: #315eea;
+  background: #e9efff;
+}
+
+.upload-box__icon {
+  background: #315eea;
+  box-shadow: 0 12px 25px rgba(49, 94, 234, .22);
+}
+
+.scan-state__loader,
+.scan-state__complete-icon {
+  background: #315eea;
+  box-shadow: 0 15px 30px rgba(49, 94, 234, .22);
+}
+
+.scan-state__step--active {
+  background: #e6edff;
+  color: #315eea;
+}
+
+/* Results */
+.result-hero {
+  border: 1px solid rgba(255, 255, 255, .8);
+  background: linear-gradient(135deg, #315eea, #587df0);
+  box-shadow: 0 30px 70px rgba(49, 94, 234, .22);
+  color: white;
+}
+
+.result-hero--safe,
+.result-hero--warning,
+.result-hero--danger {
+  background:
+    radial-gradient(circle at 80% 30%, rgba(140, 169, 255, .85), transparent 25%),
+    linear-gradient(135deg, #315eea, #5279ed);
+}
+
+.result-hero .result-verdict,
+.result-hero--safe .result-verdict,
+.result-hero--warning .result-verdict,
+.result-hero--danger .result-verdict,
+.result-hero p {
+  color: rgba(255, 255, 255, .82);
+}
+
+.result-verdict > span {
+  color: #315eea;
+}
+
+.result-hero__pet {
+  filter: drop-shadow(0 25px 20px rgba(17, 34, 92, .3));
+}
+
+.result-count {
+  border-radius: 24px;
+}
+
+.health-message,
+.result-ai-cta {
+  border: 1px solid #dce4fb;
+  background: linear-gradient(135deg, #eef3ff, #f5f2ff);
+}
+
+.health-message span {
+  color: #315eea;
+}
+
+.ingredient-card {
+  border-color: #e4e8f1;
+  box-shadow: 0 10px 28px rgba(46, 59, 106, .06);
+}
+
+.ingredient-card__summary {
+  background: rgba(255, 255, 255, .92);
+}
+
+/* Chat */
+.chatbot-page {
+  border-color: rgba(255, 255, 255, .72);
+  border-radius: 34px;
+  background: #eef2fb;
+  box-shadow: 0 28px 90px rgba(31, 44, 91, .25);
+}
+
+.chatbot-header,
+.chatbot-footer {
+  border-color: #e1e6f2;
+  background: rgba(255, 255, 255, .95);
+}
+
+.chatbot-profile {
+  border-color: rgba(255, 255, 255, .4);
+  border-radius: 24px;
+  background: linear-gradient(135deg, #315eea, #547af0);
+  box-shadow: 0 16px 32px rgba(49, 94, 234, .2);
+  color: white;
+}
+
+.chatbot-profile > div > span {
+  overflow: hidden;
+  background: rgba(255, 255, 255, .2);
+}
+
+.chatbot-profile > div > span .pet-illustration {
+  width: 48px;
+  height: 48px;
+  animation: none;
+}
+
+.chatbot-profile small,
+.chatbot-profile__selector > span {
+  color: rgba(255, 255, 255, .72);
+}
+
+.chatbot-profile__selector select {
+  border-color: rgba(255, 255, 255, .35);
+  background: rgba(255, 255, 255, .16);
+  color: white;
+}
+
+.chatbot-profile__selector select:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .18);
+}
+
+.chatbot-body {
+  background:
+    radial-gradient(circle at 100% 0, rgba(181, 198, 255, .55), transparent 31%),
+    #eef2fb;
+  scrollbar-color: #cbd4ef transparent;
+}
+
+.chat-message__avatar,
+.chat-message__content p,
+.chat-typing {
+  border-color: #e1e5ef;
+  background: white;
+  box-shadow: 0 8px 22px rgba(49, 61, 105, .07);
+}
+
+.chat-message--user .chat-message__content p {
+  border-color: transparent;
+  background: linear-gradient(135deg, #3868f4, #2e56d4);
+  box-shadow: 0 9px 24px rgba(49, 94, 234, .22);
+}
+
+.suggested-question {
+  border-color: #dfe4f0;
+  background: #f4f6fb;
+  color: #505a73;
+}
+
+.suggested-question:hover {
+  border-color: #a8b9f1;
+  background: #eaf0ff;
+}
+
+.chat-input {
+  border-color: #dce2ef;
+  background: #f4f6fb;
+}
+
+.chat-input:focus-within {
+  border-color: #7d98ed;
+  box-shadow: 0 0 0 3px rgba(49, 94, 234, .11);
+}
+
+.chat-input button {
+  background: linear-gradient(135deg, #3868f4, #2f58d8);
+  box-shadow: 0 7px 16px rgba(49, 94, 234, .25);
+}
+
+@media (max-width: 900px) {
+  .auth-page {
+    width: min(100% - 40px, 560px);
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-items: start;
+    padding-inline: 0;
+  }
+
+  .pet-guide::before {
+    width: 90px;
+    height: 90px;
+  }
+
+  .dashboard__intro {
+    min-height: auto;
+  }
+
+  .dashboard__pet-guide {
+    width: 290px;
+    min-width: 290px;
+  }
+
+  .dashboard__guide-pet {
+    width: 170px;
+    height: 170px;
+    margin-left: 95px;
+  }
+}
+
+@media (max-width: 500px) {
+  .login-page,
+  .auth-page--signup,
+  .welcome-page,
+  .setup-page,
+  .scanner-page,
+  .results-page {
+    background:
+      radial-gradient(circle at 10% 5%, rgba(132, 158, 255, .2), transparent 22%),
+      #f2f4f9;
+  }
+
+  .auth-page {
+    width: 100%;
+  }
+
+  .auth-intro__copy {
+    margin-top: 34px;
+  }
+
+  .auth-intro__copy h1 {
+    font-size: 39px;
+  }
+
+  .auth-intro__copy p {
+    margin-top: 14px;
+  }
+
+  .pet-guide {
+    min-height: 105px;
+    justify-content: flex-end;
+    margin-top: 8px;
+    padding-right: 8px;
+  }
+
+  .pet-guide::before {
+    right: 0;
+    bottom: 0;
+    width: 92px;
+    height: 92px;
+  }
+
+  .auth-intro__pet {
+    width: 92px;
+  }
+
+  .auth-card,
+  .login-page .auth-card {
+    border-radius: 30px;
+  }
+
+  .dashboard__intro {
+    padding: 27px 22px 22px;
+    border-radius: 32px;
+  }
+
+  .dashboard__heading h1 {
+    font-size: 38px;
+  }
+
+  .dashboard__pet-guide {
+    width: 100%;
+    min-width: 0;
+    min-height: 230px;
+    border-radius: 28px;
+  }
+
+  .dashboard__guide-pet {
+    width: 165px;
+    height: 165px;
+    margin-top: 58px;
+    margin-left: calc(100% - 182px);
+  }
+
+  .profile-card,
+  .pet-management,
+  .owner-settings {
+    border-radius: 25px;
+  }
+
+  .setup-card,
+  .scanner-card {
+    border-radius: 30px;
+  }
+
+  .pet-type-card {
+    min-height: 190px;
+  }
+
+  .pet-type-card__visual {
+    width: 94px;
+    height: 90px;
+  }
+
+  .pet-type-card__visual .pet-illustration {
+    width: 86px;
+    height: 86px;
+  }
+
+  .result-hero {
+    border-radius: 30px;
+  }
+
+  .chatbot-page {
+    border-radius: 0;
+  }
+}
