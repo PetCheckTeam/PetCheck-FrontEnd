@@ -3295,3 +3295,34 @@ button:not(:disabled):hover {
     width: 100%;
   }
 }
+
+/* Keep pet cards identical at desktop/tablet widths regardless of pet count. */
+@media (min-width: 781px) and (max-width: 1050px) {
+  .welcome-header,
+  .dashboard {
+    width: calc(100% - 28px);
+    max-width: none;
+  }
+
+  .dashboard__intro {
+    padding: 28px;
+  }
+
+  .dashboard__main-grid {
+    width: 100%;
+    grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr);
+  }
+
+  .pet-stage-card,
+  .pet-stage-card .pet-carousel,
+  .pet-stage-card .pet-carousel__slide,
+  .dashboard__main-grid > .pet-home-panel {
+    min-height: 510px;
+    height: 510px;
+  }
+
+  .pet-stage-card .pet-carousel__pet {
+    width: min(34vw, 310px);
+    height: min(34vw, 310px);
+  }
+}
