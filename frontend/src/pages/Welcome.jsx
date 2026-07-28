@@ -58,18 +58,57 @@ function Welcome({
       <section className="dashboard" aria-labelledby="dashboard-heading">
         <div className="dashboard__intro">
           <div className="dashboard__heading">
-            <span className="eyebrow">내 정보</span>
-            <h1 id="dashboard-heading">{userProfile?.name ?? '회원'}님, 반가워요 👋</h1>
-            <p>로그인한 계정과 등록된 반려동물 정보를 바로 확인하세요.</p>
+            <span className="eyebrow">오늘의 PetCheck</span>
+            <h1 id="dashboard-heading">
+              {hasPetProfile
+                ? `${petProfiles[0].petName}와 오늘도 건강하게`
+                : `${userProfile?.name ?? '회원'}님, 반가워요`}
+            </h1>
+            <p>
+              {hasPetProfile
+                ? '우리 아이에게 맞는 사료인지 지금 바로 확인해 보세요.'
+                : '반려동물을 등록하고 맞춤 사료 분석을 시작해 보세요.'}
+            </p>
           </div>
           <div className="dashboard__pet-guide" aria-label="PetCheck 반려동물 안내">
             <div className="dashboard__pet-bubble">
-              이 사료 나한테 맞아? <span aria-hidden="true">🤔</span>
+              {hasPetProfile
+                ? `${petProfiles[0].petName}, 오늘 사료도 확인해볼까?`
+                : '먼저 내 정보를 등록해 주세요!'}
             </div>
             <PetIllustration
               className="dashboard__guide-pet"
               type={hasPetProfile ? petProfiles[0].petType : 'dog'}
             />
+          </div>
+          <div className="dashboard__hero-action">
+            <div className="dashboard__active-pet">
+              <span>{hasPetProfile ? '분석 대상' : '시작하기'}</span>
+              <strong>
+                {hasPetProfile
+                  ? `${petProfiles[0].petName} · ${
+                    petProfiles[0].petType === 'dog' ? '강아지' : '고양이'
+                  }`
+                  : '반려동물 정보 등록'}
+              </strong>
+              <small>
+                {hasPetProfile && petProfiles[0].allergies.length > 0
+                  ? `알러지 ${petProfiles[0].allergies.length}개 등록됨`
+                  : hasPetProfile
+                    ? '등록된 알러지 없음'
+                    : '최초 한 번만 등록하면 돼요'}
+              </small>
+            </div>
+            <button
+              className="welcome-next dashboard__analyze-button"
+              type="button"
+              onClick={() => (
+                hasPetProfile ? onStartScanner(petProfiles[0].id) : onStartSetup()
+              )}
+            >
+              <strong>{hasPetProfile ? '사료 분석 시작' : '반려동물 등록하기'}</strong>
+              <span aria-hidden="true">→</span>
+            </button>
           </div>
         </div>
 
@@ -284,28 +323,6 @@ function Welcome({
           </form>
         )}
 
-        <div className="dashboard__action">
-          <div>
-            <strong>{hasPetProfile ? '사료를 분석해 볼까요?' : '반려동물을 먼저 등록해 주세요'}</strong>
-            <span>
-              {hasPetProfile
-                ? '분석할 반려동물은 다음 화면에서 선택할 수 있어요.'
-                : '각 반려동물의 정보는 최초 한 번만 등록하면 됩니다.'}
-            </span>
-          </div>
-          <div className="dashboard__action-buttons">
-            <button
-              className="welcome-next"
-              type="button"
-              onClick={() => (
-                hasPetProfile ? onStartScanner(petProfiles[0].id) : onStartSetup()
-              )}
-            >
-              <strong>{hasPetProfile ? '사료 분석 시작' : '반려동물 정보 등록'}</strong>
-              <span aria-hidden="true">→</span>
-            </button>
-          </div>
-        </div>
       </section>
 
       {hasPetProfile && (
