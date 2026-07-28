@@ -130,7 +130,7 @@ function Welcome({
           <img className="brand__image" src={petcheckAppIcon} alt="" />
           PetCheck
         </a>
-        <button type="button" onClick={onLogout}>
+        <button className="welcome-header__logout" type="button" onClick={onLogout}>
           로그아웃
         </button>
       </header>
@@ -335,7 +335,13 @@ function Welcome({
                 <h2 id="pet-management-heading">반려동물 정보 관리</h2>
                 <p>등록한 정보를 수정하거나 새로운 반려동물을 추가할 수 있어요.</p>
               </div>
-              <button type="button" onClick={() => setIsManagingPets(false)}>닫기</button>
+              <button
+                className="danger-hover-button"
+                type="button"
+                onClick={() => setIsManagingPets(false)}
+              >
+                닫기
+              </button>
             </div>
 
             <div className="pet-management__list">
@@ -355,10 +361,15 @@ function Welcome({
                         : '알러지 없음'}
                     </span>
                   </div>
-                  <button type="button" onClick={() => onEditPet(pet)}>
+                  <button
+                    className="pet-management__edit"
+                    type="button"
+                    onClick={() => onEditPet(pet)}
+                  >
                     정보 수정
                   </button>
                   <button
+                    className="pet-management__delete"
                     type="button"
                     onClick={async () => {
                       if (!window.confirm(`${pet.petName}의 정보를 삭제할까요?`)) return;
@@ -395,7 +406,13 @@ function Welcome({
                 <span className="eyebrow">계정 설정</span>
                 <h2>보호자 정보 수정</h2>
               </div>
-              <button type="button" onClick={() => setIsEditingOwner(false)}>닫기</button>
+              <button
+                className="danger-hover-button"
+                type="button"
+                onClick={() => setIsEditingOwner(false)}
+              >
+                닫기
+              </button>
             </div>
             <div className="owner-settings__fields">
               <label>
@@ -422,7 +439,7 @@ function Welcome({
             {ownerMessage && <p className="owner-settings__message">{ownerMessage}</p>}
             <button className="owner-settings__submit" type="submit">변경사항 저장</button>
             <button
-              className="setup-complete__back"
+              className="setup-complete__back owner-settings__delete"
               type="button"
               onClick={async () => {
                 if (!window.confirm('회원 탈퇴 시 모든 정보를 되돌릴 수 없습니다. 탈퇴할까요?')) return;
