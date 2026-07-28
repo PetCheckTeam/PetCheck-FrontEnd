@@ -99,8 +99,24 @@ const normalizeStatus = (status) => {
   return 'safe';
 };
 
+const parseAnalysisPayload = (value) => {
+  if (typeof value !== 'string') return value;
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+};
+
 const normalizeAnalysisResult = (analysis, petName) => {
-  const source = analysis?.analysisResult ?? analysis?.result ?? analysis;
+  const parsedAiResult = parseAnalysisPayload(analysis?.aiAnalysisResult);
+  const source = (
+    parsedAiResult
+    ?? analysis?.analysisResult
+    ?? analysis?.result
+    ?? analysis
+  );
   const rawIngredients = source?.ingredients ?? source?.ingredientResults ?? [];
   const ingredients = rawIngredients.map((ingredient, index) => ({
     ...ingredient,
@@ -125,7 +141,11 @@ const normalizeAnalysisResult = (analysis, petName) => {
     safe: source?.safeCount ?? count('safe'),
     warning: source?.warningCount ?? count('warning'),
     danger: source?.dangerCount ?? count('danger'),
-    message: source?.message ?? source?.healthMessage ?? `${petName}의 분석 결과를 확인해 주세요.`,
+    message:
+      source?.message
+      ?? source?.healthMessage
+      ?? (typeof analysis?.aiAnalysisResult === 'string' ? analysis.aiAnalysisResult : null)
+      ?? `${petName}의 분석 결과를 확인해 주세요.`,
     ingredients,
   };
 };
@@ -189,30 +209,32 @@ function Results({ petProfile, analysisResult, onScanAgain, onGoHome, onAskAI })
           </div>
         </article>
 
-        <section className="ingredient-section" aria-labelledby="ingredient-heading">
-          <div className="ingredient-section__heading">
-            <div>
-              <span className="eyebrow">총 {result.ingredients.length}개 성분</span>
-              <h2 id="ingredient-heading">성분별 상세 결과</h2>
+        {result.ingredients.length > 0 && (
+          <section className="ingredient-section" aria-labelledby="ingredient-heading">
+            <div className="ingredient-section__heading">
+              <div>
+                <span className="eyebrow">총 {result.ingredients.length}개 성분</span>
+                <h2 id="ingredient-heading">성분별 상세 결과</h2>
+              </div>
+              <p>카드를 누르면 판단 이유를 볼 수 있어요.</p>
             </div>
-            <p>카드를 누르면 판단 이유를 볼 수 있어요.</p>
-          </div>
 
-          <div className="ingredient-list">
-            {result.ingredients.map((ingredient) => (
-              <IngredientCard
-                key={ingredient.id}
-                ingredient={ingredient}
-                isOpen={openIngredientId === ingredient.id}
-                onToggle={() =>
-                  setOpenIngredientId((previous) =>
-                    previous === ingredient.id ? null : ingredient.id,
-                  )
-                }
-              />
-            ))}
-          </div>
-        </section>
+            <div className="ingredient-list">
+              {result.ingredients.map((ingredient) => (
+                <IngredientCard
+                  key={ingredient.id}
+                  ingredient={ingredient}
+                  isOpen={openIngredientId === ingredient.id}
+                  onToggle={() =>
+                    setOpenIngredientId((previous) =>
+                      previous === ingredient.id ? null : ingredient.id,
+                    )
+                  }
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         <div className="result-ai-cta">
           <div>

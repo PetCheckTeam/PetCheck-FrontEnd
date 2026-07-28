@@ -76,38 +76,38 @@ export const petsApi = {
 
 export const analysesApi = {
   create({ petId, image, productName }) {
-  const body = new FormData();
+    const body = new FormData();
 
-  const data = {
-    petId: Number(petId),
-    productName,
-  };
+    const data = {
+      petId: Number(petId),
+      productName,
+    };
 
-  body.append(
-    'data',
-    new Blob([JSON.stringify(data)], {
-      type: 'application/json',
-    }),
-  );
+    body.append(
+      'data',
+      new Blob([JSON.stringify(data)], {
+        type: 'application/json',
+      }),
+    );
 
-  body.append('image', image);
+    body.append('image', image);
 
-  return apiRequest('/api/v1/analyses', {
-    method: 'POST',
-    body,
-  });
+    return apiRequest('/api/v1/analyses', {
+      method: 'POST',
+      body,
+    });
   },
   get: (analysisId) => apiRequest(`/api/v1/analyses/${analysisId}`),
-  updateOcr: (analysisId, ingredients) => apiRequest(
+  updateOcr: (analysisId, editedOcrResult) => apiRequest(
     `/api/v1/analyses/${analysisId}/ocr`,
-    { method: 'PUT', body: { ingredients } },
+    { method: 'PUT', body: { editedOcrResult } },
   ),
   confirm: (analysisId) => apiRequest(`/api/v1/analyses/${analysisId}/confirm`, {
     method: 'POST',
   }),
-  retry: (analysisId, stage) => apiRequest(`/api/v1/analyses/${analysisId}/retry`, {
+  retry: (analysisId, retryStep) => apiRequest(`/api/v1/analyses/${analysisId}/retry`, {
     method: 'POST',
-    body: { stage },
+    body: { retryStep },
   }),
   remove: (analysisId) => apiRequest(`/api/v1/analyses/${analysisId}`, {
     method: 'DELETE',
