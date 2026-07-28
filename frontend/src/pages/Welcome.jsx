@@ -44,10 +44,7 @@ function Welcome({
     const slider = petSliderRef.current;
 
     if (slider) {
-      slider.scrollTo({
-        left: nextIndex * slider.clientWidth,
-        behavior: 'smooth',
-      });
+      slider.scrollLeft = nextIndex * slider.clientWidth;
     }
     setActivePetIndex(nextIndex);
   };
