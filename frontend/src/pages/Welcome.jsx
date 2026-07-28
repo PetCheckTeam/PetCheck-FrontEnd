@@ -505,6 +505,7 @@ function Welcome({
                     value={ownerForm.email}
                     readOnly
                   />
+                  <small>이메일은 변경할 수 없어요.</small>
                 </label>
               </div>
               {ownerMessage && <p className="owner-settings__message">{ownerMessage}</p>}
