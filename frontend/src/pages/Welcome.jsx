@@ -151,17 +151,14 @@ function Welcome({
                 오늘의 PetCheck
               </span>
               <h1>
-                {userProfile?.name ?? '보호자'}님,
-                <br />
-                오늘도 <em>건강한 하루</em>를 시작해요!
+                <span className="dashboard__owner-name">
+                  {userProfile?.name ?? '보호자'}님,
+                </span>
+                <span className="dashboard__healthy-day">
+                  오늘도 <em>건강한 하루</em>를
+                </span>
+                <span className="dashboard__start-day">시작해요!</span>
               </h1>
-              <p>
-                우리 아이에게 꼭 맞는 사료인지 사진 한 장으로 쉽고 재미있게 확인해 보세요.
-              </p>
-            </div>
-            <div className="dashboard__care-badges" aria-label="PetCheck 특징">
-              <span><i aria-hidden="true">✓</i> 알러지 맞춤 확인</span>
-              <span><i aria-hidden="true">✓</i> 쉬운 성분 설명</span>
             </div>
           </section>
 
@@ -332,36 +329,16 @@ function Welcome({
                   <div className="pet-home-panel__actions">
                     <button
                       type="button"
-                      onClick={() => {
-                        setIsEditingOwner((previous) => !previous);
-                        setOwnerMessage('');
-                      }}
-                    >
-                      <span aria-hidden="true">👤</span>
-                      <strong>보호자 정보</strong>
-                      <small>내 정보 확인하기</small>
-                    </button>
-                    <button
-                      type="button"
                       onClick={() => onStartScanner(activePet.id)}
                     >
                       <span aria-hidden="true">📷</span>
-                      <strong>사료 분석하기</strong>
-                      <small>사진으로 바로 확인</small>
+                      <span>
+                        <strong>사료 분석하기</strong>
+                        <small>성분표 사진 한 장으로 바로 확인해요</small>
+                      </span>
+                      <i aria-hidden="true">→</i>
                     </button>
                   </div>
-                  <button
-                    className="pet-home-panel__ai"
-                    type="button"
-                    onClick={() => onStartChatbot(activePet.id)}
-                  >
-                    <span aria-hidden="true">✨</span>
-                    <span>
-                      <strong>PetCheck AI에게 물어보기</strong>
-                      <small>우리 아이 맞춤 답변을 받아보세요</small>
-                    </span>
-                    <i aria-hidden="true">→</i>
-                  </button>
                 </section>
               </div>
             </>
@@ -390,132 +367,160 @@ function Welcome({
         </div>
 
         {isManagingPets && (
-          <section className="pet-management" aria-labelledby="pet-management-heading">
-            <div className="pet-management__heading">
-              <div>
-                <span className="eyebrow">반려동물 설정</span>
-                <h2 id="pet-management-heading">반려동물 정보 관리</h2>
-                <p>등록한 정보를 수정하거나 새로운 반려동물을 추가할 수 있어요.</p>
-              </div>
-              <button
-                className="danger-hover-button"
-                type="button"
-                onClick={() => setIsManagingPets(false)}
-              >
-                닫기
-              </button>
-            </div>
-
-            <div className="pet-management__list">
-              {petProfiles.map((pet) => (
-                <article className="pet-management__item" key={pet.id}>
-                  <PetIllustration
-                    className="pet-management__pet"
-                    type={pet.petType}
-                  />
-                  <div>
-                    <strong>{pet.petName}</strong>
-                    <span>
-                      {pet.petType === 'dog' ? '강아지' : '고양이'}
-                      {' · '}
-                      {pet.allergies.length > 0
-                        ? `알러지 ${pet.allergies.join(', ')}`
-                        : '알러지 없음'}
-                    </span>
-                  </div>
-                  <button
-                    className="pet-management__edit"
-                    type="button"
-                    onClick={() => onEditPet(pet)}
-                  >
-                    정보 수정
-                  </button>
-                  <button
-                    className="pet-management__delete"
-                    type="button"
-                    onClick={async () => {
-                      if (!window.confirm(`${pet.petName}의 정보를 삭제할까요?`)) return;
-                      setPetMessage('');
-                      try {
-                        await onDeletePet(pet.id);
-                      } catch (error) {
-                        setPetMessage(error.message);
-                      }
-                    }}
-                  >
-                    삭제
-                  </button>
-                </article>
-              ))}
-            </div>
-            {petMessage && <p className="owner-settings__message" role="alert">{petMessage}</p>}
-
+          <div
+            className="settings-drawer-layer settings-drawer-layer--left"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="pet-management-heading"
+          >
             <button
-              className="pet-management__add"
+              className="settings-drawer-layer__backdrop"
               type="button"
-              onClick={onStartSetup}
-            >
-              <span aria-hidden="true">＋</span>
-              새 반려동물 추가 등록
-            </button>
-          </section>
+              aria-label="반려동물 정보 관리 닫기"
+              onClick={() => setIsManagingPets(false)}
+            />
+            <section className="pet-management settings-drawer">
+              <div className="pet-management__heading">
+                <div>
+                  <span className="eyebrow">반려동물 설정</span>
+                  <h2 id="pet-management-heading">반려동물 정보 관리</h2>
+                  <p>등록한 정보를 수정하거나 새로운 반려동물을 추가할 수 있어요.</p>
+                </div>
+                <button
+                  className="settings-drawer__close danger-hover-button"
+                  type="button"
+                  aria-label="반려동물 정보 관리 닫기"
+                  onClick={() => setIsManagingPets(false)}
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="pet-management__list">
+                {petProfiles.map((pet) => (
+                  <article className="pet-management__item" key={pet.id}>
+                    <PetIllustration
+                      className="pet-management__pet"
+                      type={pet.petType}
+                    />
+                    <div>
+                      <strong>{pet.petName}</strong>
+                      <span>
+                        {pet.petType === 'dog' ? '강아지' : '고양이'}
+                        {' · '}
+                        {pet.allergies.length > 0
+                          ? `알러지 ${pet.allergies.join(', ')}`
+                          : '알러지 없음'}
+                      </span>
+                    </div>
+                    <button
+                      className="pet-management__edit"
+                      type="button"
+                      onClick={() => onEditPet(pet)}
+                    >
+                      정보 수정
+                    </button>
+                    <button
+                      className="pet-management__delete"
+                      type="button"
+                      onClick={async () => {
+                        if (!window.confirm(`${pet.petName}의 정보를 삭제할까요?`)) return;
+                        setPetMessage('');
+                        try {
+                          await onDeletePet(pet.id);
+                        } catch (error) {
+                          setPetMessage(error.message);
+                        }
+                      }}
+                    >
+                      삭제
+                    </button>
+                  </article>
+                ))}
+              </div>
+              {petMessage && <p className="owner-settings__message" role="alert">{petMessage}</p>}
+
+              <button
+                className="pet-management__add"
+                type="button"
+                onClick={onStartSetup}
+              >
+                <span aria-hidden="true">＋</span>
+                새 반려동물 추가 등록
+              </button>
+            </section>
+          </div>
         )}
 
         {isEditingOwner && (
-          <form className="owner-settings" onSubmit={handleOwnerSubmit}>
-            <div className="owner-settings__heading">
-              <div>
-                <span className="eyebrow">계정 설정</span>
-                <h2>보호자 정보 수정</h2>
-              </div>
-              <button
-                className="danger-hover-button"
-                type="button"
-                onClick={() => setIsEditingOwner(false)}
-              >
-                닫기
-              </button>
-            </div>
-            <div className="owner-settings__fields">
-              <label>
-                <span>이름</span>
-                <input
-                  type="text"
-                  value={ownerForm.name}
-                  onChange={(event) => setOwnerForm((previous) => ({
-                    ...previous,
-                    name: event.target.value,
-                  }))}
-                />
-              </label>
-              <label>
-                <span>이메일</span>
-                <input
-                  type="email"
-                  value={ownerForm.email}
-                  readOnly
-                />
-                <small>이메일은 현재 API에서 변경할 수 없어요.</small>
-              </label>
-            </div>
-            {ownerMessage && <p className="owner-settings__message">{ownerMessage}</p>}
-            <button className="owner-settings__submit" type="submit">변경사항 저장</button>
+          <div
+            className="settings-drawer-layer settings-drawer-layer--right"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="owner-settings-heading"
+          >
             <button
-              className="setup-complete__back owner-settings__delete"
+              className="settings-drawer-layer__backdrop"
               type="button"
-              onClick={async () => {
-                if (!window.confirm('회원 탈퇴 시 모든 정보를 되돌릴 수 없습니다. 탈퇴할까요?')) return;
-                setOwnerMessage('');
-                try {
-                  await onDeleteAccount();
-                } catch (error) {
-                  setOwnerMessage(error.message);
-                }
-              }}
-            >
-              회원 탈퇴
-            </button>
-          </form>
+              aria-label="보호자 정보 수정 닫기"
+              onClick={() => setIsEditingOwner(false)}
+            />
+            <form className="owner-settings settings-drawer" onSubmit={handleOwnerSubmit}>
+              <div className="owner-settings__heading">
+                <div>
+                  <span className="eyebrow">계정 설정</span>
+                  <h2 id="owner-settings-heading">보호자 정보 수정</h2>
+                </div>
+                <button
+                  className="settings-drawer__close danger-hover-button"
+                  type="button"
+                  aria-label="보호자 정보 수정 닫기"
+                  onClick={() => setIsEditingOwner(false)}
+                >
+                  ×
+                </button>
+              </div>
+              <div className="owner-settings__fields">
+                <label>
+                  <span>이름</span>
+                  <input
+                    type="text"
+                    value={ownerForm.name}
+                    onChange={(event) => setOwnerForm((previous) => ({
+                      ...previous,
+                      name: event.target.value,
+                    }))}
+                  />
+                </label>
+                <label>
+                  <span>이메일</span>
+                  <input
+                    type="email"
+                    value={ownerForm.email}
+                    readOnly
+                  />
+                  <small>이메일은 현재 API에서 변경할 수 없어요.</small>
+                </label>
+              </div>
+              {ownerMessage && <p className="owner-settings__message">{ownerMessage}</p>}
+              <button className="owner-settings__submit" type="submit">변경사항 저장</button>
+              <button
+                className="setup-complete__back owner-settings__delete"
+                type="button"
+                onClick={async () => {
+                  if (!window.confirm('회원 탈퇴 시 모든 정보를 되돌릴 수 없습니다. 탈퇴할까요?')) return;
+                  setOwnerMessage('');
+                  try {
+                    await onDeleteAccount();
+                  } catch (error) {
+                    setOwnerMessage(error.message);
+                  }
+                }}
+              >
+                회원 탈퇴
+              </button>
+            </form>
+          </div>
         )}
 
       </section>
