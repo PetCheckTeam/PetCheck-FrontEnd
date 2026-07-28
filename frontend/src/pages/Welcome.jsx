@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import petcheckAppIcon from '../assets/petcheck-app-icon.png';
 import PetIllustration from '../components/PetIllustration';
 
@@ -36,17 +36,32 @@ function Welcome({
     }
   }, [activePetIndex, petProfiles.length]);
 
+  const scrollToPetSlide = useCallback((index, behavior = 'smooth') => {
+    const slider = petSliderRef.current;
+    const slide = slider?.querySelectorAll('.pet-carousel__slide')[index];
+    if (!slider || !slide) return;
+
+    const left = (
+      slider.scrollLeft
+      + slide.getBoundingClientRect().left
+      - slider.getBoundingClientRect().left
+    );
+
+    try {
+      slider.scrollTo({ left, behavior });
+    } catch {
+      slider.scrollLeft = left;
+    }
+  }, []);
+
   const moveToPet = (index) => {
     const nextIndex = Math.min(
       petProfiles.length - 1,
       Math.max(0, index),
     );
-    const slider = petSliderRef.current;
 
-    if (slider) {
-      slider.scrollLeft = nextIndex * slider.clientWidth;
-    }
     setActivePetIndex(nextIndex);
+    requestAnimationFrame(() => scrollToPetSlide(nextIndex));
   };
 
   useEffect(() => {
@@ -57,7 +72,7 @@ function Welcome({
     const observer = new ResizeObserver(() => {
       cancelAnimationFrame(animationFrame);
       animationFrame = requestAnimationFrame(() => {
-        slider.scrollLeft = activePetIndex * slider.clientWidth;
+        scrollToPetSlide(activePetIndex, 'auto');
       });
     });
 
@@ -66,7 +81,7 @@ function Welcome({
       cancelAnimationFrame(animationFrame);
       observer.disconnect();
     };
-  }, [activePetIndex]);
+  }, [activePetIndex, scrollToPetSlide]);
 
   const finishPetSlide = (event) => {
     if (!isPetSlideDraggingRef.current) return;

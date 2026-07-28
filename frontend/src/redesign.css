@@ -1389,3 +1389,67 @@ body {
     border-radius: 25px;
   }
 }
+
+/* Scanner field refinement */
+.scanner-product-field {
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.scanner-product-field > span {
+  padding-left: 2px;
+  color: #333d4b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.scanner-product-field input {
+  height: 58px;
+  padding: 0 16px;
+  border: 1px solid #dfe3ea;
+  border-radius: 16px;
+  background: #f7f8fa;
+  color: var(--toss-text);
+  font-size: 17px;
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
+}
+
+.scanner-product-field input:hover {
+  background: #f2f4f6;
+}
+
+.scanner-product-field input:focus {
+  border-color: #6ea8fb;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(49, 130, 246, .12);
+}
+
+.scanner-card > .button {
+  min-height: 56px;
+  margin-top: 18px;
+  border-radius: 17px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.scanner-card > .button:disabled {
+  background: #e7eaf0;
+  color: #98a2b3;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .scanner-product-field input {
+    height: 54px;
+    font-size: 16px;
+  }
+
+  .scanner-card > .button,
+  .scanner-card > .button:disabled {
+    min-height: 52px;
+    font-size: 13px;
+  }
+}

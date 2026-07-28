@@ -138,7 +138,6 @@ function Scanner({
                       : '알러지 없음'}
                   </small>
                 </span>
-                <span className="pet-selector__check" aria-hidden="true">✓</span>
               </button>
             ))}
           </div>
